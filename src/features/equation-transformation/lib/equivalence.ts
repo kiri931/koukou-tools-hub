@@ -101,6 +101,8 @@ function flattenLatex(source: string): string {
   text = text.replace(/\\ /g, "");
   text = text.replace(/\\cdot|\\times/g, "*");
   text = text.replace(/\\div/g, "/");
+  // 円周率は変数ではなく定数として扱う（2\pi r のように書ける）
+  text = text.replace(/\\pi(?![A-Za-z])/g, "π");
   text = text.replace(/\\placeholder\{\}/g, "");
   text = text.replace(/[\s{}]*\\placeholder[\s{}]*/g, "");
 
@@ -126,7 +128,7 @@ function flattenLatex(source: string): string {
   // ここまでで消えなかった LaTeX 命令や中かっこが残っていたら、読めない式とみなす
   if (/\\/.test(text)) throw new ParseError("知らない LaTeX 命令が残っている");
   if (/[{}]/.test(text)) throw new ParseError("中かっこが残っている");
-  if (!/^[0-9A-Za-z+\-*/^().=]*$/.test(text)) throw new ParseError("扱えない文字がある");
+  if (!/^[0-9A-Za-zπ+\-*/^().=]*$/.test(text)) throw new ParseError("扱えない文字がある");
 
   return text;
 }
@@ -143,7 +145,8 @@ function parseExpression(source: string): Expr {
 
   const isDigit = (ch: string | undefined) => !!ch && ch >= "0" && ch <= "9";
   const isLetter = (ch: string | undefined) => !!ch && /[A-Za-z]/.test(ch);
-  const startsAtom = (ch: string | undefined) => isDigit(ch) || isLetter(ch) || ch === "(";
+  const startsAtom = (ch: string | undefined) =>
+    isDigit(ch) || isLetter(ch) || ch === "(" || ch === "π";
 
   // expr := term (('+' | '-') term)*
   const expr = (): Expr => {
@@ -208,6 +211,11 @@ function parseExpression(source: string): Expr {
       if (peek() !== ")") throw new ParseError("かっこが閉じていない");
       pos += 1;
       return inner;
+    }
+
+    if (peek() === "π") {
+      pos += 1;
+      return { kind: "num", value: Math.PI };
     }
 
     if (isDigit(peek()) || (peek() === "." && isDigit(source[pos + 1]))) {

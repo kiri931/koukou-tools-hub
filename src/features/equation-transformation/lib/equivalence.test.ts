@@ -55,6 +55,20 @@ describe("数学的に違う答えは不正解にする", () => {
   });
 });
 
+describe("円周率", () => {
+  it("π は変数ではなく定数として扱う", () => {
+    expect(isEquivalent("r=\\frac{L}{2\\pi}", "r=\\dfrac{L}{2\\pi}")).toBe(true);
+    expect(isEquivalent("r=0.5\\cdot\\frac{L}{\\pi}", "r=\\dfrac{L}{2\\pi}")).toBe(true);
+    expect(isEquivalent("r=\\frac{L}{2p}", "r=\\dfrac{L}{2\\pi}")).toBe(false);
+    expect(isEquivalent("r=\\frac{L}{\\pi}", "r=\\dfrac{L}{2\\pi}")).toBe(false);
+  });
+
+  it("π を含む式でも指数を読める", () => {
+    expect(isEquivalent("h=\\frac{V}{\\pi r^2}", "h=\\dfrac{V}{\\pi r^{2}}")).toBe(true);
+    expect(isEquivalent("h=\\frac{V}{\\pi r}", "h=\\dfrac{V}{\\pi r^{2}}")).toBe(false);
+  });
+});
+
 describe("左辺の扱い", () => {
   it("x= を書かなければ不正解にする", () => {
     expect(compareAnswers("\\dfrac{5y-7}{3}", "x=\\dfrac{5y-7}{3}").kind).not.toBe("equivalent");
@@ -112,6 +126,30 @@ describe("問題バンク20問の点検", () => {
       .filter((question) => !isEquivalent(question.answer, question.answer))
       .map((question) => question.id);
     expect(failed).toEqual([]);
+  });
+
+  it("選択肢は4つで、正解をちょうど1つ含む", () => {
+    for (const question of questions) {
+      expect(question.choices).toHaveLength(4);
+      expect(question.choices.filter((c) => c === question.answer)).toHaveLength(1);
+    }
+  });
+
+  it("4つの選択肢は値としてすべて異なる（当てずっぽうで2つ当たらない）", () => {
+    const duplicated = questions
+      .map((question) => {
+        const pairs: string[] = [];
+        for (let i = 0; i < question.choices.length; i += 1) {
+          for (let j = i + 1; j < question.choices.length; j += 1) {
+            if (isEquivalent(question.choices[i], question.choices[j])) {
+              pairs.push(`Q${question.id}: ${question.choices[i]} = ${question.choices[j]}`);
+            }
+          }
+        }
+        return pairs;
+      })
+      .flat();
+    expect(duplicated).toEqual([]);
   });
 
   it("誤答の選択肢を入力すれば必ず不正解になる", () => {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
@@ -10,27 +10,26 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-import { questions as questionBank } from "../data/questions";
 import { compareAnswers } from "../lib/equivalence";
+import {
+  appendHistory,
+  clearHistory,
+  formatRecord,
+  loadHistory,
+  pendingWrongIds,
+  type AttemptRecord,
+} from "../lib/history";
+import {
+  DEFAULT_COUNT,
+  MAX_COUNT,
+  clampQuestionCount,
+  feedbackMessage,
+  pickQuestions,
+  pickQuestionsByIds,
+} from "../lib/quiz";
 import type { RenderedQuestion } from "../types";
 import MathLiveInput from "./MathLiveInput";
 import PrintSheet from "./PrintSheet";
-
-const DEFAULT_COUNT = 10;
-
-function shuffleArray<T>(items: readonly T[]): T[] {
-  const next = [...items];
-  for (let i = next.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [next[i], next[j]] = [next[j], next[i]];
-  }
-  return next;
-}
-
-function clampQuestionCount(value: number) {
-  if (!Number.isFinite(value)) return DEFAULT_COUNT;
-  return Math.max(1, Math.min(questionBank.length, Math.floor(value)));
-}
 
 function renderMath(tex: string) {
   return katex.renderToString(tex, {
@@ -86,26 +85,6 @@ function MathText({ text, className }: { text: string; className?: string }) {
 function MathChoice({ text }: { text: string }) {
   const html = useMemo(() => renderMath(text), [text]);
   return <span className="equation-choice-katex" dangerouslySetInnerHTML={{ __html: html }} />;
-}
-
-function feedbackMessage(correct: number, total: number) {
-  if (correct === total) return "満点！移項と係数処理が完璧です。";
-  if (correct >= Math.ceil(total * 0.8)) {
-    return "とても良いです。符号と割り算の扱いを再確認すると満点が見えます。";
-  }
-  if (correct >= Math.ceil(total * 0.5)) {
-    return "基礎はできています。移項時の符号ミスに注意！";
-  }
-  return "まずは移項→係数で割るの手順を丁寧に練習しましょう。";
-}
-
-function pickQuestions(count: number): RenderedQuestion[] {
-  return shuffleArray(questionBank)
-    .slice(0, clampQuestionCount(count))
-    .map((question) => ({
-      ...question,
-      shuffledChoices: shuffleArray(question.choices),
-    }));
 }
 
 function parseFracBraces(s: string, start: number): [string, string, number] | null {
@@ -217,6 +196,8 @@ interface InputVerdict {
   correct: boolean;
   /** 不正解の理由が「書き方」にあるときだけ、生徒に伝える一言 */
   note?: string;
+  /** 正解だが、模範解答とは違う書き方だった */
+  differsFromModel?: boolean;
 }
 
 /**
@@ -230,7 +211,11 @@ function judgeInputAnswer(given: string, answer: string): InputVerdict {
   const result = compareAnswers(given, answer);
   switch (result.kind) {
     case "equivalent":
-      return { correct: true };
+      // 値は合っているが模範解答と書き方が違うときは、正解にしたうえで模範解答も見せる
+      return {
+        correct: true,
+        differsFromModel: normalizeAnswer(given) !== normalizeAnswer(answer),
+      };
     case "different":
       return { correct: false };
     case "wrong-subject":
@@ -259,37 +244,65 @@ export default function EquationTransformation() {
   const [score, setScore] = useState(0);
   const [printSheetOpen, setPrintSheetOpen] = useState(false);
   const [mode, setMode] = useState<QuizMode>("choice");
+  const [history, setHistory] = useState<AttemptRecord[]>([]);
+
+  // localStorage はブラウザにしか無いので、描画後に読む
+  useEffect(() => {
+    setHistory(loadHistory());
+  }, []);
 
   const total = items.length;
+  const wrongIds = useMemo(() => pendingWrongIds(history), [history]);
 
-  const reloadQuestions = () => {
-    const count = clampQuestionCount(Number(questionCountInput));
-    setItems(pickQuestions(count));
+  const clearAnswers = () => {
     setAnswers({});
     setGraded(false);
     setScore(0);
   };
 
+  const reloadQuestions = () => {
+    const count = clampQuestionCount(questionCountInput);
+    // 押した時点で丸めた値を欄にも書き戻す。表示と実際の問題数がずれないようにする
+    setQuestionCountInput(String(count));
+    setItems(pickQuestions(count));
+    clearAnswers();
+  };
+
+  const retryWrongQuestions = () => {
+    const picked = pickQuestionsByIds(wrongIds);
+    if (picked.length === 0) return;
+    setItems(picked);
+    setQuestionCountInput(String(picked.length));
+    clearAnswers();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const resetAnswers = () => {
-    setAnswers({});
-    setGraded(false);
-    setScore(0);
+    clearAnswers();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const gradeAnswers = () => {
     let correct = 0;
+    const wrong: number[] = [];
+
     for (const item of items) {
       const given = answers[item.id];
-      if (!given) continue;
-      if (mode === "choice") {
-        if (given === item.answer) correct += 1;
-      } else {
-        if (judgeInputAnswer(given, item.answer).correct) correct += 1;
-      }
+      const isRight =
+        !!given &&
+        (mode === "choice" ? given === item.answer : judgeInputAnswer(given, item.answer).correct);
+      if (isRight) correct += 1;
+      else wrong.push(item.id);
     }
+
     setScore(correct);
     setGraded(true);
+    setHistory(appendHistory({ at: Date.now(), mode, total, correct, wrongIds: wrong }));
+  };
+
+  const forgetHistory = () => {
+    clearHistory();
+    setHistory([]);
   };
 
   const resultVisible = graded && total > 0;
@@ -299,18 +312,70 @@ export default function EquationTransformation() {
     <main className="mx-auto max-w-5xl px-4 py-8 text-slate-900 dark:text-slate-100">
       <style>{`
         @media print {
-          header, .no-print, [data-theme-toggle] { display: none !important; }
+          /* サイトのヘッダー・フッター（運営者情報などのリンク）は配布物に要らない */
+          header, footer, .no-print, [data-theme-toggle] { display: none !important; }
           [data-slot="sheet-portal"], [data-slot="sheet-overlay"], [data-slot="sheet-content"] { display: none !important; }
-          body { background: white !important; }
+          /* 画面用の薄い背景色は紙では要らない（インクの無駄になる） */
+          body, body > div, .min-h-screen { background: #fff !important; }
           .print-root { max-width: none !important; padding: 0 !important; }
-          .print-card { box-shadow: none !important; border-color: #cbd5e1 !important; break-inside: avoid; }
-          .print-footer { display: none !important; position: fixed; bottom: 8mm; left: 12mm; right: 12mm; font-size: 10pt; color: #334155; }
+
+          /* 見出しカードは、紙では枠も説明文も要らない */
+          .print-title {
+            border: 0 !important;
+            box-shadow: none !important;
+            background: #fff !important;
+            gap: 0 !important;
+            padding: 0 !important;
+            margin: 0 0 3mm 0 !important;
+          }
+          .print-title [data-slot="card-header"] { padding: 0 !important; }
+          .print-title [data-slot="card-description"] { display: none !important; }
+
+          /* 画面用の余白・影・角丸・背景は紙では邪魔なので落として詰める */
+          .print-card {
+            box-shadow: none !important;
+            border-color: #94a3b8 !important;
+            border-radius: 0 !important;
+            background: #fff !important;
+            break-inside: avoid;
+            gap: 1.5mm !important;
+            padding: 2.5mm 3mm !important;
+            margin: 0 0 2.5mm 0 !important;
+          }
+          .print-card [data-slot="card-header"],
+          .print-card [data-slot="card-content"] {
+            padding: 0 !important;
+            gap: 1.5mm !important;
+          }
+
+          /* 選択肢は4つあるので2列に並べる。1問あたりの高さが半分になる */
+          .equation-choices {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 1mm 4mm !important;
+          }
+          .equation-choices label {
+            border-radius: 0 !important;
+            border-color: #cbd5e1 !important;
+            background: #fff !important;
+            padding: 1mm 2mm !important;
+          }
+
+          /* 氏名欄は用紙の先頭に1回だけ。position:fixed だと本文に重なる */
+          .print-student-info { display: none !important; }
+          body.print-show-student-info .print-student-info {
+            display: block !important;
+            margin: 0 0 3mm 0;
+            padding-bottom: 1.5mm;
+            border-bottom: 1px solid #94a3b8;
+            font-size: 10.5pt;
+            color: #0f172a;
+          }
+
           .print-answer { display: none !important; }
           .print-explain { display: none !important; }
-          .print-student-info { display: none !important; }
           body.print-show-answers .print-answer { display: block !important; }
           body.print-show-explain .print-explain { display: block !important; }
-          body.print-show-student-info .print-student-info { display: block !important; }
           .katex { color: #000 !important; }
           @page { size: A4; margin: 12mm; }
         }
@@ -318,7 +383,12 @@ export default function EquationTransformation() {
 
       <div className="print-root">
         <PrintSheet open={printSheetOpen} onOpenChange={setPrintSheetOpen} />
-        <Card className="mb-6 border-emerald-200/80 bg-white/95 dark:border-emerald-900/40 dark:bg-slate-900/70">
+
+        {/* 印刷時だけ、用紙の先頭に出す */}
+        <p className="print-student-info hidden">
+          等式の変形テスト ／ 氏名：__________________ ／ 学年：____ 組：____ 番：____
+        </p>
+        <Card className="print-title mb-6 border-emerald-200/80 bg-white/95 dark:border-emerald-900/40 dark:bg-slate-900/70">
           <CardHeader>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -344,44 +414,56 @@ export default function EquationTransformation() {
               </Tabs>
             </div>
 
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
-              <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
-                ルール
-              </h2>
-              <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-300">
-                <li>出題数は既定で {DEFAULT_COUNT} 問（変更可）</li>
-                <li>すべて解いたら「採点する」を押してください</li>
-                <li>採点後は各問の解説が自動で開きます</li>
-              </ul>
-              {mode === "input" && (
-                <div className="mt-3 rounded-md border border-slate-200 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900/60">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
-                    記述方式
-                  </p>
-                  <ul className="mt-1 space-y-1 text-sm text-slate-700 dark:text-slate-300">
-                    <li>記述式では数式入力欄をタップ/クリックするとキーボードが表示されます</li>
-                    <li>分数（a/b ボタン）や変数（x, y 等）を選んで入力してください</li>
-                    <li>
-                      求める文字から <span className="font-mono">x=</span> のように書いてください
-                    </li>
-                    <li>
-                      値が同じなら正解です。項の順序を変えた形・展開した形・通分した形・小数で書いた形も正解になります
-                    </li>
-                  </ul>
+            {mode === "input" && (
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-base dark:border-slate-800 dark:bg-slate-950/50">
+                <h2 className="mb-2 font-semibold text-slate-700 dark:text-slate-200">
+                  記述式の答え方
+                </h2>
+                <ul className="space-y-1 text-slate-700 dark:text-slate-300">
+                  <li>入力欄をタップ／クリックすると数式キーボードが出ます</li>
+                  <li>
+                    求める文字から <span className="font-mono">x=</span> のように書いてください
+                  </li>
+                  <li>
+                    値が同じなら正解です。項の順序を変えた形・展開した形・通分した形・小数で書いた形も正解になります
+                  </li>
+                </ul>
+              </div>
+            )}
+
+            {history.length > 0 && (
+              <div className="no-print rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                  <h2 className="font-semibold text-slate-700 dark:text-slate-200">
+                    この端末に残っている記録
+                  </h2>
+                  <Button type="button" variant="ghost" size="sm" onClick={forgetHistory}>
+                    記録を消す
+                  </Button>
                 </div>
-              )}
-            </div>
+                <ul className="space-y-1 text-base tabular-nums text-slate-700 dark:text-slate-300">
+                  {history.map((record) => (
+                    <li key={record.at}>{formatRecord(record)}</li>
+                  ))}
+                </ul>
+                {wrongIds.length > 0 && (
+                  <Button type="button" className="mt-3" onClick={retryWrongQuestions}>
+                    間違えた {wrongIds.length} 問をもう一度
+                  </Button>
+                )}
+              </div>
+            )}
 
             <div className="no-print flex flex-col gap-3 rounded-lg border border-slate-200 p-4 dark:border-slate-800 sm:flex-row sm:items-end">
               <div className="w-full sm:w-44">
-                <label htmlFor="equation-count" className="mb-1 block text-sm font-medium">
-                  出題数
+                <label htmlFor="equation-count" className="mb-1 block text-base font-medium">
+                  出題数（1〜{MAX_COUNT}）
                 </label>
                 <Input
                   id="equation-count"
                   type="number"
                   min={1}
-                  max={questionBank.length}
+                  max={MAX_COUNT}
                   value={questionCountInput}
                   onChange={(event) => setQuestionCountInput(event.target.value)}
                 />
@@ -389,12 +471,6 @@ export default function EquationTransformation() {
               <div className="flex flex-wrap gap-2">
                 <Button type="button" variant="outline" onClick={reloadQuestions}>
                   出題を更新
-                </Button>
-                <Button type="button" onClick={gradeAnswers}>
-                  採点する
-                </Button>
-                <Button type="button" variant="outline" onClick={resetAnswers}>
-                  やり直し
                 </Button>
                 <Button type="button" variant="outline" onClick={() => setPrintSheetOpen(true)}>
                   印刷（A4）
@@ -408,11 +484,11 @@ export default function EquationTransformation() {
                   <Badge variant="secondary" className="font-mono">
                     {score} / {total}
                   </Badge>
-                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  <span className="text-base font-medium text-slate-700 dark:text-slate-300">
                     正解率 {Math.round((score / total) * 100)}%
                   </span>
                 </div>
-                <p className="text-sm text-slate-700 dark:text-slate-300">{feedback}</p>
+                <p className="text-base text-slate-700 dark:text-slate-300">{feedback}</p>
               </div>
             )}
           </CardContent>
@@ -454,7 +530,7 @@ export default function EquationTransformation() {
                     <RadioGroup
                       value={selected ?? ""}
                       onValueChange={(value) => setAnswers((prev) => ({ ...prev, [item.id]: value }))}
-                      className="gap-2"
+                      className="equation-choices gap-2"
                     >
                       {item.shuffledChoices.map((choice, choiceIndex) => {
                         const isPicked = selected === choice;
@@ -465,7 +541,7 @@ export default function EquationTransformation() {
                           <label
                             key={`${item.id}-${choice}-${choiceIndex}`}
                             className={cn(
-                              "flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 transition",
+                              "flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 text-base transition",
                               "border-slate-200 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50",
                               showCorrect &&
                                 "border-emerald-300 bg-emerald-50/80 dark:border-emerald-800 dark:bg-emerald-950/30",
@@ -507,7 +583,7 @@ export default function EquationTransformation() {
                   )}
 
                   {graded && (mode === "input" || selected) && !isCorrect && (
-                    <div className="no-print mt-3 space-y-1 text-sm">
+                    <div className="no-print mt-3 space-y-1 text-base">
                       {mode === "input" && selected && (
                         <p className="text-rose-700 dark:text-rose-300">
                           あなたの解答: <MathChoice text={selected} />
@@ -523,12 +599,20 @@ export default function EquationTransformation() {
                   )}
 
                   {graded && isCorrect && mode === "input" && selected && (
-                    <div className="no-print mt-3 text-sm text-emerald-700 dark:text-emerald-300">
-                      正解！ <MathChoice text={selected} />
+                    <div className="no-print mt-3 space-y-1 text-base text-emerald-700 dark:text-emerald-300">
+                      <p>
+                        正解！ <MathChoice text={selected} />
+                      </p>
+                      {verdict?.differsFromModel && (
+                        <p className="text-slate-600 dark:text-slate-400">
+                          値が同じなので正解です。模範解答は <MathChoice text={item.answer} />{" "}
+                          でした。見比べてみてください。
+                        </p>
+                      )}
                     </div>
                   )}
 
-                  <p className="print-answer hidden mt-3 text-sm text-slate-700">
+                  <p className="print-answer hidden mt-3 text-base text-slate-700">
                     解答: <MathChoice text={item.answer} />
                   </p>
 
@@ -536,16 +620,16 @@ export default function EquationTransformation() {
                     className="no-print mt-4 rounded-lg border border-slate-200 bg-slate-50/80 p-3 dark:border-slate-800 dark:bg-slate-950/50"
                     open={graded}
                   >
-                    <summary className="cursor-pointer text-sm font-medium text-slate-700 dark:text-slate-200">
+                    <summary className="cursor-pointer text-base font-medium text-slate-700 dark:text-slate-200">
                       解説
                     </summary>
                     <MathText
                       text={item.explain}
-                      className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300"
+                      className="mt-3 text-base leading-7 text-slate-700 dark:text-slate-300"
                     />
                   </details>
 
-                  <div className="print-explain hidden mt-4 rounded-lg border border-slate-200 bg-white p-3 text-sm leading-7 text-slate-700">
+                  <div className="print-explain hidden mt-4 rounded-lg border border-slate-200 bg-white p-3 text-base leading-7 text-slate-700">
                     <p className="mb-2 font-medium">解説</p>
                     <MathText text={item.explain} />
                   </div>
@@ -568,22 +652,21 @@ export default function EquationTransformation() {
           </Button>
         </div>
 
-        <Card className="mb-6 border-slate-200 bg-white/95 dark:border-slate-800 dark:bg-slate-900/70">
-          <CardHeader>
-            <CardTitle className="text-xl">使い方</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5 text-sm text-slate-700 dark:text-slate-300">
-            <div>
-              <ol className="list-decimal space-y-1 pl-5">
-                <li>出題数と方式（択一式 / 記述式）を選ぶ</li>
-                <li>出題される問題に解答する（記述式は数式入力キーボード対応）</li>
-                <li>「採点する」で正答率と解説を確認する</li>
-                <li>「出題を更新」でランダムに新しい問題へ切り替え、「印刷」でA4プリントとして配布する</li>
-              </ol>
-            </div>
+        {/* 使い方とFAQは、解き終わった人だけが読めばよいので畳んでおく */}
+        <details className="no-print mb-6 rounded-lg border border-slate-300 bg-white/95 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+          <summary className="cursor-pointer text-lg font-semibold text-slate-900 dark:text-slate-100">
+            使い方とよくある質問
+          </summary>
+          <div className="mt-4 space-y-5 text-base text-slate-700 dark:text-slate-300">
+            <ol className="list-decimal space-y-1 pl-5">
+              <li>出題数と方式（択一式 / 記述式）を選ぶ</li>
+              <li>出題される問題に解答する（記述式は数式入力キーボード対応）</li>
+              <li>「採点する」で正答率と解説を確認する</li>
+              <li>「出題を更新」でランダムに新しい問題へ切り替え、「印刷」でA4プリントとして配布する</li>
+            </ol>
 
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
-              <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+            <div className="rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+              <h2 className="mb-2 font-semibold text-slate-700 dark:text-slate-200">
                 この単元とのつながり
               </h2>
               <p>
@@ -593,34 +676,52 @@ export default function EquationTransformation() {
             </div>
 
             <div className="space-y-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
-                よくある質問
-              </h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="font-medium text-slate-900 dark:text-slate-100">Q. 採点後にもう一度同じ問題を解き直せますか?</p>
-                  <p>「やり直し」ボタンから同じ問題セットに再挑戦できます。</p>
-                </div>
-                <div>
-                  <p className="font-medium text-slate-900 dark:text-slate-100">Q. 印刷して配布に使えますか?</p>
-                  <p>
-                    「印刷」ボタンからA4サイズ想定でレイアウトされたプリントを出力できます。小テストや宿題プリントとして利用できます。
-                  </p>
-                </div>
-                <div>
-                  <p className="font-medium text-slate-900 dark:text-slate-100">Q. 記述式と択一式はどちらがおすすめですか?</p>
-                  <p>
-                    初めての単元は択一式で概念をつかみ、慣れてきたら記述式で計算力を鍛える、という使い分けがおすすめです。
-                  </p>
-                </div>
+              <h2 className="font-semibold text-slate-700 dark:text-slate-200">よくある質問</h2>
+              <div>
+                <p className="font-medium text-slate-900 dark:text-slate-100">
+                  Q. 採点後にもう一度同じ問題を解き直せますか?
+                </p>
+                <p>「やり直し」ボタンから同じ問題セットに再挑戦できます。</p>
+              </div>
+              <div>
+                <p className="font-medium text-slate-900 dark:text-slate-100">
+                  Q. 間違えた問題だけをもう一度解けますか?
+                </p>
+                <p>
+                  採点すると、この端末のブラウザの中だけに直近5回ぶんの記録が残ります。記録があるときは
+                  「間違えた◯問をもう一度」のボタンが出ます。記録はいつでも「記録を消す」で消せます。
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-slate-900 dark:text-slate-100">
+                  Q. 記述式は、書き方が違うと不正解になりますか?
+                </p>
+                <p>
+                  なりません。式の値が同じかどうかで判定するので、項の順序を変えた形・展開した形・
+                  通分した形・小数で書いた形も正解になります。ただし
+                  <span className="font-mono">x=</span> のように、求める文字から書いてください。
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-slate-900 dark:text-slate-100">
+                  Q. 印刷して配布に使えますか?
+                </p>
+                <p>
+                  「印刷」ボタンからA4サイズ想定でレイアウトされたプリントを出力できます。小テストや宿題プリントとして利用できます。
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-slate-900 dark:text-slate-100">
+                  Q. 記述式と択一式はどちらがおすすめですか?
+                </p>
+                <p>
+                  初めての単元は択一式で概念をつかみ、慣れてきたら記述式で計算力を鍛える、という使い分けがおすすめです。
+                </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </details>
 
-        <p className="print-footer print-student-info hidden">
-          等式の変形テスト ／ 氏名：__________________ ／ 学年：____ 組：____ 番：____
-        </p>
       </div>
     </main>
   );

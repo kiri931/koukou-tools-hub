@@ -56,7 +56,7 @@ export default function MathLiveInput({
         onChange(target?.value ?? "");
       }}
       className={cn(
-        "block w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
+        "block w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         disabled && "cursor-not-allowed opacity-50",
         className
