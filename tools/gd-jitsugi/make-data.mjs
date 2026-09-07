@@ -10,7 +10,7 @@ import { mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
-const OUT = process.argv[2] ?? "public/gd-jitsugi/dento-iro";
+const OUT = process.argv[2] ?? "public/study/graphic-design/dento-iro";
 const TMP = "/tmp/gd-jitsugi-build";
 
 rmSync(TMP, { recursive: true, force: true });

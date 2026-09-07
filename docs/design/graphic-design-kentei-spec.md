@@ -249,7 +249,7 @@ export interface GdQuestion {
 別の題材にする。例: 日本の伝統色、地元の祭り、校内の部活動紹介）。1セットの中身:
 
 ```
-public/gd-jitsugi/<セット名>/
+public/study/graphic-design/<セット名>/
   shijisho.pdf        指示書（2ページ）
   shijizu.pdf         指示図（グレーで配置位置を示した図）
   checklist.pdf       自己採点チェックリスト

@@ -6,7 +6,7 @@
 # ヘッドレスの Chrome は印刷後も終了しないので、timeout で切って kill する。
 set -u
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-OUT="public/gd-jitsugi/dento-iro"
+OUT="public/study/graphic-design/dento-iro"
 SRC="tools/gd-jitsugi"
 PROFILE="/tmp/gd-jitsugi-chrome"
 

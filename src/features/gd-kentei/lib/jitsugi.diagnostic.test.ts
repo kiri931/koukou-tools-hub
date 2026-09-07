@@ -1,4 +1,4 @@
-import { existsSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
  * 1級実技の練習課題の配布物が、そろっているかを見張る。
  * **ページからリンクしているのにファイルが無い**という壊れ方を防ぐ。
  */
-const dir = join(process.cwd(), "public/gd-jitsugi/dento-iro");
+const dir = join(process.cwd(), "public/study/graphic-design/dento-iro");
 
 const required = [
   "README.txt",
@@ -45,5 +45,27 @@ describe("1級実技の練習課題（実データ）", () => {
     const { readFileSync } = await import("node:fs");
     const readme = readFileSync(join(dir, "README.txt"), "utf8");
     expect(readme).not.toContain("全国工業高等学校長協会");
+  });
+});
+
+/**
+ * 配布物のURLが hub の worker の担当範囲から外れていないかの見張り。
+ *
+ * hub の worker が受け持つのは wrangler.jsonc の routes にある
+ * /study/* /tools/* /support/* /_astro-web/* だけ。
+ * 配布物を /gd-jitsugi/ に置いていたときは、ローカルの dev サーバーでは 200 なのに
+ * 本番だけ 404 になった（routes に無いので親サイトの worker に流れる）。
+ */
+describe("配布物のURL", () => {
+  const page = readFileSync("src/pages/study/graphic-design/jitsugi.astro", "utf8");
+
+  it("worker が担当するパスの下にある", () => {
+    const base = /const base = "([^"]+)"/.exec(page)?.[1];
+    expect(base).toBeDefined();
+    expect(base!.startsWith("/study/")).toBe(true);
+  });
+
+  it("public 側の実体も同じ場所にある", () => {
+    expect(existsSync("public/study/graphic-design/dento-iro/shijisho.pdf")).toBe(true);
   });
 });

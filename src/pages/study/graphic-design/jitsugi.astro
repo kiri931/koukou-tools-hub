@@ -4,9 +4,11 @@ import { Header } from "../../../components/Header";
 import GdBackLink from "../../../components/GdBackLink.astro";
 import "../../../styles/global.css";
 
-// 1級実技の練習課題。配布物は public/gd-jitsugi/ の下に置いた静的ファイル。
+// 1級実技の練習課題。配布物は public/study/graphic-design/ の下に置いた静的ファイル。
+// hub の worker が担当するのは /study/* /tools/* だけなので、配布物も /study/ の下に置く
+// （/gd-jitsugi/ に置いていたときは本番で404になった）。
 // 生成の手順は tools/gd-jitsugi/ にある。
-const base = "/gd-jitsugi/dento-iro";
+const base = "/study/graphic-design/dento-iro";
 const files = [
 	{ href: `${base}/shijisho.pdf`, label: "指示書（PDF・2ページ）", desc: "作り方の指定。まず15分かけて読む。" },
 	{ href: `${base}/shijizu.pdf`, label: "指示図（PDF・1ページ）", desc: "どこに何を置くかを、寸法つきで示した図。" },
