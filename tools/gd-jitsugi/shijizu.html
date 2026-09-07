@@ -1,0 +1,47 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>指示図 日本の伝統色</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; color: #111; }
+  .sheet { position: relative; width: 210mm; height: 297mm; }
+  /* 外枠＝裁ちしろ込み、内枠＝仕上がり */
+  .bleed { position: absolute; inset: 0; border: 0.3mm solid #bbb; }
+  .trim { position: absolute; left: 3mm; top: 3mm; width: 204mm; height: 291mm; border: 0.3mm solid #111; }
+  .note { position: absolute; font-size: 2.6mm; }
+  .box {
+    position: absolute; background: #ececec; border: 0.3mm solid #9a9a9a;
+    padding: 2mm; font-size: 3mm; line-height: 1.4;
+  }
+  .box b { font-size: 3.2mm; display: block; }
+  .box span { font-size: 2.6mm; color: #333; }
+  .circle { border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; }
+</style>
+<div class="sheet">
+  <div class="bleed"></div>
+  <div class="trim"></div>
+  <div class="note" style="left:6mm; top:6.5mm;">外枠＝裁ちしろ込み（216×303mm相当）／内枠＝仕上がり（210×297mm）</div>
+  <div class="note" style="right:6mm; top:11mm; text-align:right;">右上に主催名・検定名・受験番号（袋文字）<br>10pt／行送り12pt、受験番号18pt半角</div>
+
+  <div class="box" style="left:6mm; top:20mm; width:198mm; height:26mm; background:#3a3a3a; color:#fff; border-color:#111;">
+    <b style="color:#fff;">上部の作図（墨90%）</b>
+    <span style="color:#eee;">text「1」を 明朝24pt・白・中心揃えで載せる</span>
+  </div>
+
+  <div class="box" style="left:6mm; top:50mm; width:64mm; height:46mm;"><b>image B</b><span>毛抜き合わせ</span></div>
+  <div class="box" style="left:70mm; top:50mm; width:64mm; height:46mm;"><b>image C</b><span>毛抜き合わせ</span></div>
+  <div class="box" style="left:134mm; top:50mm; width:70mm; height:46mm;"><b>image D</b><span>毛抜き合わせ</span></div>
+
+  <div class="box" style="left:6mm; top:100mm; width:92mm; height:74mm;"><b>text「2」本文 左段</b><span>明朝9pt／行送り15pt／両端揃え</span></div>
+  <div class="box" style="left:104mm; top:100mm; width:92mm; height:74mm;"><b>text「2」本文 右段</b><span>段間6mm</span></div>
+
+  <div class="box" style="left:6mm; top:180mm; width:130mm; height:16mm;"><b>text「3」小見出し</b><span>ゴシック14pt・墨100%</span></div>
+  <div class="box" style="left:6mm; top:200mm; width:130mm; height:38mm;"><b>text「4」本文</b><span>明朝8.5pt／行送り14pt</span></div>
+  <div class="box" style="left:146mm; top:180mm; width:58mm; height:58mm;"><b>image E</b><span>W58×H58mm 等倍</span></div>
+
+  <div class="box" style="left:6mm; top:244mm; width:46mm; height:46mm;"><b>image F</b><span>W46×H46mm<br>時計回りに90度回転</span></div>
+  <div class="box circle" style="left:58mm; top:239mm; width:55mm; height:55mm;"><span><b>選択問題①</b>ロゴマーク<br>正円 φ55mm</span></div>
+  <div class="box" style="left:120mm; top:248mm; width:64mm; height:37mm;"><b>選択問題②</b><span>作表 W64×H37mm<br>data1 を使う</span></div>
+  <div class="note" style="left:120mm; top:288mm;">※ 選択問題は①②のどちらか一方だけを作る</div>
+</div>

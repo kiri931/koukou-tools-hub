@@ -36,8 +36,16 @@ export function SupportForm() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get("ref");
+    // 用語集の「誤りを報告する」は #ref= で対象ページを渡す。
+    // クエリ(?ref=)だと用語ごとに別URLが生まれ、Google に重複ページとして
+    // 積み上がるため hash に移した。すでに拾われている古い ?ref= 付きリンクも
+    // 動くように、hash を優先しつつクエリも読む。
+    const hash = window.location.hash.startsWith("#")
+      ? window.location.hash.slice(1)
+      : window.location.hash;
+    const ref =
+      new URLSearchParams(hash).get("ref") ??
+      new URLSearchParams(window.location.search).get("ref");
     if (ref) {
       setContent(`対象ページ: ${ref}\n\n### 気になった点\n(ここに具体的な誤り・分かりにくい点を書いてください)\n`);
     }

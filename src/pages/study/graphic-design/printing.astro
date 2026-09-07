@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdLesson from "../../../features/gd-kentei/components/GdLesson";
+import { printingLesson } from "../../../features/gd-kentei/data/lessons/printing";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="印刷 - グラフィックデザイン検定 - 高校情報"
+  description="グラフィックデザイン検定の「印刷」分野の解説。凸版・凹版・平版・孔版の4つの版式と、インキのしくみ、印刷のトラブル。問12・問13で問われる用語を整理しました。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdLesson lesson={printingLesson} client:only="react" />
+  </div>
+</Layout>

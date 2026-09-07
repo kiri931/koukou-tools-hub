@@ -73,6 +73,20 @@ export const sections: SiteLinkSection[] = [
 				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="2" /><path d="M8 6.5h8" /><path d="M8 11.5h2" /><path d="M12 11.5h2" /><path d="M16 11.5h0.01" /><path d="M8 15.5h2" /><path d="M12 15.5h2" /><path d="M16 15.5h0.01" /><path d="M8 19h8" /></svg>',
 			},
 			{
+				href: '/study/graphic-design/',
+				label: 'グラフィックデザイン検定 対策',
+				desc: '企画・写真・編集レイアウト・写真製版・印刷・製本の6分野の解説と用語辞典。級ごとの出題傾向も、実施結果をもとにまとめています。',
+				bg: '#ec4899',
+				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H13a2 2 0 0 1 0-4h4a4 4 0 0 0 4-4 6 6 0 0 0-6-6Z" /><circle cx="7.5" cy="10.5" r="1" /><circle cx="10.5" cy="6.5" r="1" /><circle cx="15" cy="7.5" r="1" /></svg>',
+			},
+			{
+				href: '/tools/gd-kentei/',
+				label: 'グラフィックデザイン検定ドリル',
+				desc: '6分野の4択問題を、分野と級で絞って1問ずつ解けます。まちがえた問題だけをやり直せます。',
+				bg: '#d946ef',
+				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7 9h4" /><path d="M7 13h6" /><path d="m15.5 15.5 2 2 3.5-3.5" /></svg>',
+			},
+			{
 				href: '/study/equation-transformation/',
 				label: '等式の変形テスト',
 				desc: '等式の変形をランダム出題で練習できる択一式テスト。採点・解説・印刷に対応。',

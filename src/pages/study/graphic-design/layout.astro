@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdLesson from "../../../features/gd-kentei/components/GdLesson";
+import { layoutLesson } from "../../../features/gd-kentei/data/lessons/layout";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="編集レイアウト - グラフィックデザイン検定 - 高校情報"
+  description="グラフィックデザイン検定の「編集レイアウト」分野の解説。ノンブル・柱・禁則処理・カーニング・罫線など、問7〜問9で問われる用語を、取り違えやすい点とあわせて整理しました。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdLesson lesson={layoutLesson} client:only="react" />
+  </div>
+</Layout>

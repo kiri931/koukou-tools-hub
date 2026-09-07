@@ -23,3 +23,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# 検定過去問の作業用コピー（全工協会の著作物。絶対にコミットしない）
+.local-corpus/
+
+# wrangler のローカル状態（本番には要らない）
+.wrangler/

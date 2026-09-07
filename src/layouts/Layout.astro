@@ -11,9 +11,16 @@ interface Props {
 
 const { title = '高校情報', description, canonical, ogImage, noindex } = Astro.props;
 const siteUrl = 'https://koukou-jouhou.org';
-const canonicalUrl = canonical
-	? new URL(canonical, siteUrl).href
-	: new URL(Astro.url.pathname, siteUrl).href;
+// このサイトは末尾スラッシュ付きURLが実体(Cloudflare Assets が付いていないURLを307でこちらへ飛ばす)。
+// canonical が末尾スラッシュ無しのままだと「リダイレクトされるURL」を指すことになり、
+// Google に「代替ページ(適切な canonical タグあり)」として弾かれる。
+// メインサイトの koukou-jouhou/src/layouts/Layout.astro と同じ正規化をここでも行う。
+const withTrailingSlash = (pathname: string) =>
+	pathname.endsWith('/') || /\.[a-z0-9]+$/i.test(pathname) ? pathname : `${pathname}/`;
+const canonicalUrl = new URL(
+	withTrailingSlash(new URL(canonical ?? Astro.url.pathname, siteUrl).pathname),
+	siteUrl,
+).href;
 const ogImageUrl = ogImage ? new URL(ogImage, siteUrl).href : null;
 const breadcrumbNameMap: Record<string, string> = {
 	about: '運営者情報',
@@ -29,6 +36,13 @@ const breadcrumbNameMap: Record<string, string> = {
 	'equation-transformation': '等式の変形テスト',
 	'feature-request': '機能リクエスト',
 	'calc-drill': '計算技術検定ドリル',
+	'graphic-design': 'グラフィックデザイン検定',
+	glossary: '用語辞典',
+	'level-3': '3級',
+	'level-2': '2級',
+	'level-1': '1級',
+	'gd-kentei': 'グラフィックデザイン検定ドリル',
+	jitsugi: '1級実技の練習課題',
 	'privacy-policy': 'プライバシーポリシー',
 	'terms-of-use': '利用規約',
 	'time-schedule': 'タイムスケジューラ',
@@ -121,9 +135,9 @@ const breadcrumbJsonLd =
 		<slot />
 		<footer class="border-t border-slate-300 py-6 text-center text-sm text-slate-600 dark:border-slate-800 dark:text-slate-400">
 			<nav class="flex justify-center gap-6">
-				<a href="/about">運営者情報</a>
-				<a href="/privacy-policy">プライバシーポリシー</a>
-				<a href="/support/feature-request">お問い合わせ</a>
+				<a href="/about/">運営者情報</a>
+				<a href="/privacy-policy/">プライバシーポリシー</a>
+				<a href="/support/feature-request/">お問い合わせ</a>
 			</nav>
 		</footer>
 		<script is:inline>

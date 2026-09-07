@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="t">
+  <title id="t">絞りの開き具合と被写界深度の関係</title>
+  <text x="20" y="24" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">絞りを絞るほど、鮮明に写る奥行きが広くなる</text>
+
+  <g transform="translate(30,44)">
+    <circle cx="46" cy="46" r="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <circle cx="46" cy="46" r="26" fill="#f59e0b" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5"/>
+    <text x="46" y="52" text-anchor="middle" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">F2.8</text>
+    <text x="0" y="108" font-family="sans-serif" font-size="12" fill="currentColor">絞りを開く（F値が小さい）</text>
+  </g>
+  <g transform="translate(190,52)">
+    <path d="M0 30 H400" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="150" y="16" width="70" height="28" fill="#0ea5e9" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5"/>
+    <text x="185" y="10" text-anchor="middle" font-family="sans-serif" font-size="12" fill="currentColor" font-weight="bold">鮮明な範囲</text>
+    <text x="0" y="62" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">深度が浅い</text>
+    <text x="90" y="62" font-family="sans-serif" font-size="12" fill="currentColor">手前と奥がぼける</text>
+    <text x="0" y="18" font-family="sans-serif" font-size="12" fill="currentColor">手前</text>
+    <text x="370" y="18" font-family="sans-serif" font-size="12" fill="currentColor">奥</text>
+  </g>
+
+  <g transform="translate(30,170)">
+    <circle cx="46" cy="46" r="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <circle cx="46" cy="46" r="11" fill="#f59e0b" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5"/>
+    <text x="46" y="98" text-anchor="middle" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">F16</text>
+    <text x="0" y="118" font-family="sans-serif" font-size="12" fill="currentColor">絞り込む（F値が大きい）</text>
+  </g>
+  <g transform="translate(190,178)">
+    <path d="M0 30 H400" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="60" y="16" width="270" height="28" fill="#0ea5e9" fill-opacity="0.35" stroke="currentColor" stroke-width="1.5"/>
+    <text x="195" y="10" text-anchor="middle" font-family="sans-serif" font-size="12" fill="currentColor" font-weight="bold">鮮明な範囲</text>
+    <text x="0" y="62" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">深度が深い</text>
+    <text x="90" y="62" font-family="sans-serif" font-size="12" fill="currentColor">広い範囲にピントが合う</text>
+  </g>
+
+  <text x="20" y="292" font-family="sans-serif" font-size="12" fill="currentColor">深度は焦点距離が短いほど、被写体から離れるほど深くなる。撮る側で狙って決められる。</text>
+</svg>

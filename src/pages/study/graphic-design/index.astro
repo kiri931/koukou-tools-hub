@@ -1,0 +1,117 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import { LinkCard } from "../../../components/LinkCard";
+import { fields } from "../../../features/gd-kentei/lib/fields";
+import { lessons } from "../../../features/gd-kentei/data/lessons";
+import { levelGuides } from "../../../features/gd-kentei/data/levels";
+import { terms } from "../../../features/gd-kentei/data/terms";
+import "../../../styles/global.css";
+
+// 分野カードのアクセント色。色だけに意味を持たせず、見分けを助けるためだけに使う。
+const accents: Record<string, string> = {
+	planning: "#6366f1",
+	photo: "#0ea5e9",
+	layout: "#f43f5e",
+	prepress: "#8b5cf6",
+	printing: "#f59e0b",
+	binding: "#10b981",
+};
+
+const cards = fields.map((field) => ({
+	href: `/study/graphic-design/${field.id}/`,
+	label: field.label,
+	desc: `${field.desc} 本番では問${field.questionNumbers.join("・問")}。用語${terms.filter((t) => t.field === field.id).length}語。`,
+	accent: accents[field.id],
+	sections: lessons[field.id].sections.length,
+}));
+---
+
+<Layout
+	title="グラフィックデザイン検定 対策 - 高校情報"
+	description="グラフィックデザイン検定（全国工業高等学校長協会）の対策教材。企画・写真・編集レイアウト・写真製版・印刷・製本の6分野の解説と、233語の用語辞典。"
+>
+	<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+		<Header client:load currentPath={Astro.url.pathname} />
+		<main class="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+			<h1
+				class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50"
+			>
+				グラフィックデザイン検定 対策
+			</h1>
+			<p class="mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-300">
+				筆記試験は問1から問15まであり、そのうち<strong class="font-bold text-slate-900 dark:text-slate-50"
+					>10題を選んで解答</strong
+				>します（1題5設問なので50設問）。制限時間60分、60点以上で合格です。
+				11題以上に手を付けると失格になるので、どの分野で取るかをあらかじめ決めておくのが有利です。
+			</p>
+			<p class="mt-3 text-base leading-relaxed text-slate-700 dark:text-slate-300">
+				問番号と分野の対応は決まっています。まず得意な分野を作り、そこから広げてください。
+			</p>
+
+			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">級ごとの案内</h2>
+			<p class="mt-3 text-base leading-relaxed text-slate-700 dark:text-slate-300">
+				級が上がるほど、用語を答える設問が減り、記述の正誤を見分ける設問が増えます。
+				受ける級のページから読んでください。
+			</p>
+			<div class="mt-4 grid gap-4 sm:grid-cols-3">
+				{
+					(["3", "2", "1"] as const).map((level) => (
+						<LinkCard
+							href={`/study/graphic-design/level-${level}/`}
+							label={`${levelGuides[level].label}で問われること`}
+							desc={`${levelGuides[level].standard}。${levelGuides[level].format} 合格率は直近4年で${Math.min(...levelGuides[level].results.map((r) => r.passRate))}〜${Math.max(...levelGuides[level].results.map((r) => r.passRate))}%。`}
+							accent={level === "3" ? "#0ea5e9" : level === "2" ? "#8b5cf6" : "#f43f5e"}
+						/>
+					))
+				}
+			</div>
+
+			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">分野ごとの解説</h2>
+			<div class="mt-4 grid gap-4 sm:grid-cols-2">
+				{
+					cards.map((card) => (
+						<LinkCard href={card.href} label={card.label} desc={card.desc} accent={card.accent} />
+					))
+				}
+			</div>
+
+			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">1級を受ける人へ</h2>
+			<div class="mt-4">
+				<LinkCard
+					href="/study/graphic-design/jitsugi/"
+					label="1級実技の練習課題"
+					desc="指示書・指示図・支給データ・自己採点チェックリストの一式。テーマは「日本の伝統色」。過去問ではなく書き下ろしの類題です。"
+					accent="#f43f5e"
+				/>
+			</div>
+
+			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">まとめて調べる</h2>
+			<div class="mt-4">
+				<LinkCard
+					href="/tools/gd-kentei/"
+					label="4択ドリル"
+					desc="書き下ろした135問。分野と級で絞って1問ずつ解け、まちがえた問題だけをやり直せます。"
+					accent="#d946ef"
+				/>
+			</div>
+			<div class="mt-4">
+				<LinkCard
+					href="/study/graphic-design/glossary/"
+					label="用語辞典"
+					desc={`6分野の用語${terms.length}語。読み・分野・級で絞り込めます。`}
+					accent="#334155"
+				/>
+			</div>
+
+			<p class="mt-12 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+				出題の傾向は、公益社団法人 全国工業高等学校長協会が公開している<a
+					href="https://zenkoukyo.or.jp/index_kentei/exam_result/"
+					target="_blank"
+					rel="noreferrer noopener"
+					class="mx-1 underline underline-offset-2 hover:no-underline">検定試験の実施結果</a
+				>（第26〜30回）をもとにしています。ここに載せている文章と例はすべて書き下ろしたもので、過去問そのものは掲載していません。
+			</p>
+		</main>
+	</div>
+</Layout>

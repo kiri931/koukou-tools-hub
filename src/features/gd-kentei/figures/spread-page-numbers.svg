@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" role="img" aria-labelledby="t">
+  <title id="t">横組みと縦組みの見開きで、ページ番号の偶数と奇数がどちらに来るか</title>
+  <text x="20" y="24" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">見開きのページ番号は、組み方向で左右が入れ替わる</text>
+
+  <g transform="translate(30,44)">
+    <text x="0" y="0" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">横組みの本（左開き）</text>
+    <rect x="0" y="12" width="120" height="140" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="120" y="12" width="120" height="140" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M120 12 V152" stroke="currentColor" stroke-width="3"/>
+    <g stroke="#64748b" stroke-width="1.2">
+      <path d="M14 34 H106 M14 50 H106 M14 66 H106 M14 82 H106 M134 34 H226 M134 50 H226 M134 66 H226 M134 82 H226"/>
+    </g>
+    <path d="M14 104 H96" stroke="#0ea5e9" stroke-width="2"/>
+    <path d="M96 104 l-6 -4 v8 z" fill="#0ea5e9"/>
+    <text x="52" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">12</text>
+    <text x="188" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">13</text>
+    <text x="0" y="176" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">左が偶数、右が奇数</text>
+    <text x="0" y="196" font-family="sans-serif" font-size="12" fill="currentColor">青い矢印＝文字の流れる向き。太い線＝のど（綴じ側）</text>
+  </g>
+
+  <g transform="translate(350,44)">
+    <text x="0" y="0" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">縦組みの本（右開き）</text>
+    <rect x="0" y="12" width="120" height="140" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="120" y="12" width="120" height="140" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M120 12 V152" stroke="currentColor" stroke-width="3"/>
+    <g stroke="#64748b" stroke-width="1.2">
+      <path d="M20 26 V96 M40 26 V96 M60 26 V96 M80 26 V96 M140 26 V96 M160 26 V96 M180 26 V96 M200 26 V96"/>
+    </g>
+    <path d="M214 110 H120" stroke="#0ea5e9" stroke-width="2"/>
+    <path d="M120 110 l6 -4 v8 z" fill="#0ea5e9"/>
+    <text x="52" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">13</text>
+    <text x="188" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">12</text>
+    <text x="0" y="176" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">左が奇数、右が偶数</text>
+    <text x="0" y="196" font-family="sans-serif" font-size="12" fill="currentColor">文字は右から左へ流れる</text>
+  </g>
+  <text x="20" y="252" font-family="sans-serif" font-size="12" fill="currentColor">1ページ目は必ず表紙をめくった側に来る。横組みなら右ページが1。</text>
+</svg>

@@ -1,0 +1,20 @@
+---
+// グラフィックデザイン検定の各ページから対策トップへ戻るための1本リンク。
+// 本文の React コンポーネント（GdLesson 等）は Astro 側から中身を触れないので、
+// その手前に置いて全ページで同じ位置に出るようにしている。
+interface Props {
+	/** 戻り先。既定は対策トップ。 */
+	href?: string;
+	label?: string;
+}
+const { href = "/study/graphic-design/", label = "グラフィックデザイン検定 対策" } = Astro.props;
+---
+
+<nav class="mx-auto max-w-3xl px-4 pt-6" aria-label="ページの階層">
+	<a
+		href={href}
+		class="inline-flex min-h-11 items-center gap-2 text-base text-sky-800 underline underline-offset-4 hover:no-underline dark:text-sky-300"
+	>
+		<span aria-hidden="true">←</span>{label}へもどる
+	</a>
+</nav>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="t">
+  <title id="t">網点の大きさで濃淡を表すしくみと、色ごとにスクリーン角度をずらす理由</title>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="20" y="52" width="76" height="76"/>
+    <rect x="110" y="52" width="76" height="76"/>
+    <rect x="200" y="52" width="76" height="76"/>
+  </g>
+  <g fill="currentColor" font-family="sans-serif" font-size="13">
+    <text x="20" y="30" font-size="14" font-weight="bold">濃淡は点の大きさで表す</text>
+    <text x="34" y="146">濃い</text>
+    <text x="120" y="146">中間</text>
+    <text x="214" y="146">薄い</text>
+    <text x="20" y="176" font-size="12">インキの濃さは変えられない。</text>
+    <text x="20" y="194" font-size="12">点の面積で濃く見せる。</text>
+  </g>
+  <g fill="currentColor">
+    <g id="dense">
+      <circle cx="34" cy="66" r="6"/><circle cx="53" cy="66" r="6"/><circle cx="72" cy="66" r="6"/><circle cx="91" cy="66" r="6"/>
+      <circle cx="34" cy="85" r="6"/><circle cx="53" cy="85" r="6"/><circle cx="72" cy="85" r="6"/><circle cx="91" cy="85" r="6"/>
+      <circle cx="34" cy="104" r="6"/><circle cx="53" cy="104" r="6"/><circle cx="72" cy="104" r="6"/><circle cx="91" cy="104" r="6"/>
+      <circle cx="34" cy="123" r="6"/><circle cx="53" cy="123" r="6"/><circle cx="72" cy="123" r="6"/><circle cx="91" cy="123" r="6"/>
+    </g>
+    <g transform="translate(90,0)" opacity="1">
+      <circle cx="34" cy="66" r="3.6"/><circle cx="53" cy="66" r="3.6"/><circle cx="72" cy="66" r="3.6"/><circle cx="91" cy="66" r="3.6"/>
+      <circle cx="34" cy="85" r="3.6"/><circle cx="53" cy="85" r="3.6"/><circle cx="72" cy="85" r="3.6"/><circle cx="91" cy="85" r="3.6"/>
+      <circle cx="34" cy="104" r="3.6"/><circle cx="53" cy="104" r="3.6"/><circle cx="72" cy="104" r="3.6"/><circle cx="91" cy="104" r="3.6"/>
+      <circle cx="34" cy="123" r="3.6"/><circle cx="53" cy="123" r="3.6"/><circle cx="72" cy="123" r="3.6"/><circle cx="91" cy="123" r="3.6"/>
+    </g>
+    <g transform="translate(180,0)">
+      <circle cx="34" cy="66" r="1.6"/><circle cx="53" cy="66" r="1.6"/><circle cx="72" cy="66" r="1.6"/><circle cx="91" cy="66" r="1.6"/>
+      <circle cx="34" cy="85" r="1.6"/><circle cx="53" cy="85" r="1.6"/><circle cx="72" cy="85" r="1.6"/><circle cx="91" cy="85" r="1.6"/>
+      <circle cx="34" cy="104" r="1.6"/><circle cx="53" cy="104" r="1.6"/><circle cx="72" cy="104" r="1.6"/><circle cx="91" cy="104" r="1.6"/>
+      <circle cx="34" cy="123" r="1.6"/><circle cx="53" cy="123" r="1.6"/><circle cx="72" cy="123" r="1.6"/><circle cx="91" cy="123" r="1.6"/>
+    </g>
+  </g>
+
+  <g font-family="sans-serif" font-size="13" fill="currentColor">
+    <text x="330" y="30" font-size="14" font-weight="bold">4色は角度をずらして重ねる</text>
+  </g>
+  <g stroke-width="2" fill="none">
+    <g stroke="#0ea5e9"><g transform="rotate(15 400 95)"><path d="M360 60 H440 M360 76 H440 M360 92 H440 M360 108 H440 M360 124 H440"/></g></g>
+    <g stroke="#f43f5e"><g transform="rotate(75 400 95)"><path d="M360 60 H440 M360 76 H440 M360 92 H440 M360 108 H440 M360 124 H440"/></g></g>
+  </g>
+  <rect x="352" y="52" width="96" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <g stroke-width="2" fill="none">
+    <g stroke="#f59e0b"><path d="M480 60 H560 M480 76 H560 M480 92 H560 M480 108 H560 M480 124 H560"/></g>
+    <g stroke="currentColor"><g transform="rotate(45 520 95)"><path d="M480 60 H560 M480 76 H560 M480 92 H560 M480 108 H560 M480 124 H560"/></g></g>
+  </g>
+  <rect x="472" y="52" width="96" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <g font-family="sans-serif" font-size="12" fill="currentColor">
+    <text x="352" y="156">C 15度 ／ M 75度</text>
+    <text x="472" y="156">Y 0度 ／ K 45度</text>
+    <text x="352" y="182" font-size="12">墨（K）は目立ちにくい45度に置く。</text>
+    <text x="352" y="200" font-size="12">角度が近いとモアレが出る。</text>
+  </g>
+  <g font-family="sans-serif" font-size="12" fill="currentColor">
+    <text x="20" y="240" font-weight="bold">画像解像度（ppi）は、スクリーン線数（lpi）の2倍が目安。</text>
+    <text x="20" y="262">175lpi で刷るなら 350ppi。線数が多いほど網点は細かく、なめらかに見える。</text>
+  </g>
+</svg>

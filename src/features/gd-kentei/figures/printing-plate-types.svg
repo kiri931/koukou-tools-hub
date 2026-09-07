@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" role="img" aria-labelledby="t">
+  <title id="t">凸版・凹版・平版・孔版の断面図。インキが版のどこに乗るかの違い</title>
+  <g font-family="sans-serif" font-size="13" fill="currentColor">
+    <text x="20" y="24" font-size="14" font-weight="bold">版のどこにインキが乗るかで4つに分かれる</text>
+  </g>
+
+  <!-- 凸版 -->
+  <g transform="translate(20,44)">
+    <path d="M0 60 H130 V40 H20 V20 H50 V40 H80 V20 H110 V40 H130 V60 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M20 20 H50 M80 20 H110" stroke="#f43f5e" stroke-width="6" stroke-linecap="butt"/>
+    <rect x="0" y="0" width="130" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <text x="0" y="86" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">凸版式</text>
+    <text x="0" y="104" font-family="sans-serif" font-size="12" fill="currentColor">出っぱりにインキ</text>
+    <text x="0" y="122" font-family="sans-serif" font-size="12" fill="currentColor">例: 活版・フレキソ</text>
+  </g>
+  <!-- 凹版 -->
+  <g transform="translate(175,44)">
+    <path d="M0 20 H20 V44 H50 V20 H80 V44 H110 V20 H130 V60 H0 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M20 40 H50 M80 40 H110" stroke="#f43f5e" stroke-width="6"/>
+    <rect x="0" y="0" width="130" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <text x="0" y="86" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">凹版式</text>
+    <text x="0" y="104" font-family="sans-serif" font-size="12" fill="currentColor">くぼみにインキ</text>
+    <text x="0" y="122" font-family="sans-serif" font-size="12" fill="currentColor">例: グラビア</text>
+  </g>
+  <!-- 平版 -->
+  <g transform="translate(330,44)">
+    <rect x="0" y="20" width="130" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <path d="M20 20 H50 M80 20 H110" stroke="#f43f5e" stroke-width="6"/>
+    <path d="M0 20 H20 M50 20 H80 M110 20 H130" stroke="#0ea5e9" stroke-width="6"/>
+    <rect x="0" y="0" width="130" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <text x="0" y="86" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">平版式</text>
+    <text x="0" y="104" font-family="sans-serif" font-size="12" fill="currentColor">高低差なし。油の所にインキ、</text>
+    <text x="0" y="120" font-family="sans-serif" font-size="12" fill="currentColor">水の所には乗らない</text>
+    <text x="0" y="136" font-family="sans-serif" font-size="12" fill="currentColor">例: オフセット</text>
+  </g>
+  <!-- 孔版 -->
+  <g transform="translate(485,44)">
+    <path d="M0 20 H30 M50 20 H80 M100 20 H130" stroke="currentColor" stroke-width="1.5" fill="none"/>
+    <path d="M36 26 V52 M86 26 V52" stroke="#f43f5e" stroke-width="6"/>
+    <rect x="0" y="52" width="130" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="0" y="0" width="130" height="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <text x="0" y="86" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">孔版式</text>
+    <text x="0" y="104" font-family="sans-serif" font-size="12" fill="currentColor">穴から押し出す</text>
+    <text x="0" y="122" font-family="sans-serif" font-size="12" fill="currentColor">例: スクリーン印刷</text>
+  </g>
+
+  <g font-family="sans-serif" font-size="12" fill="currentColor">
+    <text x="20" y="216"><tspan fill="#f43f5e">■</tspan> インキ　<tspan fill="#0ea5e9">■</tspan> 湿し水　細い線が版と紙</text>
+    <text x="20" y="240">版画では 木版画＝凸版、エッチング＝凹版、リトグラフ＝平版、シルクスクリーン＝孔版。</text>
+  </g>
+</svg>

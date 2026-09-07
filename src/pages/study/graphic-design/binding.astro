@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdLesson from "../../../features/gd-kentei/components/GdLesson";
+import { bindingLesson } from "../../../features/gd-kentei/data/lessons/binding";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="製本 - グラフィックデザイン検定 - 高校情報"
+  description="グラフィックデザイン検定の「製本」分野の解説。上製本と並製本の違い、紙の目、折丁と台割、綴じと断裁。問14・問15で問われる製本の用語を整理しました。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdLesson lesson={bindingLesson} client:only="react" />
+  </div>
+</Layout>

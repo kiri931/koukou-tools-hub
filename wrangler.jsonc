@@ -8,7 +8,17 @@
     // アセットに該当しないパスで例外(error 1101 / HTTP 500)になる。
     "binding": "ASSETS",
     // 未設定だと存在しないURLで空の404になり、src/pages/404.astro が使われない
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // 既定ではアセットが先に評価されるため、実体の無い /support/ は worker に
+    // 届かないまま404ページになっていた(Search Console の404として検出済み)。
+    // このパスだけ worker を先に走らせて、301で /support/feature-request/ へ送る。
+    // /support/feature-request/ も worker を先に通す。?ref= 付きの古いURLを
+    // 301 で #ref= へ寄せる処理が worker 側にあるため。
+    // /study/ も同じ理由で worker を先に通す。実体は /study/equation-transformation/ だけで、
+    // /study/ 自体はアセットに無いため、放っておくと404ページが返って worker の301が効かない。
+    // 末尾スラッシュ無しURLを 301 で正規化するため、Assets の自動307より先に worker を通す。
+    // 詳しくは src/worker.ts のコメント。
+    "run_worker_first": true
   },
   "routes": [
     { "pattern": "koukou-jouhou.org/_astro-web/*", "zone_name": "koukou-jouhou.org" },

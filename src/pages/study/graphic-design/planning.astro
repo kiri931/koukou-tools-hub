@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdLesson from "../../../features/gd-kentei/components/GdLesson";
+import { planningLesson } from "../../../features/gd-kentei/data/lessons/planning";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="企画・マーケティング・デザイン - グラフィックデザイン検定 - 高校情報"
+  description="グラフィックデザイン検定の「企画・マーケティング・デザイン」分野の解説。4P・AIDMA・SWOT・PDCAといった枠組みと、色・かたち・技法の基本。問1〜問3で問われる用語を、取り違えやすい点とあわせて整理しました。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdLesson lesson={planningLesson} client:only="react" />
+  </div>
+</Layout>

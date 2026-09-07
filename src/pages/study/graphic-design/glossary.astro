@@ -1,0 +1,18 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdGlossary from "../../../features/gd-kentei/components/GdGlossary";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="グラフィックデザイン検定 用語辞典 - 高校情報"
+  description="グラフィックデザイン検定の対策用の用語辞典。企画・写真・編集レイアウト・写真製版・印刷・製本の6分野の用語を、読みと分野で絞り込みながら調べられます。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdGlossary client:only="react" />
+  </div>
+</Layout>

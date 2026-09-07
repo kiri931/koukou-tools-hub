@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdLevelGuide from "../../../features/gd-kentei/components/GdLevelGuide";
+import { levelGuides } from "../../../features/gd-kentei/data/levels";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="2級で問われること - グラフィックデザイン検定 - 高校情報"
+  description="グラフィックデザイン検定2級の出題の傾向。2級から記述判定型が半数を超えます。合格率は79〜83%と3級より高め。想定は高校2学年終了程度、筆記60分のみ。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdLevelGuide guide={levelGuides["2"]} client:only="react" />
+  </div>
+</Layout>

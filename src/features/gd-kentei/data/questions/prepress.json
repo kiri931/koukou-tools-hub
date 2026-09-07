@@ -1,0 +1,447 @@
+[
+  {
+    "id": "prepress-001",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "濃淡を、点の大きさに置き換えて表したものを何というか。",
+    "choices": [
+      "網点",
+      "平網",
+      "地紋",
+      "モアレ"
+    ],
+    "answer": 0,
+    "explanation": "濃淡を点の大きさで表すのが網点。平網は一定の濃度で敷いた面のこと。地紋は下地に敷く規則的な模様。モアレは規則的な模様どうしが干渉して出るうろこ状の模様で、いずれも濃淡を点に置き換えるしくみそのものではない。",
+    "termIds": [
+      "amiten",
+      "jimon",
+      "moire"
+    ]
+  },
+  {
+    "id": "prepress-002",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "CTPの意味を正しく説明しているものはどれか。",
+    "choices": [
+      "Color To Proofing",
+      "Computer To Plate",
+      "Communication To People",
+      "Color To Perfect"
+    ],
+    "answer": 1,
+    "explanation": "CTPはComputer To Plateで、データから直接刷版を作る方式。Color To Proofingは色校正らしく見せた語だが、そうした略語は使われていない。Communication To Peopleも印刷の用語ではない。Color To Perfectも同様に存在しない語である。",
+    "termIds": [
+      "ctp",
+      "sappan"
+    ]
+  },
+  {
+    "id": "prepress-003",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "印刷に必要な画像解像度は、スクリーン線数に対しておよそ何倍が目安か。",
+    "choices": [
+      "1倍",
+      "3倍",
+      "2倍",
+      "1/2倍"
+    ],
+    "answer": 2,
+    "explanation": "画像解像度（ppi）はスクリーン線数（lpi）の2倍が目安で、175lpiなら350ppi。1倍では網点を作るのに情報が足りない。3倍にしても仕上がりはほとんど変わらず、容量だけが増える。1/2倍では明らかに足りない。",
+    "termIds": [
+      "gazou-kaizoudo",
+      "screen-sensuu",
+      "amiten"
+    ]
+  },
+  {
+    "id": "prepress-004",
+    "field": "prepress",
+    "level": "3",
+    "type": "statement",
+    "polarity": "incorrect",
+    "stem": "デジタル画像のdpiについての記述で、間違っているものを選びなさい。",
+    "choices": [
+      "画像解像度を表す言葉として使われる。",
+      "1インチあたりのドットの数である。",
+      "実際にはppiとほぼ同じ意味で使われる。",
+      "ファイルデータの容量そのものを表す。"
+    ],
+    "answer": 3,
+    "explanation": "ファイルデータの容量そのものを表すという記述が誤り。容量は解像度と寸法と色数から決まるもので、dpiだけでは決まらない。画像解像度を表す言葉として使われるのも、1インチあたりのドットの数であるのも、実際にはppiとほぼ同じ意味で使われるのも正しい。",
+    "termIds": [
+      "gazou-kaizoudo",
+      "gazou-youryou"
+    ]
+  },
+  {
+    "id": "prepress-005",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "次の印刷原稿のうち、反射原稿ではないものはどれか。",
+    "choices": [
+      "スライドフィルム",
+      "印画紙",
+      "パステル画",
+      "新聞"
+    ],
+    "answer": 0,
+    "explanation": "スライドフィルムは光を通して読む透過原稿なので、反射原稿ではない。印画紙、パステル画、新聞はいずれも紙に描かれていて、光を当てて跳ね返った光を読む反射原稿である。",
+    "termIds": [
+      "hansha-genkou",
+      "renzoku-kaichou"
+    ]
+  },
+  {
+    "id": "prepress-006",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "次の印刷原稿のうち、連続階調ではないものはどれか。",
+    "choices": [
+      "風景写真",
+      "文字原稿",
+      "人物写真",
+      "カラー写真"
+    ],
+    "answer": 1,
+    "explanation": "文字原稿は濃い部分と白い部分しかない線画原稿なので、連続階調ではない。風景写真、人物写真、カラー写真はいずれも濃度がなめらかに変わる連続階調原稿である。",
+    "termIds": [
+      "renzoku-kaichou",
+      "sengaback"
+    ]
+  },
+  {
+    "id": "prepress-007",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "同じ判型なら、カラー写真の画像容量は白黒写真のおよそ何倍になるか。",
+    "choices": [
+      "1倍",
+      "2倍",
+      "3倍",
+      "1/2倍"
+    ],
+    "answer": 2,
+    "explanation": "RGBの3成分を持つので、およそ3倍になる。1倍では色の情報が入る余地がない。2倍や1/2倍も成分の数と合わない。",
+    "termIds": [
+      "gazou-youryou",
+      "monochrome"
+    ]
+  },
+  {
+    "id": "prepress-008",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "印刷機に取り付けて、実際にインキを乗せる版を何というか。",
+    "choices": [
+      "ブランケット",
+      "圧胴",
+      "原版",
+      "刷版"
+    ],
+    "answer": 3,
+    "explanation": "インキを乗せる版が刷版で、平版ではアルミのPS版を使う。ブランケットはオフセット印刷で版から紙へインキを受け渡すゴムの膜。圧胴は紙を版に押し当てる胴。原版は複製のもとになる版の呼び方で、いずれも印刷機に取り付けてインキを受ける版そのものではない。",
+    "termIds": [
+      "sappan",
+      "ctp",
+      "burankettoushi"
+    ]
+  },
+  {
+    "id": "prepress-009",
+    "field": "prepress",
+    "level": "2",
+    "type": "term",
+    "stem": "規則的な模様どうしが干渉して出る、うろこ状の模様を何というか。",
+    "choices": [
+      "モアレ",
+      "ドットゲイン",
+      "ヒッキー",
+      "ピッキング"
+    ],
+    "answer": 0,
+    "explanation": "干渉して出るうろこ状の模様がモアレ。ドットゲインは刷ったときに網点が太って濃く出る現象。ヒッキーは紙粉などが版に付いて白く抜ける不具合。ピッキングは紙の表面がむしり取られる不具合で、いずれも干渉による模様ではない。",
+    "termIds": [
+      "moire",
+      "dot-gain",
+      "hickey",
+      "picking"
+    ]
+  },
+  {
+    "id": "prepress-010",
+    "field": "prepress",
+    "level": "2",
+    "type": "term",
+    "stem": "4色を重ねて刷るとき、目立ちにくい墨に割り当てるスクリーン角度は何度か。",
+    "choices": [
+      "0度",
+      "45度",
+      "15度",
+      "75度"
+    ],
+    "answer": 1,
+    "explanation": "墨には45度を割り当てるのが基本。0度はイエローに割り当てられることが多い。15度と75度はシアンとマゼンタに使われる角度で、どれも墨の基本ではない。",
+    "termIds": [
+      "screen-kakudo",
+      "amiten",
+      "process-color"
+    ]
+  },
+  {
+    "id": "prepress-011",
+    "field": "prepress",
+    "level": "2",
+    "type": "term",
+    "stem": "刷ったときに網点が版よりも太って、濃く出る現象を何というか。",
+    "choices": [
+      "モアレ",
+      "ヒッキー",
+      "ドットゲイン",
+      "ミスチング"
+    ],
+    "answer": 2,
+    "explanation": "網点が太って濃く出るのがドットゲインで、インキが紙ににじむために起きる。モアレは模様の干渉で出るうろこ状の模様。ヒッキーは版に付いた異物で白く抜ける不具合。ミスチングはインキが霧になって飛び散る不具合で、いずれも網点が太る現象ではない。",
+    "termIds": [
+      "dot-gain",
+      "moire",
+      "hickey",
+      "misting"
+    ]
+  },
+  {
+    "id": "prepress-012",
+    "field": "prepress",
+    "level": "2",
+    "type": "term",
+    "stem": "1インチあたりに並ぶ網点の列の数を何というか。単位はlpiである。",
+    "choices": [
+      "画像解像度",
+      "スクリーン角度",
+      "ビット深度",
+      "スクリーン線数"
+    ],
+    "answer": 3,
+    "explanation": "1インチあたりの網点の列の数がスクリーン線数。画像解像度は1インチあたりのピクセル数で、単位はppi。スクリーン角度は網点の列の傾きで、数ではなく向き。ビット深度は1画素の色の段階数で、いずれも線の数ではない。",
+    "termIds": [
+      "screen-sensuu",
+      "gazou-kaizoudo",
+      "screen-kakudo",
+      "bit-shinsa"
+    ]
+  },
+  {
+    "id": "prepress-013",
+    "field": "prepress",
+    "level": "2",
+    "type": "term",
+    "stem": "2つの色がどれだけ違うかを1つの数値で表したものを何というか。",
+    "choices": [
+      "色差",
+      "色温度",
+      "色相",
+      "彩度"
+    ],
+    "answer": 0,
+    "explanation": "違いを数値で表したのが色差（ΔE）で、L*a*b*空間での距離として計算する。色温度は光の色みを絶対温度で表したもの。色相は赤や青といった色味の種類。彩度は鮮やかさの度合いで、いずれも2色の隔たりを表す数値ではない。",
+    "termIds": [
+      "shikisa",
+      "lab",
+      "shikionndo",
+      "munsell"
+    ]
+  },
+  {
+    "id": "prepress-014",
+    "field": "prepress",
+    "level": "2",
+    "type": "term",
+    "stem": "刷る前に、色の出かたを確かめる工程を何というか。",
+    "choices": [
+      "カラーマッチング",
+      "色校正",
+      "階調再現",
+      "面付け"
+    ],
+    "answer": 1,
+    "explanation": "色の出かたを確かめる工程が色校正。カラーマッチングは機器ごとに違う色の出かたをそろえる考え方そのもの。階調再現は原稿の明暗をどこまで写し取るかの話。面付けは折ったときに正しい順になるようページを並べる作業で、いずれも刷る前に色を見る工程ではない。",
+    "termIds": [
+      "iro-kousei",
+      "color-matching",
+      "kaichou-saigen",
+      "menzuke"
+    ]
+  },
+  {
+    "id": "prepress-015",
+    "field": "prepress",
+    "level": "2",
+    "type": "term",
+    "stem": "印刷用にフォントを埋め込み、色や解像度の条件を決めたPDFの規格を何というか。",
+    "choices": [
+      "PDF/A",
+      "PDF/E",
+      "PDF/X",
+      "PDF/UA"
+    ],
+    "answer": 2,
+    "explanation": "印刷用の受け渡しに使われるのがPDF/X。PDF/Aは長期保存のための規格。PDF/Eは技術文書のための規格。PDF/UAはアクセシビリティのための規格で、いずれも印刷入稿を目的にしたものではない。",
+    "termIds": [
+      "pdf-prepress",
+      "prepress-term"
+    ]
+  },
+  {
+    "id": "prepress-016",
+    "field": "prepress",
+    "level": "1",
+    "type": "term",
+    "stem": "明度と2つの色味の軸で色を表す、機器に依らない色空間を何というか。",
+    "choices": [
+      "CMYK",
+      "RGB",
+      "HSB",
+      "L*a*b*"
+    ],
+    "answer": 3,
+    "explanation": "機器に依らないのがL*a*b*で、カラーマネジメントの仲立ちに使う。CMYKは印刷インキに、RGBはモニタに結び付いた機器依存の表し方。HSBは色相・彩度・明度で表す方式だが、これも機器に依らない基準としては使われない。",
+    "termIds": [
+      "lab",
+      "shikisa",
+      "color-matching",
+      "process-color"
+    ]
+  },
+  {
+    "id": "prepress-017",
+    "field": "prepress",
+    "level": "1",
+    "type": "term",
+    "stem": "輪郭の境目のコントラストを上げて、画像をくっきり見せる処理を何というか。",
+    "choices": [
+      "アンシャープマスク",
+      "マスキング",
+      "トーンカーブ",
+      "デスクリーン"
+    ],
+    "answer": 0,
+    "explanation": "輪郭を立てるのがアンシャープマスク。名前はぼかした画像を使う手順に由来し、ぼかす処理ではない。マスキングは画像の一部だけを処理の対象にすること。トーンカーブは入力と出力の明るさの対応を決める曲線。デスクリーンは印刷物の網点をぼかして取り込む処理で、いずれも輪郭を立てる処理ではない。",
+    "termIds": [
+      "unsharp-mask",
+      "masking",
+      "tone-curve",
+      "moire"
+    ]
+  },
+  {
+    "id": "prepress-018",
+    "field": "prepress",
+    "level": "1",
+    "type": "term",
+    "stem": "1枚のモノクロ写真を2色の版で刷り、階調に深みを出す手法を何というか。",
+    "choices": [
+      "プロセスカラー",
+      "ダブルトーン",
+      "ダイレクト製版",
+      "デスクリーン"
+    ],
+    "answer": 1,
+    "explanation": "2色の版で刷るのがダブルトーン（デュオトーン）。プロセスカラーはC・M・Y・Kの4色で刷る方法。ダイレクト製版は版を直接作る工程の呼び方。デスクリーンは網点をぼかす処理で、いずれも2色で階調を作る手法ではない。",
+    "termIds": [
+      "double-tone",
+      "process-color",
+      "monochrome"
+    ]
+  },
+  {
+    "id": "prepress-019",
+    "field": "prepress",
+    "level": "1",
+    "type": "statement",
+    "polarity": "correct",
+    "stem": "カラーマネジメントについての記述で、正しいものを選びなさい。",
+    "choices": [
+      "すべての機器で同じ数値を送れば、同じ色が出る。",
+      "モニタで見た色は、そのまま印刷でも再現できる。",
+      "機器ごとの特性をプロファイルとして持ち、共通の色空間を介して変換する。",
+      "色の違いは数値では表せないので、目で見て判断するしかない。"
+    ],
+    "answer": 2,
+    "explanation": "機器ごとの特性をプロファイルとして持ち、共通の色空間を介して変換するのが正しい。すべての機器で同じ数値を送れば、同じ色が出るというのは誤りで、機器ごとに出せる色の範囲が違う。モニタで見た色は、そのまま印刷でも再現できるというのも誤りで、印刷の色域はモニタより狭い。色の違いは数値では表せないので、目で見て判断するしかないというのも誤りで、色差（ΔE）として数値化できる。",
+    "termIds": [
+      "color-matching",
+      "lab",
+      "shikisa",
+      "iro-kousei"
+    ]
+  },
+  {
+    "id": "prepress-020",
+    "field": "prepress",
+    "level": "1",
+    "type": "term",
+    "stem": "人物写真で、瞳に映り込む小さな光の点を何というか。",
+    "choices": [
+      "ハイライト",
+      "ゴースト",
+      "モアレ",
+      "キャッチライト"
+    ],
+    "answer": 3,
+    "explanation": "瞳に映る光の点がキャッチライトで、ここが白く残ると生き生きして見える。ハイライトは画面の中でいちばん明るい部分全般を指す言葉。ゴーストはレンズの反射で光源の形が写り込む現象。モアレは模様の干渉で出る模様で、いずれも瞳の光の点そのものではない。",
+    "termIds": [
+      "catch-light",
+      "kaichou-saigen",
+      "ghost",
+      "moire"
+    ]
+  },
+  {
+    "id": "prepress-021",
+    "field": "prepress",
+    "level": "3",
+    "type": "term",
+    "stem": "印刷する前の、原稿づくりから製版までの工程をまとめて何というか。",
+    "choices": [
+      "プリプレス",
+      "プレス",
+      "ポストプレス",
+      "オンデマンド"
+    ],
+    "answer": 0,
+    "explanation": "刷る前の工程がプリプレス。プレスは印刷そのもの。ポストプレスは断裁や製本など刷った後の工程。オンデマンドは版を作らず必要な分だけ刷る印刷方式で、工程の区分を表す言葉ではない。",
+    "termIds": [
+      "prepress-term",
+      "sappan",
+      "on-demand"
+    ]
+  },
+  {
+    "id": "prepress-022",
+    "field": "prepress",
+    "level": "1",
+    "type": "term",
+    "stem": "入力の明るさを出力の明るさへどう移すかを表した曲線を何というか。",
+    "choices": [
+      "ヒストグラム",
+      "トーンカーブ",
+      "ガンマ",
+      "階調再現"
+    ],
+    "answer": 1,
+    "explanation": "対応を表す曲線がトーンカーブ。ヒストグラムは明るさの分布を棒で表したグラフで、曲線ではない。ガンマは明るさの変換の傾きを表す1つの数値。階調再現は原稿の明暗をどこまで写し取れるかという考え方そのもので、いずれも入出力の対応を描いた曲線ではない。",
+    "termIds": [
+      "tone-curve",
+      "kaichou-saigen",
+      "bit-shinsa"
+    ]
+  }
+]

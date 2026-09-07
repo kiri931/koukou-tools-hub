@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdLesson from "../../../features/gd-kentei/components/GdLesson";
+import { prepressLesson } from "../../../features/gd-kentei/data/lessons/prepress";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="写真製版 - グラフィックデザイン検定 - 高校情報"
+  description="グラフィックデザイン検定の「写真製版」分野の解説。網点・スクリーン線数・画像解像度・モアレ・カラーマッチング。問10・問11で問われる写真製版の用語を整理しました。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdLesson lesson={prepressLesson} client:only="react" />
+  </div>
+</Layout>

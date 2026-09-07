@@ -1,0 +1,103 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import "../../../styles/global.css";
+
+// 1級実技の練習課題。配布物は public/gd-jitsugi/ の下に置いた静的ファイル。
+// 生成の手順は tools/gd-jitsugi/ にある。
+const base = "/gd-jitsugi/dento-iro";
+const files = [
+	{ href: `${base}/shijisho.pdf`, label: "指示書（PDF・2ページ）", desc: "作り方の指定。まず15分かけて読む。" },
+	{ href: `${base}/shijizu.pdf`, label: "指示図（PDF・1ページ）", desc: "どこに何を置くかを、寸法つきで示した図。" },
+	{ href: `${base}/checklist.pdf`, label: "自己採点チェックリスト（PDF）", desc: "刷り上がりを見ながら1つずつ確かめる。" },
+	{ href: `${base}/dento-iro.zip`, label: "一式まとめて（ZIP）", desc: "上の3つと、支給データ（text・illust・image）が入っている。" },
+];
+---
+
+<Layout
+	title="1級実技の練習課題 - グラフィックデザイン検定 - 高校情報"
+	description="グラフィックデザイン検定1級の実技試験の類題。指示書・指示図・支給データ・自己採点チェックリストを一式で配布します。テーマは「日本の伝統色」。"
+>
+	<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+		<Header client:load currentPath={Astro.url.pathname} />
+		<GdBackLink />
+		<main class="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+			<p class="text-sm font-medium text-slate-600 dark:text-slate-400">グラフィックデザイン検定</p>
+			<h1
+				class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50"
+			>
+				1級実技の練習課題
+			</h1>
+			<p class="mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-300">
+				1級の実技試験は、支給された文字・イラスト・写真を、指示書と指示図のとおりにA4へ配置する課題です。
+				ここに置いてあるのは、その形をそのまま踏襲して作った<strong
+					class="font-bold text-slate-900 dark:text-slate-50">練習用の類題</strong
+				>です。テーマは「日本の伝統色」。
+				<strong class="font-bold text-slate-900 dark:text-slate-50"
+					>過去問そのものではなく、文章・図・画像はすべて書き下ろし・自作です。</strong
+				>
+			</p>
+
+			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">配布物</h2>
+			<ul class="mt-4 space-y-3">
+				{
+					files.map((file) => (
+						<li class="rounded-lg border border-slate-300 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+							<a
+								href={file.href}
+								class="text-base font-bold text-sky-800 underline underline-offset-4 hover:no-underline dark:text-sky-300"
+							>
+								{file.label}
+							</a>
+							<p class="mt-1 text-base text-slate-700 dark:text-slate-300">{file.desc}</p>
+						</li>
+					))
+				}
+			</ul>
+
+			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">進め方</h2>
+			<ol
+				class="mt-4 list-decimal space-y-2 pl-5 text-base leading-relaxed text-slate-800 dark:text-slate-200"
+			>
+				<li>指示書を15分で読む。読むだけで、まだ作らない。</li>
+				<li>90分で作る。本番と同じ時間配分です。</li>
+				<li>原寸・カラー・トンボ付きで出力する。</li>
+				<li>チェックリストで自己採点する。</li>
+			</ol>
+
+			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">本番との違い</h2>
+			<ul
+				class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-slate-800 dark:text-slate-200"
+			>
+				<li>
+					本番の支給データは illust が jpg と eps、image が tif と jpg です。ここでは svg・png・jpg
+					にしています。<strong class="font-bold">練習の中身（配置と文字組版）は変わりません。</strong>
+				</li>
+				<li>書体は本番では会場ごとに指定されます。ここでは手元の明朝体とゴシック体を1つずつ選び、作品全体で統一してください。</li>
+				<li>主催団体名は本番の団体名ではなく、練習用の名前にしてあります。</li>
+			</ul>
+
+			<div
+				class="mt-10 rounded-lg border border-amber-400 bg-amber-50 p-6 dark:border-amber-700 dark:bg-amber-950"
+			>
+				<h2 class="text-xl font-bold text-amber-950 dark:text-amber-100">採点について</h2>
+				<p class="mt-2 text-base leading-relaxed text-amber-950 dark:text-amber-100">
+					自動採点はしません。Illustrator や InDesign の成果物を画面で採点するのは無理があるためです。
+					代わりに自己採点チェックリストを付けました。
+					<strong class="font-bold">「すべてが配置されていれば合格」ではありません。</strong>
+					配置だけでなく、文字組版の精度や寸法の正確さも見られます。1つずつ測って確かめてください。
+				</p>
+			</div>
+
+			<p class="mt-10 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+				課題の形は、公益社団法人 全国工業高等学校長協会が公開している<a
+					href="https://zenkoukyo.or.jp/index_kentei/exam_result/"
+					target="_blank"
+					rel="noreferrer noopener"
+					class="mx-1 underline underline-offset-2 hover:no-underline">検定試験の実施結果</a
+				>に載っている実技試験の構成を参考にしています。指示書の文言・題材・支給データはすべて書き下ろしたもので、過去問は掲載していません。
+			</p>
+		</main>
+	</div>
+</Layout>

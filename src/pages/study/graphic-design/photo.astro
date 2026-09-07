@@ -1,0 +1,19 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/Header";
+import GdBackLink from "../../../components/GdBackLink.astro";
+import GdLesson from "../../../features/gd-kentei/components/GdLesson";
+import { photoLesson } from "../../../features/gd-kentei/data/lessons/photo";
+import "../../../styles/global.css";
+---
+
+<Layout
+  title="写真 - グラフィックデザイン検定 - 高校情報"
+  description="グラフィックデザイン検定の「写真」分野の解説。焦点距離・画角・絞り・シャッター・被写界深度・ホワイトバランス。問4〜問6で問われる写真の用語を、取り違えやすい点とあわせて整理しました。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdLesson lesson={photoLesson} client:only="react" />
+  </div>
+</Layout>

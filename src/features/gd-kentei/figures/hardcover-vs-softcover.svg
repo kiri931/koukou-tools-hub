@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 280" role="img" aria-labelledby="t">
+  <title id="t">上製本と並製本の断面。チリが出るのは上製本だけ</title>
+  <g font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">
+    <text x="20" y="26">上製本（ハードカバー）</text>
+    <text x="350" y="26">並製本（ソフトカバー）</text>
+  </g>
+
+  <!-- 上製本 -->
+  <g transform="translate(20,44)">
+    <rect x="10" y="0" width="14" height="160" fill="#8b5cf6" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="24" y="16" width="180" height="128" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <g stroke="currentColor" stroke-width="1" opacity="0.7">
+      <path d="M24 30 H204 M24 44 H204 M24 58 H204 M24 72 H204 M24 86 H204 M24 100 H204 M24 114 H204 M24 128 H204"/>
+    </g>
+    <path d="M10 0 H210 M10 160 H210" stroke="#8b5cf6" stroke-width="5"/>
+    <path d="M204 0 V160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <g stroke="#f43f5e" stroke-width="1.5" fill="none">
+      <path d="M204 8 H210" marker-end="none"/>
+      <path d="M204 152 H210"/>
+    </g>
+    <text x="216" y="12" font-family="sans-serif" font-size="12" fill="#f43f5e" font-weight="bold">チリ</text>
+    <text x="216" y="30" font-family="sans-serif" font-size="12" fill="currentColor">表紙が中身より</text>
+    <text x="216" y="46" font-family="sans-serif" font-size="12" fill="currentColor">はみ出す（約3mm）</text>
+    <text x="6" y="182" font-family="sans-serif" font-size="12" fill="currentColor">紫の線＝表紙／点線＝中身の端</text>
+    <text x="6" y="200" font-family="sans-serif" font-size="12" fill="currentColor">背は丸背か角背。見返しで中身と表紙をつなぐ。</text>
+  </g>
+
+  <!-- 並製本 -->
+  <g transform="translate(350,44)">
+    <rect x="10" y="8" width="12" height="144" fill="#10b981" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="22" y="16" width="170" height="128" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <g stroke="currentColor" stroke-width="1" opacity="0.7">
+      <path d="M22 30 H192 M22 44 H192 M22 58 H192 M22 72 H192 M22 86 H192 M22 100 H192 M22 114 H192 M22 128 H192"/>
+    </g>
+    <path d="M10 8 H192 M10 152 H192" stroke="#10b981" stroke-width="5"/>
+    <path d="M192 8 V152" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="196" y="12" font-family="sans-serif" font-size="12" fill="currentColor" font-weight="bold">チリなし</text>
+    <text x="196" y="30" font-family="sans-serif" font-size="12" fill="currentColor">表紙と中身が</text>
+    <text x="196" y="46" font-family="sans-serif" font-size="12" fill="currentColor">同じ大きさ</text>
+    <text x="6" y="182" font-family="sans-serif" font-size="12" fill="currentColor">緑の線＝表紙。端が中身とそろっている。</text>
+    <text x="6" y="200" font-family="sans-serif" font-size="12" fill="currentColor">くるみ製本（無線綴じ）と組み合わせることが多い。</text>
+  </g>
+</svg>

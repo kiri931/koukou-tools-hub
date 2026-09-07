@@ -1,0 +1,31 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Header } from "../../components/Header";
+import GdBackLink from "../../components/GdBackLink.astro";
+import GdDrill from "../../features/gd-kentei/components/GdDrill";
+import "../../styles/global.css";
+---
+
+<Layout
+  title="グラフィックデザイン検定ドリル - 高校情報"
+  description="グラフィックデザイン検定の4択ドリル。企画・写真・編集レイアウト・写真製版・印刷・製本の6分野を、級で絞って1問ずつ解けます。まちがえた問題だけをやり直せます。"
+>
+  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <Header client:load currentPath={Astro.url.pathname} />
+    <GdBackLink />
+    <GdDrill client:only="react" />
+  </div>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'グラフィックデザイン検定ドリル',
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'Web Browser',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+      inLanguage: 'ja-JP',
+      url: 'https://koukou-jouhou.org/tools/gd-kentei/',
+    })}
+  />
+</Layout>
