@@ -1,29 +1,58 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Check, Copy } from 'lucide-react';
+import type { AngleMode, DisplayLine, NumberBase } from '../types';
 
 interface CalcDisplayProps {
-  expression: string;
+  /** カーソルより前の式（表示用に整形済み） */
+  beforeCursor: string;
+  /** カーソルより後ろの式（表示用に整形済み） */
+  afterCursor: string;
   ghostExpression?: string;
+  /** ゴースト表示のときに使う、カーソルを分けない式 */
+  expression: string;
   result: string;
-  angleMode: 'DEG' | 'RAD';
+  angleMode: AngleMode;
   shiftActive: boolean;
+  altActive: boolean;
   memory: number;
   parenBalance: number;
   hasError: boolean;
+  /** Norm / Fix2 / Sci3 のような表示形式のラベル */
+  formatLabel: string;
+  base: NumberBase;
+  engShift: number;
+  dmsView: boolean;
+  /** 過去の式と答え */
+  lines: DisplayLine[];
 }
 
 export default function CalcDisplay({
-  expression,
+  beforeCursor,
+  afterCursor,
   ghostExpression,
+  expression,
   result,
   angleMode,
   shiftActive,
+  altActive,
   memory,
   parenBalance,
   hasError,
+  formatLabel,
+  base,
+  engShift,
+  dmsView,
+  lines,
 }: CalcDisplayProps) {
   const [copied, setCopied] = useState(false);
   const normalizedMemory = Object.is(memory, -0) ? 0 : memory;
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // 新しい行が増えたら、いちばん下（いま打っている式）まで送る
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [lines.length]);
 
   const handleCopy = async () => {
     if (hasError) return;
@@ -38,28 +67,69 @@ export default function CalcDisplay({
 
   return (
     <div className="rounded-2xl border border-zinc-300 bg-zinc-900 p-4 text-zinc-100 shadow-inner dark:border-zinc-700">
-      <div className="mb-2 flex flex-wrap items-center gap-2 text-xs font-semibold tracking-wide text-zinc-300">
-        <span className="rounded bg-zinc-700 px-2 py-0.5">{angleMode}</span>
-        <span className={`rounded px-2 py-0.5 ${shiftActive ? 'bg-violet-500 text-white' : 'bg-zinc-700'}`}>SHIFT</span>
+      {/* ステータス行。実物の電卓と同じく、いまのモードを常に出す。 */}
+      <div className="mb-2 flex flex-wrap items-center gap-2 text-sm font-semibold tracking-wide text-zinc-200">
+        <span className="rounded bg-zinc-700 px-2 py-0.5">{formatLabel}</span>
+        <span className="rounded bg-zinc-700 px-2 py-0.5">{base}</span>
+        <span className="rounded bg-zinc-700 px-2 py-0.5">[{angleMode}]</span>
+        {shiftActive && (
+          <span className="rounded bg-violet-500 px-2 py-0.5 text-white">SHIFT</span>
+        )}
+        {altActive && <span className="rounded bg-amber-500 px-2 py-0.5 text-zinc-950">ALT</span>}
         {normalizedMemory !== 0 && (
           <span className="rounded bg-emerald-600 px-2 py-0.5 text-white">
             M {normalizedMemory.toFixed(4).replace(/\.0+$/, '')}
           </span>
         )}
+        {engShift !== 0 && (
+          <span className="rounded bg-sky-600 px-2 py-0.5 text-white">
+            ENG {engShift > 0 ? `+${engShift}` : engShift}
+          </span>
+        )}
+        {dmsView && <span className="rounded bg-sky-600 px-2 py-0.5 text-white">度分秒</span>}
         {parenBalance > 0 && (
           <span className="rounded bg-amber-500/80 px-2 py-0.5 text-zinc-950">() {parenBalance}</span>
         )}
       </div>
-      <div className="min-h-10 break-all text-right font-mono text-sm text-zinc-400 sm:text-base">
+
+      {/* 過去の式と答え。実物と同じく上へ流れていく。 */}
+      {lines.length > 0 && (
+        <div
+          ref={scrollRef}
+          className="mb-2 max-h-28 overflow-y-auto break-all border-b border-zinc-700 pb-2 text-left font-mono text-sm text-zinc-400"
+        >
+          {lines.map((line, index) => (
+            <div
+              key={`${index}-${line.text}`}
+              className={line.isResult ? 'font-semibold text-zinc-200' : 'text-zinc-400'}
+            >
+              {line.text}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="min-h-10 break-all text-right font-mono text-base text-zinc-200">
         {ghostExpression ? (
           <>
             <span className="text-zinc-200">{expression}</span>
             <span className="text-zinc-600">{ghostExpression.slice(expression.length)}</span>
           </>
+        ) : beforeCursor || afterCursor ? (
+          <span className="inline-flex items-center">
+            <span>{beforeCursor}</span>
+            {/* カーソル。色ではなく「縦棒」という形で位置を示す */}
+            <span
+              aria-hidden="true"
+              className="mx-px inline-block h-5 w-0.5 animate-pulse bg-emerald-300 align-middle"
+            />
+            <span>{afterCursor}</span>
+          </span>
         ) : (
-          expression || '0'
+          '0'
         )}
       </div>
+
       <div className="flex items-start gap-2">
         <div
           className={`min-h-12 flex-1 break-all text-right font-mono text-2xl font-bold sm:text-3xl ${hasError ? 'text-rose-300' : 'text-emerald-300'}`}

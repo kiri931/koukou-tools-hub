@@ -5,6 +5,8 @@ import type { ButtonDef } from '../types';
 interface CalcButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   button: ButtonDef;
   shiftActive: boolean;
+  /** ALT（第2機能）が押されているか */
+  altActive?: boolean;
   highlighted?: boolean;
   onPress: (action: string) => void;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -20,14 +22,25 @@ const variantClassMap: Record<ButtonDef['variant'], string> = {
 };
 
 const CalcButton = forwardRef<HTMLButtonElement, CalcButtonProps>(function CalcButton(
-  { button, shiftActive, highlighted = false, onPress, onClick, className, ...buttonProps },
+  { button, shiftActive, altActive = false, highlighted = false, onPress, onClick, className, ...buttonProps },
   ref
 ) {
-  const label = shiftActive && button.shiftLabel ? button.shiftLabel : button.label;
-  const action = shiftActive && button.shiftAction ? button.shiftAction : button.action;
+  // ALT が優先。次に SHIFT。どちらも無ければそのキー本来の機能。
+  const label = altActive && button.altLabel
+    ? button.altLabel
+    : shiftActive && button.shiftLabel
+      ? button.shiftLabel
+      : button.label;
+  const action = altActive && button.altAction
+    ? button.altAction
+    : shiftActive && button.shiftAction
+      ? button.shiftAction
+      : button.action;
   const isShiftKey = button.action === 'toggle-shift';
-  const hasShiftAlt = !isShiftKey && Boolean(button.shiftAction || button.shiftLabel);
-  const showShiftSubLabel = hasShiftAlt && shiftActive && label !== button.label;
+  const isAltKey = button.action === 'toggle-alt';
+  const hasShiftAlt = !isShiftKey && !isAltKey && Boolean(button.shiftAction || button.shiftLabel);
+  const hasAlt = !isAltKey && Boolean(button.altAction || button.altLabel);
+  const showShiftSubLabel = (hasShiftAlt || hasAlt) && label !== button.label;
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
@@ -46,12 +59,13 @@ const CalcButton = forwardRef<HTMLButtonElement, CalcButtonProps>(function CalcB
         button.wide && 'col-span-2',
         showShiftSubLabel && 'py-1',
         isShiftKey && shiftActive && 'ring-2 ring-violet-400 ring-offset-1 dark:ring-violet-300',
+        isAltKey && altActive && 'ring-2 ring-amber-600 ring-offset-1 dark:ring-amber-400',
         // ライトは amber-700 (対キー背景 4.57:1)、ダークは amber-400 (8.92:1)。
         // どちらも DADS の非テキスト 3:1 を満たす。yellow-400 は 1.39:1 で見えなかった。
         highlighted && 'ring-[3px] ring-amber-700 ring-offset-1 dark:ring-amber-400',
         className
       )}
-      aria-pressed={isShiftKey ? shiftActive : undefined}
+      aria-pressed={isShiftKey ? shiftActive : isAltKey ? altActive : undefined}
       {...buttonProps}
     >
       {/* 色だけに情報を乗せないための印。枠線と併用する。 */}
@@ -69,6 +83,16 @@ const CalcButton = forwardRef<HTMLButtonElement, CalcButtonProps>(function CalcB
           className={cn(
             'absolute right-1.5 top-1.5 size-1.5 rounded-full bg-current opacity-45',
             shiftActive && 'opacity-80'
+          )}
+        />
+      )}
+      {/* ALT の副機能を持つ印。SHIFT の丸と形を変えて、色だけに頼らないようにする。 */}
+      {hasAlt && (
+        <span
+          aria-hidden="true"
+          className={cn(
+            'absolute left-1.5 top-1.5 size-1.5 rotate-45 bg-current opacity-45',
+            altActive && 'opacity-80'
           )}
         />
       )}

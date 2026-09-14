@@ -11,6 +11,8 @@ type HelpItem = {
   description: string;
   shiftLabel?: string;
   shiftDescription?: string;
+  altLabel?: string;
+  altDescription?: string;
 };
 
 type HelpSection = {
@@ -19,6 +21,98 @@ type HelpSection = {
 };
 
 const HELP_SECTIONS: HelpSection[] = [
+  {
+    title: 'ALT（黄色の副機能）',
+    items: [
+      {
+        label: 'ALT',
+        description:
+          'キーの左上に「◆」が付いたボタンの、もう1つの機能を有効にします。1回押すと、次に押したキー1つだけに効きます。',
+      },
+      {
+        label: 'ALT → SHIFT（FSE）',
+        description:
+          '答えの見せ方を Norm → Fix → Sci → Eng の順に切り替えます。Sci3 なら −233 は −2.33E2 と出ます。',
+      },
+      {
+        label: 'ALT → DEG（DRG）',
+        description: '角度単位を DEG → RAD → GRAD の順に切り替えます。',
+      },
+      {
+        label: 'ALT → STAT（DIGS）',
+        description: '桁数を決めます。Fix は小数点以下、Sci と Eng は有効数字の桁数です。',
+      },
+      {
+        label: 'ALT → °′″（H:M:S）',
+        description: '答えを度分秒の形と十進の形で切り替えて見ます。例: 1.5 ⇄ 1°30\'0"',
+      },
+      {
+        label: 'ALT → MC（Const）',
+        description: '光速・重力加速度などの物理定数を一覧から選んで式に入れます。',
+      },
+      {
+        label: 'ALT → MR（M）',
+        description: 'メモリの値を「M」という記号のまま式に入れます。あとから中身が変わっても追随します。',
+      },
+      {
+        label: 'ALT → DEL（(−)）',
+        description: 'これから打つ数の符号をマイナスにします。引き算の「−」とは別のキーです。',
+      },
+      {
+        label: 'ALT → x²（x⁻¹）',
+        description: '逆数を計算します。例: 4 x⁻¹ = 0.25',
+      },
+      {
+        label: 'ALT → √（Abs）',
+        description: '絶対値を計算します。例: Abs((−)8) = 8',
+      },
+      {
+        label: 'ALT → xʸ（Mod）',
+        description: '割った余りを計算します。例: Mod(17,5) = 2',
+      },
+      {
+        label: 'ALT → log（Pol）',
+        description: '直交座標を極座標へ直します。例: Pol(3,4) で r=5、θ=53.13°',
+      },
+      {
+        label: 'ALT → ln（Rec）',
+        description: '極座標を直交座標へ直します。例: Rec(2,60) で x=1、y=1.732',
+      },
+    ],
+  },
+  {
+    title: 'カーソルと基数',
+    items: [
+      {
+        label: '◀ ▶',
+        description: 'カーソルを1つずつ動かします。途中に文字を入れたり消したりできます。キー: ← →',
+        altLabel: 'HEX / OCT',
+        altDescription: 'ALTと一緒に押すと16進・8進モードになります。',
+        shiftLabel: '◀ENG / ENG▶',
+        shiftDescription: '出ている答えの指数を3つずつ動かします。例: 12.3E3 ⇄ 12345E0',
+      },
+      {
+        label: '△',
+        description: 'カーソルを式の先頭へ戻します。',
+        altLabel: 'DEC',
+        altDescription: '10進モードに戻します。',
+        shiftLabel: '▲履歴',
+        shiftDescription: '1つ前に計算した式を呼び戻します。キー: ↑',
+      },
+      {
+        label: '⌦',
+        description: 'カーソルの位置にある1文字を消します。DELはカーソルの手前を消します。',
+        altLabel: 'BIN',
+        altDescription: '2進モードにします。',
+        shiftLabel: '▼履歴',
+        shiftDescription: '1つ後に計算した式へ進みます。キー: ↓',
+      },
+      {
+        label: 'SHIFT → 1〜6',
+        description: '16進数の A〜F を入力します（HEXモードのとき）。',
+      },
+    ],
+  },
   {
     title: 'モード・操作',
     items: [
@@ -193,6 +287,14 @@ export default function HelpSheet({ open, onOpenChange }: HelpSheetProps) {
                           SHIFT: {item.shiftLabel}
                         </span>
                         <span className="text-muted-foreground">{item.shiftDescription}</span>
+                      </div>
+                    )}
+                    {item.altLabel && item.altDescription && (
+                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                        <span className="rounded bg-amber-100 px-1.5 py-0.5 font-mono font-semibold text-amber-900 dark:bg-amber-500/15 dark:text-amber-100">
+                          ALT: {item.altLabel}
+                        </span>
+                        <span className="text-muted-foreground">{item.altDescription}</span>
                       </div>
                     )}
                   </div>

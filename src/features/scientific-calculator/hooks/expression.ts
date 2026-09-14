@@ -1,3 +1,6 @@
+import type { NumberBase } from '../types';
+import { BASE_RADIX } from './format';
+
 // 式文字列そのものを扱う純関数。React に依存しないのでテストしやすい。
 
 export function countParenBalance(expression: string) {
@@ -26,9 +29,24 @@ export function expandDms(expression: string) {
  * mathjs に渡す直前の整形。
  * 閉じ忘れたかっこを補う（実際の関数電卓と同じ挙動）。
  */
-export function prepareForEval(expression: string) {
+export function prepareForEval(expression: string, base: NumberBase = 'DEC') {
   const missing = Math.max(0, countParenBalance(expression));
-  return expandDms(`${expression}${')'.repeat(missing)}`);
+  const closed = `${expression}${')'.repeat(missing)}`;
+  return expandBaseLiterals(expandDms(closed), base);
+}
+
+/**
+ * DEC 以外のとき、式の中の数値リテラルを10進に直す。
+ * 関数名は小文字なので、大文字A〜Fだけを含むリテラルとはぶつからない。
+ *   HEX: "FF+1" -> "255+1"
+ */
+export function expandBaseLiterals(expression: string, base: NumberBase) {
+  if (base === 'DEC') return expression;
+  const radix = BASE_RADIX[base];
+  return expression.replace(/[0-9A-F]+/g, (literal) => {
+    const value = Number.parseInt(literal, radix);
+    return Number.isNaN(value) ? literal : String(value);
+  });
 }
 
 /**
@@ -134,6 +152,11 @@ export function formatExpressionForDisplay(expression: string) {
     .replace(/\bpow10\(/g, '10^(')
     .replace(/\bexp\(/g, 'e^(')
     .replace(/\bcbrt\(/g, '∛(')
+    .replace(/\babs\(/g, 'Abs(')
+    .replace(/\bpol\(/g, 'Pol(')
+    .replace(/\brec\(/g, 'Rec(')
+    .replace(/\bmod\(/g, 'Mod(')
+    .replace(/\binv\(/g, '1÷(')
     .replace(/\bsqrt\(/g, '√(')
     .replace(/\*/g, '×')
     .replace(/\//g, '÷')

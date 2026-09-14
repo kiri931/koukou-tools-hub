@@ -2,15 +2,27 @@ import type { CalculatorState } from '../types';
 import { applyInsertOperator, applyInsertText } from './calculatorStateTransitions';
 
 function createState(overrides: Partial<CalculatorState> = {}): CalculatorState {
+  const expression = overrides.expression ?? '';
   return {
     expression: '',
+    cursorPos: expression.length,
     result: '0',
+    resultValue: null,
     justEvaluated: false,
     hasError: false,
     shiftActive: false,
+    altActive: false,
     angleMode: 'DEG',
+    formatMode: 'NORM',
+    digits: 6,
+    base: 'DEC',
+    engShift: 0,
+    dmsView: false,
     panelMode: 'none',
     memory: 0,
+    lines: [],
+    inputHistory: [],
+    historyCursor: null,
     ...overrides,
   };
 }

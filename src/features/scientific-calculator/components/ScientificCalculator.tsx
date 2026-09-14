@@ -6,8 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { TooltipProvider } from '@/components/ui/tooltip';
 import CalcDisplay from './CalcDisplay';
 import CalcKeypad from './CalcKeypad';
+import ConstantsPanel from './ConstantsPanel';
+import DigitsPanel from './DigitsPanel';
 import HelpSheet from './HelpSheet';
 import StatisticsPanel from './StatisticsPanel';
+import { formatModeLabel } from '../hooks/format';
 import { useCalculator } from '../hooks/useCalculator';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 
@@ -15,7 +18,8 @@ export default function ScientificCalculator() {
   const [helpOpen, setHelpOpen] = useState(false);
   const {
     state,
-    displayExpression,
+    displayBeforeCursor,
+    displayAfterCursor,
     parenBalance,
     pressButton,
     setPanelMode,
@@ -52,21 +56,46 @@ export default function ScientificCalculator() {
           </CardHeader>
           <CardContent className="space-y-4">
             <CalcDisplay
-              expression={displayExpression}
+              expression={`${displayBeforeCursor}${displayAfterCursor}`}
+              beforeCursor={displayBeforeCursor}
+              afterCursor={displayAfterCursor}
               result={state.result}
               angleMode={state.angleMode}
               shiftActive={state.shiftActive}
+              altActive={state.altActive}
               memory={state.memory}
               parenBalance={parenBalance}
               hasError={state.hasError}
+              formatLabel={formatModeLabel(state.formatMode, state.digits)}
+              base={state.base}
+              engShift={state.engShift}
+              dmsView={state.dmsView}
+              lines={state.lines}
             />
 
-            <CalcKeypad shiftActive={state.shiftActive} angleMode={state.angleMode} onPress={pressButton} />
+            <CalcKeypad
+              shiftActive={state.shiftActive}
+              altActive={state.altActive}
+              angleMode={state.angleMode}
+              onPress={pressButton}
+            />
           </CardContent>
         </Card>
 
         <HelpSheet open={helpOpen} onOpenChange={setHelpOpen} />
         <StatisticsPanel open={state.panelMode === 'stats'} onOpenChange={(open) => setPanelMode(open ? 'stats' : 'none')} />
+        <DigitsPanel
+          open={state.panelMode === 'digits'}
+          onOpenChange={(open) => setPanelMode(open ? 'digits' : 'none')}
+          formatMode={state.formatMode}
+          digits={state.digits}
+          onPress={pressButton}
+        />
+        <ConstantsPanel
+          open={state.panelMode === 'consts'}
+          onOpenChange={(open) => setPanelMode(open ? 'consts' : 'none')}
+          onPress={pressButton}
+        />
       </main>
     </TooltipProvider>
   );

@@ -7,7 +7,7 @@ import '../../styles/global.css';
 
 <Layout
   title="関数電卓 - ツール"
-  description="検定の練習に使える関数電卓。三角関数・対数・nPr/nCr・統計処理、角度モードの切り替え、度分秒の入力に対応し、ブラウザだけで動きます。"
+  description="検定の練習に使える関数電卓。三角関数・対数・nPr/nCr・統計処理に加えて、DEG/RAD/GRADの切り替え、Fix/Sci/Engの表示形式、2進・8進・16進、度分秒、Pol/Rec、物理定数まで扱えます。ブラウザだけで動きます。"
 >
   <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
     <Header client:load currentPath={Astro.url.pathname} />
@@ -22,15 +22,20 @@ import '../../styles/global.css';
 
       <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">使い方</h2>
       <ol class="mt-2 list-decimal space-y-1 pl-5">
-        <li>モードや角度単位を設定します。</li>
+        <li>モードや角度単位を設定します（ALT を押してから DEG で DEG→RAD→GRAD）。</li>
         <li>キーボードまたは画面ボタンで式を入力します。</li>
         <li>結果を確認し、必要に応じて履歴や統計機能を使います。</li>
+        <li>キーの左上に「◆」が付いたボタンは、ALT を押すともう1つの機能になります。右上の「●」は SHIFT です。</li>
       </ol>
 
       <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">仕様・対応環境</h2>
       <ul class="mt-2 list-disc space-y-1 pl-5">
         <li>ブラウザ上で完結し、入力内容をサーバーに送信しません。</li>
-        <li>三角関数、指数対数、nPr/nCr、統計の基本処理に対応します。</li>
+        <li>三角関数と逆三角関数、指数対数、nPr/nCr、統計の基本処理に対応します。</li>
+        <li>角度は DEG / RAD / GRAD、表示形式は Norm / Fix / Sci / Eng から選べます。</li>
+        <li>2進・8進・16進の計算ができます（A〜F は SHIFT と数字キーで入れます）。</li>
+        <li>度分秒の入力と表示、極座標との変換（Pol / Rec）、物理定数の呼び出しができます。</li>
+        <li>カーソルを動かして式の途中を直せます。計算した式と答えは画面に積み上がります。</li>
         <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
       </ul>
 
