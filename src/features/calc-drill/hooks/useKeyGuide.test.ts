@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { useKeyGuide, withLayerKeys } from './useKeyGuide';
-import type { DrillProblem } from '@/features/calc-drill/types';
+import type { DrillProblem } from '../types';
 
 function makeProblem(keySequence: string[]): DrillProblem {
   return {

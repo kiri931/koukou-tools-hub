@@ -1,27 +1,35 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import CalculatorSetup from './CalculatorSetup';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import ConstantsPanel from './ConstantsPanel';
 import DigitsPanel from './DigitsPanel';
 import FullScreenCalculator from './FullScreenCalculator';
 import HelpSheet from './HelpSheet';
 import StatisticsPanel from './StatisticsPanel';
-import { DEFAULT_CHOICE, loadChoice, presetFor, saveChoice } from '../exam-presets';
-import { DEFAULT_THEME, loadTheme, saveTheme, type KeypadTheme } from '../keypad-themes';
+import {
+  DEFAULT_THEME,
+  KEYPAD_THEMES,
+  THEME_ORDER,
+  loadTheme,
+  saveTheme,
+  type KeypadTheme,
+} from '../keypad-themes';
 import { useCalculator } from '../hooks/useCalculator';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
-import { useAnswerSheet } from '../hooks/useAnswerSheet';
-import { useKeyGuide } from '../hooks/useKeyGuide';
-import { useProblemSession } from '../hooks/useProblemSession';
-import type { ExamChoice } from '../types';
 
+/**
+ * 関数電卓そのもの。
+ *
+ * 検定の問題を出す・答え合わせをする・解答用紙で解く、といった練習は
+ * 計算技術検定ドリル(/tools/calc-drill/)に寄せてある。
+ * 同じものを2つのページに置くと、直すときに片方だけ古くなるため。
+ */
 export default function ScientificCalculator() {
   const [helpOpen, setHelpOpen] = useState(false);
-  const [choice, setChoice] = useState<ExamChoice>(DEFAULT_CHOICE);
   const [theme, setTheme] = useState<KeypadTheme>(DEFAULT_THEME);
   const [open, setOpen] = useState(false);
-  const [assist, setAssist] = useState(false);
   const {
     state,
     displayBeforeCursor,
@@ -29,47 +37,11 @@ export default function ScientificCalculator() {
     parenBalance,
     pressButton,
     setPanelMode,
-    applyPreset,
   } = useCalculator();
 
-  // 前回選んだ級・分野・色を既定にする。選択画面自体は毎回出す。
   useEffect(() => {
-    setChoice(loadChoice());
     setTheme(loadTheme());
   }, []);
-
-  const session = useProblemSession(choice, open && choice.mode === 'problems');
-  const sheet = useAnswerSheet(choice, open && choice.mode === 'sheet');
-
-  // いま解いている問題。モードによって出どころが違う。
-  const activeProblem =
-    choice.mode === 'problems'
-      ? session.problem
-      : choice.mode === 'sheet'
-        ? (sheet.rows[sheet.activeIndex]?.problem ?? null)
-        : null;
-
-  const guide = useKeyGuide(activeProblem, assist && open);
-
-  // 補助を入れている間は、表示形式もその問題の丸め方に合わせる。
-  // 本番の四則計算は (1)〜(7) が小数第2位、(8)〜(10) が有効数字3けたで、
-  // そのたびに FSE と DIGS を押し直すのは練習の本筋ではない。
-  useEffect(() => {
-    if (!open || !assist || !activeProblem?.rounding) return;
-    const r = activeProblem.rounding;
-    applyPreset(
-      r.kind === 'decimals'
-        ? { formatMode: 'FIX', digits: r.value }
-        : { formatMode: 'SCI', digits: r.value }
-    );
-    // applyPreset は毎回作り直されるので、依存に入れると無限に走る
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, assist, activeProblem?.id]);
-
-  const handlePress = (action: string) => {
-    guide.observe(action);
-    pressButton(action);
-  };
 
   // 電卓を開いている間だけ、裏のページがスクロールしないようにする
   useEffect(() => {
@@ -82,25 +54,7 @@ export default function ScientificCalculator() {
   }, [open]);
 
   // ヘルプに「キー: Enter または =」と書いてあるのに、これを繋いでいなかった。
-  // ドリル側では繋がない（押すキーを制限しているので、キーボードから
-  // 素通しできてしまうとガイドの意味がなくなる）。
   useKeyboardInput({ onPress: pressButton });
-
-  const start = () => {
-    const preset = presetFor(choice);
-    applyPreset({
-      angleMode: preset.angleMode,
-      formatMode: preset.formatMode,
-      digits: preset.digits,
-      base: preset.base,
-    });
-    saveChoice(choice);
-    saveTheme(theme);
-    session.restart();
-    sheet.restart();
-    setAssist(false);
-    setOpen(true);
-  };
 
   const changeTheme = (next: KeypadTheme) => {
     setTheme(next);
@@ -117,47 +71,60 @@ export default function ScientificCalculator() {
               検定の練習に使える電卓です。押した数字はこの端末から出ません。
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <CalculatorSetup
-              choice={choice}
-              onChange={setChoice}
-              theme={theme}
-              onThemeChange={changeTheme}
-              onStart={start}
-            />
+          <CardContent className="space-y-6">
+            <fieldset>
+              <legend className="text-base font-semibold">色</legend>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {THEME_ORDER.map((name) => (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => changeTheme(name)}
+                    aria-pressed={theme === name}
+                    className={cn(
+                      // 選択中は色だけでなく「✓」と太い枠でも示す
+                      'min-h-11 rounded-lg border-2 px-4 py-2 text-base font-semibold transition',
+                      theme === name
+                        ? 'border-violet-700 bg-violet-700 text-white dark:border-violet-300 dark:bg-violet-300 dark:text-slate-900'
+                        : 'border-slate-400 bg-white text-slate-900 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800'
+                    )}
+                  >
+                    {theme === name ? `✓ ${KEYPAD_THEMES[name].label}` : KEYPAD_THEMES[name].label}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-1 text-base text-slate-700 dark:text-slate-300">
+                {KEYPAD_THEMES[theme].description}
+              </p>
+            </fieldset>
+
+            <Button type="button" size="lg" className="w-full text-lg" onClick={() => setOpen(true)}>
+              電卓をひらく
+            </Button>
+
+            <p className="text-base text-slate-700 dark:text-slate-300">
+              検定と同じ形の問題を解く練習は{' '}
+              <a className="underline" href="/tools/calc-drill/">
+                計算技術検定ドリル
+              </a>{' '}
+              にあります。同じ電卓を使います。
+            </p>
           </CardContent>
         </Card>
 
         {open && (
           <FullScreenCalculator
-            choice={choice}
             state={state}
             displayBeforeCursor={displayBeforeCursor}
             displayAfterCursor={displayAfterCursor}
             parenBalance={parenBalance}
-            onPress={handlePress}
+            onPress={pressButton}
             onBack={() => {
               setOpen(false);
-              // 全画面から戻ると裏のページの位置が残る。選択画面が見える位置へ戻す
               window.scrollTo({ top: 0 });
             }}
             onHelp={() => setHelpOpen(true)}
             theme={theme}
-            problem={session.problem}
-            judgement={session.judgement}
-            answered={session.answered}
-            correct={session.correct}
-            onCheck={() => session.check(state.result)}
-            onNext={session.next}
-            sheet={sheet}
-            assist={assist}
-            onToggleAssist={choice.mode === 'calc' ? undefined : () => setAssist((v) => !v)}
-            highlightedAction={guide.nextAction ?? undefined}
-            assistOffTrack={guide.offTrack}
-            onAssistReset={() => {
-              pressButton('ac');
-              guide.reset();
-            }}
           />
         )}
 

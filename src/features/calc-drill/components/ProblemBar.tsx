@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
-import MathText from './MathText';
-import { roundingLabel } from '@/features/calc-drill/types';
-import type { DrillProblem } from '@/features/calc-drill/types';
+import MathText from '@/features/scientific-calculator/components/MathText';
+import { roundingLabel } from '../types';
+import type { DrillProblem } from '../types';
 import type { Judgement } from '../hooks/useProblemSession';
 
 interface ProblemBarProps {

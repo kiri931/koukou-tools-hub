@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
-import { generateProblems } from '@/features/calc-drill/data/problems';
-import { isAnswerCorrect } from '@/features/calc-drill/lib/grading';
-import type { DrillProblem } from '@/features/calc-drill/types';
-import type { ExamChoice } from '../types';
+import { generateProblems } from '../data/problems';
+import { isAnswerCorrect } from '../lib/grading';
+import type { DrillChoice, DrillProblem } from '../types';
+
 
 export type Judgement = { kind: 'none' } | { kind: 'correct' } | { kind: 'wrong'; answer: string };
 
@@ -13,7 +13,7 @@ export type Judgement = { kind: 'none' } | { kind: 'correct' } | { kind: 'wrong'
  * こちらは「問題を見て自分で打つ」練習。検定の本番に近いのはこちら。
  * 問題そのものは同じ生成器を使うので、増やす場所は1か所で済む。
  */
-export function useProblemSession(choice: ExamChoice, enabled: boolean) {
+export function useProblemSession(choice: DrillChoice, enabled: boolean) {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1_000_000) + 1);
   const [index, setIndex] = useState(0);
   const [judgement, setJudgement] = useState<Judgement>({ kind: 'none' });

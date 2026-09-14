@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { generateProblems } from '@/features/calc-drill/data/problems';
-import { isAnswerCorrect } from '@/features/calc-drill/lib/grading';
-import type { DrillProblem } from '@/features/calc-drill/types';
-import type { ExamChoice } from '../types';
+import { generateProblems } from '../data/problems';
+import { isAnswerCorrect } from '../lib/grading';
+import type { DrillChoice, DrillProblem } from '../types';
+
 
 /** 検定の1区分は10問・10分。過去問の表紙に書かれているとおり。 */
 export const SHEET_QUESTION_COUNT = 10;
@@ -22,7 +22,7 @@ export interface SheetRow {
  * 10問を一枚に並べ、答えを書き込んでから最後にまとめて採点する。
  * 1問ずつ答え合わせする problems モードとは、そこが違う。
  */
-export function useAnswerSheet(choice: ExamChoice, enabled: boolean) {
+export function useAnswerSheet(choice: DrillChoice, enabled: boolean) {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1_000_000) + 1);
   const [answers, setAnswers] = useState<string[]>(() => Array(SHEET_QUESTION_COUNT).fill(''));
   const [activeIndex, setActiveIndex] = useState(0);

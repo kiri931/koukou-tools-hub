@@ -22,6 +22,12 @@ export interface DrillProblem {
 
 export type DrillLevelFilter = DrillLevel | '両方';
 
+/** 練習する区分。解答用紙も「自分で解く」も、ここを1つに決めてから始める。 */
+export interface DrillChoice {
+  level: DrillLevel;
+  category: DrillCategory;
+}
+
 export function roundingLabel(rounding?: Rounding): string | null {
   if (!rounding) return null;
   return rounding.kind === 'decimals'

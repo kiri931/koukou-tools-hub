@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { BUTTON_ROWS } from '../components/CalcKeypad';
-import type { DrillProblem } from '@/features/calc-drill/types';
+import { BUTTON_ROWS } from '@/features/scientific-calculator/components/CalcKeypad';
+import type { DrillProblem } from '../types';
 
 /** SHIFT を押さないと出せないキー。キー配置を変えてもここが自動で追従する。 */
 const SHIFT_ONLY = new Set(

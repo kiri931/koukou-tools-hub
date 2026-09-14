@@ -6,9 +6,9 @@ import CalcKeypad from '@/features/scientific-calculator/components/CalcKeypad';
 import { generateProblems } from '../data/problems';
 import { useCalcDrill } from '../hooks/useCalcDrill';
 import { clearMissCounts, loadMissCounts, sortByWeakness, type MissCounts } from '../lib/missLog';
-import type { DrillCategory, DrillLevelFilter } from '../types';
+import type { DrillChoice, DrillCategory, DrillLevelFilter } from '../types';
 import DrillDisplay from './DrillDisplay';
-import ExamMode from './ExamMode';
+import PracticeMode from './PracticeMode';
 import WeakKeySummary from './WeakKeySummary';
 import MathText from '@/features/scientific-calculator/components/MathText';
 
@@ -21,12 +21,41 @@ const CATEGORY_FILTERS: (DrillCategory | 'すべて')[] = [
   '実務計算',
 ];
 
+const MODES = [
+  {
+    key: 'guide' as const,
+    label: 'ガイド練習',
+    description:
+      '光っているキーを順に押していきます。手順ごと覚えるための練習です。問題は検定と同じ形で毎回作り直されます。',
+  },
+  {
+    key: 'solo' as const,
+    label: '自分で解く',
+    description:
+      '問題を見て自分で電卓を打ちます。1問ずつその場で答え合わせができます。入力補助を入れると、次に押すキーが光ります。',
+  },
+  {
+    key: 'sheet' as const,
+    label: '解答用紙（本番）',
+    description:
+      '検定と同じ版面で10問を一枚に並べます。10分で解いて、最後にまとめて採点します。',
+  },
+];
+
 export default function CalcDrill() {
   const [levelFilter, setLevelFilter] = useState<DrillLevelFilter>('両方');
   const [categoryFilter, setCategoryFilter] = useState<DrillCategory | 'すべて'>('すべて');
   const [listOpen, setListOpen] = useState(false);
   const [weakFirst, setWeakFirst] = useState(false);
-  const [mode, setMode] = useState<'guide' | 'exam'>('guide');
+  const [mode, setMode] = useState<'guide' | 'solo' | 'sheet'>('guide');
+  const [assist, setAssist] = useState(false);
+
+  // 「自分で解く」と「解答用紙」は区分を1つに決めてから始める。
+  // 絞り込みが「両方」「すべて」のままなら、検定でいちばん最初に解く区分にする。
+  const practiceChoice: DrillChoice = {
+    level: levelFilter === '両方' ? '3級' : levelFilter,
+    category: categoryFilter === 'すべて' ? '四則計算' : categoryFilter,
+  };
   // 開くたびに違う種にする。過去問をそのまま出すのではなく、同じ形の問題を作っている
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
   const displayRef = useRef<HTMLDivElement>(null);
@@ -92,32 +121,29 @@ export default function CalcDrill() {
 
   return (
     <TooltipProvider delayDuration={500} skipDelayDuration={100}>
-      <main className="mx-auto max-w-[30rem] px-4 py-4 text-slate-900 dark:text-slate-100">
+      {/* ガイド練習は片手で押せる幅にする。解答用紙は用紙と電卓を横に並べるので広げる。 */}
+      <main
+        className={`mx-auto px-4 py-4 text-slate-900 dark:text-slate-100 ${
+          mode === 'sheet' ? 'max-w-6xl' : mode === 'solo' ? 'max-w-2xl' : 'max-w-[30rem]'
+        }`}
+      >
         <div className="mb-3 flex flex-wrap gap-1.5">
-          <Button
-            type="button"
-            size="sm"
-            variant={mode === 'guide' ? 'default' : 'outline'}
-            onClick={() => setMode('guide')}
-            aria-pressed={mode === 'guide'}
-          >
-            ガイド練習
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant={mode === 'exam' ? 'default' : 'outline'}
-            onClick={() => setMode('exam')}
-            aria-pressed={mode === 'exam'}
-          >
-            本番（10分）
-          </Button>
+          {MODES.map((m) => (
+            <Button
+              key={m.key}
+              type="button"
+              size="sm"
+              variant={mode === m.key ? 'default' : 'outline'}
+              onClick={() => setMode(m.key)}
+              aria-pressed={mode === m.key}
+            >
+              {m.label}
+            </Button>
+          ))}
         </div>
 
         <p className="mb-3 text-base text-slate-600 dark:text-slate-300">
-          {mode === 'guide'
-            ? '光っているキーを順に押していきます。手順ごと覚えるための練習です。問題は検定と同じ形で毎回作り直されます。'
-            : '検定と同じ 10 分・10 問で通して解きます。キーのガイドは出ません。'}
+          {MODES.find((m) => m.key === mode)?.description}
         </p>
 
         <div className="mb-3 space-y-1.5">
@@ -167,11 +193,12 @@ export default function CalcDrill() {
           </div>
         </div>
 
-        {mode === 'exam' ? (
-          <ExamMode
-            pool={filteredProblems}
-            levelLabel={levelFilter}
-            categoryLabel={categoryFilter}
+        {mode !== 'guide' ? (
+          <PracticeMode
+            kind={mode}
+            choice={practiceChoice}
+            assist={assist}
+            onToggleAssist={() => setAssist((v) => !v)}
           />
         ) : currentProblem ? (
           <>

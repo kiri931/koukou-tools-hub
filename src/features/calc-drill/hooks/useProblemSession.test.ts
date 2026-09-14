@@ -1,8 +1,9 @@
 import { act, renderHook } from '@testing-library/react';
 import { useProblemSession } from './useProblemSession';
-import type { ExamChoice } from '../types';
+import type { DrillChoice } from '../types';
 
-const choice: ExamChoice = { level: '3級', category: '関数計算', mode: 'problems' };
+
+const choice: DrillChoice = { level: '3級', category: '関数計算' };
 
 describe('useProblemSession', () => {
   it('選んだ級と分野の問題だけを出す', () => {

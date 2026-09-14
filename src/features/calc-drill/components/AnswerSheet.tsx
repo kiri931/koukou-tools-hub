@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button';
-import MathText from './MathText';
-import { roundingLabel } from '@/features/calc-drill/types';
-import { PASSING_SCORE } from '@/features/calc-drill/lib/grading';
+import MathText from '@/features/scientific-calculator/components/MathText';
+import { roundingLabel } from '../types';
+import type { DrillChoice } from '../types';
+import { PASSING_SCORE } from '../lib/grading';
 import type { SheetRow } from '../hooks/useAnswerSheet';
-import type { ExamChoice } from '../types';
+
 
 interface AnswerSheetProps {
-  choice: ExamChoice;
+  choice: DrillChoice;
   rows: SheetRow[];
   activeIndex: number;
   graded: boolean;

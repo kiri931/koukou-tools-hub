@@ -5,9 +5,10 @@ import {
   SHEET_SECONDS,
   useAnswerSheet,
 } from './useAnswerSheet';
-import type { ExamChoice } from '../types';
+import type { DrillChoice } from '../types';
 
-const choice: ExamChoice = { level: '3級', category: '四則計算', mode: 'sheet' };
+
+const choice: DrillChoice = { level: '3級', category: '四則計算' };
 
 describe('useAnswerSheet', () => {
   beforeEach(() => vi.useFakeTimers());
@@ -39,7 +40,7 @@ describe('useAnswerSheet', () => {
   });
 
   it('関数計算は、有効数字の問題を後ろ寄りに置く', () => {
-    const kansuu: ExamChoice = { level: '3級', category: '関数計算', mode: 'sheet' };
+    const kansuu: DrillChoice = { level: '3級', category: '関数計算' };
     const { result } = renderHook(() => useAnswerSheet(kansuu, true));
     const kinds = result.current.rows.map((r) => r.problem.rounding?.kind);
     const firstSig = kinds.indexOf('sigfigs');
