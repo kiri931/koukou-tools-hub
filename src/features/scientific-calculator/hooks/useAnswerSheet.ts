@@ -7,6 +7,8 @@ import type { ExamChoice } from '../types';
 /** 検定の1区分は10問・10分。過去問の表紙に書かれているとおり。 */
 export const SHEET_QUESTION_COUNT = 10;
 export const SHEET_SECONDS = 10 * 60;
+/** 四則計算で (1)〜(7) が小数第2位、(8)〜(10) が有効数字3けたになる境目 */
+export const SHEET_FIXED_COUNT = 7;
 
 export interface SheetRow {
   problem: DrillProblem;
@@ -32,14 +34,44 @@ export function useAnswerSheet(choice: ExamChoice, enabled: boolean) {
     const pool = generateProblems(seed, 1).filter(
       (p) => p.level === choice.level && p.category === choice.category
     );
+
     let a = seed >>> 0;
-    const shuffled = [...pool];
-    for (let i = shuffled.length - 1; i > 0; i -= 1) {
-      a = (a * 1664525 + 1013904223) >>> 0;
-      const j = a % (i + 1);
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    const shuffle = <T,>(items: T[]) => {
+      const out = [...items];
+      for (let i = out.length - 1; i > 0; i -= 1) {
+        a = (a * 1664525 + 1013904223) >>> 0;
+        const j = a % (i + 1);
+        [out[i], out[j]] = [out[j], out[i]];
+      }
+      return out;
+    };
+
+    // 本番の並びに合わせる。
+    // 過去問（第82・83・85・86回）の四則計算はどの回も
+    //   (1)〜(7) 小数第2位まで / (8)〜(10) 有効数字3けたまで
+    // で固定なので、その並びを再現する。
+    // 関数計算と実務計算は回ごとに位置が動く（86回は関数(6)、83回は関数(8)）ので、
+    // 有効数字の問題を後ろ寄りに置くだけにとどめる。
+    const isSig = (p: (typeof pool)[number]) => p.rounding?.kind === 'sigfigs';
+    const decimals = shuffle(pool.filter((p) => !isSig(p)));
+    const sigfigs = shuffle(pool.filter(isSig));
+
+    if (choice.category === '四則計算') {
+      const head = decimals.slice(0, SHEET_FIXED_COUNT);
+      const tail = sigfigs.slice(0, SHEET_QUESTION_COUNT - SHEET_FIXED_COUNT);
+      const sheet = [...head, ...tail];
+      // どちらかが足りなければ、残りから埋める（テンプレートが増減しても穴を開けない）
+      if (sheet.length < SHEET_QUESTION_COUNT) {
+        const used = new Set(sheet.map((p) => p.id));
+        for (const p of [...decimals, ...sigfigs]) {
+          if (sheet.length >= SHEET_QUESTION_COUNT) break;
+          if (!used.has(p.id)) sheet.push(p);
+        }
+      }
+      return sheet.slice(0, SHEET_QUESTION_COUNT);
     }
-    return shuffled.slice(0, SHEET_QUESTION_COUNT);
+
+    return [...decimals, ...sigfigs].slice(0, SHEET_QUESTION_COUNT);
   }, [seed, choice.level, choice.category, enabled]);
 
   // 残り時間。0 になったらそこで採点する（本番と同じ）

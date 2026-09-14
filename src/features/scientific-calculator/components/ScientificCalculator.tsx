@@ -12,6 +12,7 @@ import { DEFAULT_THEME, loadTheme, saveTheme, type KeypadTheme } from '../keypad
 import { useCalculator } from '../hooks/useCalculator';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
 import { useAnswerSheet } from '../hooks/useAnswerSheet';
+import { useKeyGuide } from '../hooks/useKeyGuide';
 import { useProblemSession } from '../hooks/useProblemSession';
 import type { ExamChoice } from '../types';
 
@@ -20,6 +21,7 @@ export default function ScientificCalculator() {
   const [choice, setChoice] = useState<ExamChoice>(DEFAULT_CHOICE);
   const [theme, setTheme] = useState<KeypadTheme>(DEFAULT_THEME);
   const [open, setOpen] = useState(false);
+  const [assist, setAssist] = useState(false);
   const {
     state,
     displayBeforeCursor,
@@ -38,6 +40,36 @@ export default function ScientificCalculator() {
 
   const session = useProblemSession(choice, open && choice.mode === 'problems');
   const sheet = useAnswerSheet(choice, open && choice.mode === 'sheet');
+
+  // いま解いている問題。モードによって出どころが違う。
+  const activeProblem =
+    choice.mode === 'problems'
+      ? session.problem
+      : choice.mode === 'sheet'
+        ? (sheet.rows[sheet.activeIndex]?.problem ?? null)
+        : null;
+
+  const guide = useKeyGuide(activeProblem, assist && open);
+
+  // 補助を入れている間は、表示形式もその問題の丸め方に合わせる。
+  // 本番の四則計算は (1)〜(7) が小数第2位、(8)〜(10) が有効数字3けたで、
+  // そのたびに FSE と DIGS を押し直すのは練習の本筋ではない。
+  useEffect(() => {
+    if (!open || !assist || !activeProblem?.rounding) return;
+    const r = activeProblem.rounding;
+    applyPreset(
+      r.kind === 'decimals'
+        ? { formatMode: 'FIX', digits: r.value }
+        : { formatMode: 'SCI', digits: r.value }
+    );
+    // applyPreset は毎回作り直されるので、依存に入れると無限に走る
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, assist, activeProblem?.id]);
+
+  const handlePress = (action: string) => {
+    guide.observe(action);
+    pressButton(action);
+  };
 
   // 電卓を開いている間だけ、裏のページがスクロールしないようにする
   useEffect(() => {
@@ -66,6 +98,7 @@ export default function ScientificCalculator() {
     saveTheme(theme);
     session.restart();
     sheet.restart();
+    setAssist(false);
     setOpen(true);
   };
 
@@ -102,7 +135,7 @@ export default function ScientificCalculator() {
             displayBeforeCursor={displayBeforeCursor}
             displayAfterCursor={displayAfterCursor}
             parenBalance={parenBalance}
-            onPress={pressButton}
+            onPress={handlePress}
             onBack={() => {
               setOpen(false);
               // 全画面から戻ると裏のページの位置が残る。選択画面が見える位置へ戻す
@@ -117,6 +150,14 @@ export default function ScientificCalculator() {
             onCheck={() => session.check(state.result)}
             onNext={session.next}
             sheet={sheet}
+            assist={assist}
+            onToggleAssist={choice.mode === 'calc' ? undefined : () => setAssist((v) => !v)}
+            highlightedAction={guide.nextAction ?? undefined}
+            assistOffTrack={guide.offTrack}
+            onAssistReset={() => {
+              pressButton('ac');
+              guide.reset();
+            }}
           />
         )}
 

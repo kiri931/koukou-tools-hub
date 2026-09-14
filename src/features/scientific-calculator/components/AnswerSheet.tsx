@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import MathText from './MathText';
 import { roundingLabel } from '@/features/calc-drill/types';
 import { PASSING_SCORE } from '@/features/calc-drill/lib/grading';
 import type { SheetRow } from '../hooks/useAnswerSheet';
@@ -93,7 +94,9 @@ export default function AnswerSheet({
                       {row.problem.angleMode === 'RAD' ? '〔RAD〕' : ''}
                     </p>
                   )}
-                  <p className="break-words text-base leading-snug">{row.problem.question}</p>
+                  <p className="break-words text-base leading-snug">
+                    <MathText>{row.problem.question}</MathText>
+                  </p>
 
                   <div className="mt-1 flex flex-wrap items-center gap-2">
                     <span className="text-base">=</span>

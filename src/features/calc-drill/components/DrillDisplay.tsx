@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { BUTTON_ROWS } from '@/features/scientific-calculator/components/CalcKeypad';
 import type { AngleMode } from '@/features/scientific-calculator/types';
 import { roundingLabel, type DrillProblem } from '../types';
+import MathText from '@/features/scientific-calculator/components/MathText';
 
 /** action からキーの表示名を引くための表。「つぎに押すキー」に出す。 */
 const ACTION_LABELS: Record<string, string> = Object.fromEntries(
@@ -108,7 +109,7 @@ export default function DrillDisplay({
             questionExpanded ? '' : 'line-clamp-2 min-h-14'
           }`}
         >
-          {problem.question}
+          <MathText>{problem.question}</MathText>
         </p>
         <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
           {rounding && <span className="text-base text-amber-300">{rounding}</span>}

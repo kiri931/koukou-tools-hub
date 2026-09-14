@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import MathText from './MathText';
 import { roundingLabel } from '@/features/calc-drill/types';
 import type { DrillProblem } from '@/features/calc-drill/types';
 import type { Judgement } from '../hooks/useProblemSession';
@@ -48,7 +49,7 @@ export default function ProblemBar({
         {leading}
 
         <p className="min-w-0 flex-1 text-lg font-bold text-slate-900 dark:text-slate-100">
-          {problem.question}
+          <MathText>{problem.question}</MathText>
         </p>
 
         {hint && (

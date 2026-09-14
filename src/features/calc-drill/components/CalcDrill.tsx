@@ -10,6 +10,7 @@ import type { DrillCategory, DrillLevelFilter } from '../types';
 import DrillDisplay from './DrillDisplay';
 import ExamMode from './ExamMode';
 import WeakKeySummary from './WeakKeySummary';
+import MathText from '@/features/scientific-calculator/components/MathText';
 
 const LEVEL_FILTERS: DrillLevelFilter[] = ['両方', '4級', '3級'];
 const CATEGORY_FILTERS: (DrillCategory | 'すべて')[] = [
@@ -255,7 +256,7 @@ export default function CalcDrill() {
                               }}
                               className="text-left underline underline-offset-2"
                             >
-                              {problem.question}
+                              <MathText>{problem.question}</MathText>
                             </button>
                           </td>
                         </tr>

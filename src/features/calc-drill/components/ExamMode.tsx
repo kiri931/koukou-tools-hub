@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useExamMode } from '../hooks/useExamMode';
 import { EXAM_QUESTION_COUNT, PASSING_SCORE, formatRemaining } from '../lib/grading';
 import { roundingLabel, type DrillProblem } from '../types';
+import MathText from '@/features/scientific-calculator/components/MathText';
 
 interface ExamModeProps {
   pool: DrillProblem[];
@@ -92,7 +93,9 @@ export default function ExamMode({ pool, levelLabel, categoryLabel }: ExamModePr
                   {entry.correct ? '○ 正解' : '× まちがい'}
                 </span>
                 <span className="text-base">{i + 1}.</span>
-                <span className="min-w-0 break-words text-base">{entry.problem.question}</span>
+                <span className="min-w-0 break-words text-base">
+                  <MathText>{entry.problem.question}</MathText>
+                </span>
               </div>
               {!entry.correct && (
                 <p className="mt-1 text-base text-slate-700 dark:text-slate-200">
@@ -134,7 +137,7 @@ export default function ExamMode({ pool, levelLabel, categoryLabel }: ExamModePr
 
         <div className="px-3 py-2">
           <p className="min-h-14 text-xl font-bold leading-[1.4] text-zinc-50">
-            {currentProblem?.question}
+            {currentProblem && <MathText>{currentProblem.question}</MathText>}
           </p>
           {rounding && <p className="mt-1 text-base text-amber-300">{rounding}</p>}
         </div>

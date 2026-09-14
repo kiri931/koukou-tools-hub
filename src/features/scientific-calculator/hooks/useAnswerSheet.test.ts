@@ -1,5 +1,10 @@
 import { act, renderHook } from '@testing-library/react';
-import { SHEET_QUESTION_COUNT, SHEET_SECONDS, useAnswerSheet } from './useAnswerSheet';
+import {
+  SHEET_FIXED_COUNT,
+  SHEET_QUESTION_COUNT,
+  SHEET_SECONDS,
+  useAnswerSheet,
+} from './useAnswerSheet';
 import type { ExamChoice } from '../types';
 
 const choice: ExamChoice = { level: '3級', category: '四則計算', mode: 'sheet' };
@@ -19,6 +24,29 @@ describe('useAnswerSheet', () => {
     const { result } = renderHook(() => useAnswerSheet(choice, true));
     const ids = result.current.rows.map((r) => r.problem.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('四則計算は本番と同じ並び（1〜7が小数第2位、8〜10が有効数字3けた）になる', () => {
+    // 種を変えても並びの規則は変わらないこと
+    for (let i = 0; i < 20; i += 1) {
+      const { result } = renderHook(() => useAnswerSheet(choice, true));
+      const kinds = result.current.rows.map((r) => r.problem.rounding?.kind);
+      expect(kinds.slice(0, SHEET_FIXED_COUNT)).toEqual(Array(SHEET_FIXED_COUNT).fill('decimals'));
+      expect(kinds.slice(SHEET_FIXED_COUNT)).toEqual(
+        Array(SHEET_QUESTION_COUNT - SHEET_FIXED_COUNT).fill('sigfigs')
+      );
+    }
+  });
+
+  it('関数計算は、有効数字の問題を後ろ寄りに置く', () => {
+    const kansuu: ExamChoice = { level: '3級', category: '関数計算', mode: 'sheet' };
+    const { result } = renderHook(() => useAnswerSheet(kansuu, true));
+    const kinds = result.current.rows.map((r) => r.problem.rounding?.kind);
+    const firstSig = kinds.indexOf('sigfigs');
+    if (firstSig >= 0) {
+      // 有効数字が始まったら、そのあとに小数の問題は出てこない
+      expect(kinds.slice(firstSig).every((k) => k === 'sigfigs')).toBe(true);
+    }
   });
 
   it('使わないときは作らない', () => {

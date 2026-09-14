@@ -31,6 +31,12 @@ interface FullScreenCalculatorProps {
   onNext?: () => void;
   /** 解答用紙モードのときだけ渡す */
   sheet?: ReturnType<typeof useAnswerSheet>;
+  /** 入力補助（次に押すキーを光らせる） */
+  assist?: boolean;
+  onToggleAssist?: () => void;
+  highlightedAction?: string;
+  assistOffTrack?: boolean;
+  onAssistReset?: () => void;
 }
 
 /**
@@ -55,6 +61,11 @@ export default function FullScreenCalculator({
   onCheck,
   onNext,
   sheet,
+  assist = false,
+  onToggleAssist,
+  highlightedAction,
+  assistOffTrack = false,
+  onAssistReset,
 }: FullScreenCalculatorProps) {
   const preset = presetFor(choice);
   const showProblems = choice.mode === 'problems';
@@ -68,6 +79,18 @@ export default function FullScreenCalculator({
 
   const actions = (
     <>
+      {onToggleAssist && (
+        <Button
+          type="button"
+          variant={assist ? 'default' : 'outline'}
+          onClick={onToggleAssist}
+          aria-pressed={assist}
+          className="min-h-11 gap-1 border-slate-500 dark:border-slate-400"
+        >
+          {/* 入／切は色だけでなく文字でも示す */}
+          入力補助 {assist ? '入' : '切'}
+        </Button>
+      )}
       <Button
         type="button"
         variant="outline"
@@ -119,6 +142,15 @@ export default function FullScreenCalculator({
             onCheck={onCheck}
             onNext={onNext}
           />
+        </div>
+      )}
+
+      {assistOffTrack && onAssistReset && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 rounded-lg border border-amber-700 bg-amber-50 px-3 py-1.5 text-base text-amber-950">
+          <span>⚠ 手順から外れたので、案内を止めました。</span>
+          <Button type="button" variant="outline" className="min-h-11 border-amber-700" onClick={onAssistReset}>
+            手順を最初から
+          </Button>
         </div>
       )}
 
@@ -182,6 +214,7 @@ export default function FullScreenCalculator({
                 theme={theme}
                 angleMode={state.angleMode}
                 onPress={onPress}
+                highlightedAction={highlightedAction}
               />
             </div>
           </div>
@@ -220,6 +253,7 @@ export default function FullScreenCalculator({
             theme={theme}
             angleMode={state.angleMode}
             onPress={onPress}
+            highlightedAction={highlightedAction}
           />
         </div>
         </>
