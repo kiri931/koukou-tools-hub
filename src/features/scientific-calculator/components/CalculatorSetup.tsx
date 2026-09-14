@@ -14,7 +14,11 @@ interface CalculatorSetupProps {
 
 const MODE_LABELS: Record<CalculatorMode, { label: string; description: string }> = {
   calc: { label: '電卓だけ', description: '自分の問題集を解くときに使う' },
-  problems: { label: '問題を出す', description: '検定と同じ形の問題が出て、答え合わせができる' },
+  problems: { label: '問題を出す', description: '1問ずつ出て、その場で答え合わせができる' },
+  sheet: {
+    label: '解答用紙',
+    description: '検定と同じ版面で10問を一枚に並べ、10分で解いて最後に採点する',
+  },
 };
 
 export default function CalculatorSetup({
@@ -80,7 +84,7 @@ export default function CalculatorSetup({
       <fieldset>
         <legend className="text-base font-semibold text-slate-900 dark:text-slate-100">使い方</legend>
         <div className="mt-2 flex flex-wrap gap-2">
-          {(['calc', 'problems'] as CalculatorMode[]).map((mode) => (
+          {(['calc', 'problems', 'sheet'] as CalculatorMode[]).map((mode) => (
             <ChoiceButton
               key={mode}
               selected={choice.mode === mode}

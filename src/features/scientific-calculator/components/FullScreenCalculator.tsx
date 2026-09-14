@@ -2,11 +2,13 @@ import { HelpCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CalcDisplay from './CalcDisplay';
 import CalcKeypad from './CalcKeypad';
+import AnswerSheet from './AnswerSheet';
 import ProblemBar from './ProblemBar';
 import { formatModeLabel } from '../hooks/format';
 import { presetFor } from '../exam-presets';
 import { KEYPAD_THEMES, type KeypadTheme } from '../keypad-themes';
 import type { Judgement } from '../hooks/useProblemSession';
+import type { useAnswerSheet } from '../hooks/useAnswerSheet';
 import type { DrillProblem } from '@/features/calc-drill/types';
 import type { CalculatorState, ExamChoice } from '../types';
 
@@ -27,6 +29,8 @@ interface FullScreenCalculatorProps {
   correct?: number;
   onCheck?: () => void;
   onNext?: () => void;
+  /** 解答用紙モードのときだけ渡す */
+  sheet?: ReturnType<typeof useAnswerSheet>;
 }
 
 /**
@@ -50,9 +54,11 @@ export default function FullScreenCalculator({
   correct = 0,
   onCheck,
   onNext,
+  sheet,
 }: FullScreenCalculatorProps) {
   const preset = presetFor(choice);
   const showProblems = choice.mode === 'problems';
+  const showSheet = choice.mode === 'sheet';
 
   const chip = (
     <span className="rounded-md bg-violet-800 px-2 py-1 text-base font-bold text-white dark:bg-violet-200 dark:text-slate-950">
@@ -92,9 +98,11 @@ export default function FullScreenCalculator({
       {!showProblems && (
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           {chip}
-          <span className="hidden text-base text-slate-700 dark:text-slate-300 [@media(min-height:760px)]:inline">
-            {preset.roundingHint}
-          </span>
+          {!showSheet && (
+            <span className="hidden text-base text-slate-700 dark:text-slate-300 [@media(min-height:760px)]:inline">
+              {preset.roundingHint}
+            </span>
+          )}
           <span className="ml-auto flex items-center gap-2">{actions}</span>
         </div>
       )}
@@ -114,40 +122,109 @@ export default function FullScreenCalculator({
         </div>
       )}
 
-      <div className="shrink-0">
-        <CalcDisplay
-          expression={`${displayBeforeCursor}${displayAfterCursor}`}
-          beforeCursor={displayBeforeCursor}
-          afterCursor={displayAfterCursor}
-          result={state.result}
-          angleMode={state.angleMode}
-          shiftActive={state.shiftActive}
-          altActive={state.altActive}
-          memory={state.memory}
-          parenBalance={parenBalance}
-          hasError={state.hasError}
-          formatLabel={formatModeLabel(state.formatMode, state.digits)}
-          base={state.base}
-          engShift={state.engShift}
-          dmsView={state.dmsView}
-          lines={state.lines}
-          compact
-          theme={theme}
-          showLines={!showProblems}
-        />
-      </div>
+      {showSheet && sheet ? (
+        // 解答用紙モード: 左に用紙、右に電卓。狭い画面では上下に積む。
+        <div className="flex min-h-0 flex-1 flex-col gap-2 lg:flex-row">
+          <div className="min-h-0 flex-1 lg:w-[54%] lg:flex-none">
+            <AnswerSheet
+              choice={choice}
+              rows={sheet.rows}
+              activeIndex={sheet.activeIndex}
+              graded={sheet.graded}
+              remaining={sheet.remaining}
+              correctCount={sheet.correctCount}
+              score={sheet.score}
+              onSelect={sheet.setActiveIndex}
+              onWrite={sheet.write}
+              onGrade={sheet.grade}
+              onRestart={sheet.restart}
+            />
+          </div>
 
-      {/* 通常の iPad なら収まる。極端に低い画面ではここだけが縦に動く。 */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <CalcKeypad
-          shiftActive={state.shiftActive}
-          altActive={state.altActive}
-          fill
-          theme={theme}
-          angleMode={state.angleMode}
-          onPress={onPress}
-        />
-      </div>
+          <div className="flex min-h-0 flex-1 flex-col gap-1.5">
+            <div className="shrink-0">
+              <CalcDisplay
+                expression={`${displayBeforeCursor}${displayAfterCursor}`}
+                beforeCursor={displayBeforeCursor}
+                afterCursor={displayAfterCursor}
+                result={state.result}
+                angleMode={state.angleMode}
+                shiftActive={state.shiftActive}
+                altActive={state.altActive}
+                memory={state.memory}
+                parenBalance={parenBalance}
+                hasError={state.hasError}
+                formatLabel={formatModeLabel(state.formatMode, state.digits)}
+                base={state.base}
+                engShift={state.engShift}
+                dmsView={state.dmsView}
+                lines={state.lines}
+                compact
+                theme={theme}
+                showLines={false}
+              />
+            </div>
+
+            <Button
+              type="button"
+              className="min-h-11 shrink-0"
+              disabled={sheet.graded || sheet.rows.length === 0}
+              onClick={() => sheet.writeCurrent(state.result)}
+            >
+              ({sheet.activeIndex + 1}) の答えとして書く
+            </Button>
+
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <CalcKeypad
+                shiftActive={state.shiftActive}
+                altActive={state.altActive}
+                fill
+                theme={theme}
+                angleMode={state.angleMode}
+                onPress={onPress}
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+        <div className="shrink-0">
+          <CalcDisplay
+            expression={`${displayBeforeCursor}${displayAfterCursor}`}
+            beforeCursor={displayBeforeCursor}
+            afterCursor={displayAfterCursor}
+            result={state.result}
+            angleMode={state.angleMode}
+            shiftActive={state.shiftActive}
+            altActive={state.altActive}
+            memory={state.memory}
+            parenBalance={parenBalance}
+            hasError={state.hasError}
+            formatLabel={formatModeLabel(state.formatMode, state.digits)}
+            base={state.base}
+            engShift={state.engShift}
+            dmsView={state.dmsView}
+            lines={state.lines}
+            compact
+            theme={theme}
+            showLines={!showProblems}
+          />
+        </div>
+  
+        {/* 通常の iPad なら収まる。極端に低い画面ではここだけが縦に動く。 */}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <CalcKeypad
+            shiftActive={state.shiftActive}
+            altActive={state.altActive}
+            fill
+            theme={theme}
+            angleMode={state.angleMode}
+            onPress={onPress}
+          />
+        </div>
+        </>
+      )}
+
     </div>
   );
 }

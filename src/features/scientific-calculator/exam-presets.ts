@@ -99,7 +99,8 @@ export function loadChoice(): ExamChoice {
     const category = categories.includes(parsed.category as ExamCategory)
       ? (parsed.category as ExamCategory)
       : categories[0];
-    const mode = parsed.mode === 'problems' ? 'problems' : 'calc';
+    const mode =
+      parsed.mode === 'problems' || parsed.mode === 'sheet' ? parsed.mode : 'calc';
     return { level, category, mode };
   } catch {
     return DEFAULT_CHOICE;

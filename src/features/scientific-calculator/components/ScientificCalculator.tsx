@@ -11,6 +11,7 @@ import { DEFAULT_CHOICE, loadChoice, presetFor, saveChoice } from '../exam-prese
 import { DEFAULT_THEME, loadTheme, saveTheme, type KeypadTheme } from '../keypad-themes';
 import { useCalculator } from '../hooks/useCalculator';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import { useAnswerSheet } from '../hooks/useAnswerSheet';
 import { useProblemSession } from '../hooks/useProblemSession';
 import type { ExamChoice } from '../types';
 
@@ -36,6 +37,7 @@ export default function ScientificCalculator() {
   }, []);
 
   const session = useProblemSession(choice, open && choice.mode === 'problems');
+  const sheet = useAnswerSheet(choice, open && choice.mode === 'sheet');
 
   // 電卓を開いている間だけ、裏のページがスクロールしないようにする
   useEffect(() => {
@@ -63,6 +65,7 @@ export default function ScientificCalculator() {
     saveChoice(choice);
     saveTheme(theme);
     session.restart();
+    sheet.restart();
     setOpen(true);
   };
 
@@ -113,6 +116,7 @@ export default function ScientificCalculator() {
             correct={session.correct}
             onCheck={() => session.check(state.result)}
             onNext={session.next}
+            sheet={sheet}
           />
         )}
 

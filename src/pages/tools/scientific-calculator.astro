@@ -7,7 +7,7 @@ import '../../styles/global.css';
 
 <Layout
   title="関数電卓 - ツール"
-  description="検定の練習に使える関数電卓。級と分野を選ぶと画面いっぱいの電卓が開き、検定と同じ形の問題を出して答え合わせもできます。三角関数・対数・nPr/nCr・統計処理、DEG/RAD/GRAD、Fix/Sci/Eng、2進・8進・16進、度分秒、Pol/Rec、物理定数に対応。ブラウザだけで動きます。"
+  description="検定の練習に使える関数電卓。級と分野を選ぶと画面いっぱいの電卓が開き、検定と同じ形の問題を1問ずつ、または解答用紙の版面で10問まとめて解けます。三角関数・対数・nPr/nCr・統計処理、DEG/RAD/GRAD、Fix/Sci/Eng、2進・8進・16進、度分秒、Pol/Rec、物理定数に対応。ブラウザだけで動きます。"
 >
   <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
     <Header client:load currentPath={Astro.url.pathname} />
@@ -22,7 +22,7 @@ import '../../styles/global.css';
 
       <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">使い方</h2>
       <ol class="mt-2 list-decimal space-y-1 pl-5">
-        <li>最初の画面で、練習する級（4級・3級）と分野、使い方（電卓だけ／問題を出す）、色を選びます。</li>
+        <li>最初の画面で、練習する級（4級・3級）と分野、使い方（電卓だけ／問題を出す／解答用紙）、色を選びます。</li>
         <li>「電卓をひらく」を押すと、画面いっぱいの電卓になります（iPadなら1画面で収まります）。</li>
         <li>必要なら角度や表示形式を変えます（ALT を押してから DEG で DEG→RAD→GRAD）。</li>
         <li>キーボードまたは画面ボタンで式を入力します。</li>
@@ -34,7 +34,8 @@ import '../../styles/global.css';
       <ul class="mt-2 list-disc space-y-1 pl-5">
         <li>ブラウザ上で完結し、入力内容をサーバーに送信しません。</li>
         <li>最初に級と分野を選ぶと、その区分の丸め方の目安を表示したまま計算できます。</li>
-        <li>「問題を出す」を選ぶと、検定と同じ形の問題が出て、その場で答え合わせができます。</li>
+        <li>「問題を出す」を選ぶと、検定と同じ形の問題が1問ずつ出て、その場で答え合わせができます。</li>
+        <li>「解答用紙」を選ぶと、検定と同じ版面で10問が一枚に並びます。10分で解いて最後にまとめて採点します。</li>
         <li>キーの色は「おちつき・かみ・よる・にぎやか」から選べます（次に開いたときも覚えています）。</li>
         <li>三角関数と逆三角関数、指数対数、nPr/nCr、統計の基本処理に対応します。</li>
         <li>角度は DEG / RAD / GRAD、表示形式は Norm / Fix / Sci / Eng から選べます。</li>
