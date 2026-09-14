@@ -7,6 +7,8 @@ interface CalcButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
   shiftActive: boolean;
   /** ALT（第2機能）が押されているか */
   altActive?: boolean;
+  /** 親の高さいっぱいに広げる（全画面の電卓で使う） */
+  fill?: boolean;
   highlighted?: boolean;
   onPress: (action: string) => void;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -22,7 +24,7 @@ const variantClassMap: Record<ButtonDef['variant'], string> = {
 };
 
 const CalcButton = forwardRef<HTMLButtonElement, CalcButtonProps>(function CalcButton(
-  { button, shiftActive, altActive = false, highlighted = false, onPress, onClick, className, ...buttonProps },
+  { button, shiftActive, altActive = false, fill = false, highlighted = false, onPress, onClick, className, ...buttonProps },
   ref
 ) {
   // ALT が優先。次に SHIFT。どちらも無ければそのキー本来の機能。
@@ -54,7 +56,9 @@ const CalcButton = forwardRef<HTMLButtonElement, CalcButtonProps>(function CalcB
       type="button"
       onClick={handleClick}
       className={cn(
-        'relative h-11 rounded-lg border border-white/50 px-1 text-base font-semibold shadow-sm transition active:translate-y-px sm:h-12',
+        'relative rounded-lg border border-white/50 px-1 text-base font-semibold shadow-sm transition active:translate-y-px',
+        // 全画面では画面の高さに合わせて伸ばす。最低44px（DADSのタップ領域）は確保する。
+        fill ? 'h-full min-h-11' : 'h-11 sm:h-12',
         variantClassMap[button.variant],
         button.wide && 'col-span-2',
         showShiftSubLabel && 'py-1',

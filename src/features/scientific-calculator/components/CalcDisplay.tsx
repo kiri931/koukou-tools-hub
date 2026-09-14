@@ -24,6 +24,8 @@ interface CalcDisplayProps {
   dmsView: boolean;
   /** 過去の式と答え */
   lines: DisplayLine[];
+  /** 全画面のとき。高さを詰めて、キーに場所を譲る。 */
+  compact?: boolean;
 }
 
 export default function CalcDisplay({
@@ -43,6 +45,7 @@ export default function CalcDisplay({
   engShift,
   dmsView,
   lines,
+  compact = false,
 }: CalcDisplayProps) {
   const [copied, setCopied] = useState(false);
   const normalizedMemory = Object.is(memory, -0) ? 0 : memory;
@@ -66,7 +69,9 @@ export default function CalcDisplay({
   };
 
   return (
-    <div className="rounded-2xl border border-zinc-300 bg-zinc-900 p-4 text-zinc-100 shadow-inner dark:border-zinc-700">
+    <div
+      className={`rounded-2xl border border-zinc-300 bg-zinc-900 text-zinc-100 shadow-inner dark:border-zinc-700 ${compact ? 'p-3' : 'p-4'}`}
+    >
       {/* ステータス行。実物の電卓と同じく、いまのモードを常に出す。 */}
       <div className="mb-2 flex flex-wrap items-center gap-2 text-sm font-semibold tracking-wide text-zinc-200">
         <span className="rounded bg-zinc-700 px-2 py-0.5">{formatLabel}</span>
@@ -96,7 +101,7 @@ export default function CalcDisplay({
       {lines.length > 0 && (
         <div
           ref={scrollRef}
-          className="mb-2 max-h-28 overflow-y-auto break-all border-b border-zinc-700 pb-2 text-left font-mono text-sm text-zinc-400"
+          className={`mb-2 overflow-y-auto break-all border-b border-zinc-700 pb-2 text-left font-mono text-sm text-zinc-400 ${compact ? 'max-h-16' : 'max-h-28'}`}
         >
           {lines.map((line, index) => (
             <div
@@ -109,7 +114,9 @@ export default function CalcDisplay({
         </div>
       )}
 
-      <div className="min-h-10 break-all text-right font-mono text-base text-zinc-200">
+      <div
+        className={`break-all text-right font-mono text-base text-zinc-200 ${compact ? 'min-h-8' : 'min-h-10'}`}
+      >
         {ghostExpression ? (
           <>
             <span className="text-zinc-200">{expression}</span>
@@ -132,7 +139,7 @@ export default function CalcDisplay({
 
       <div className="flex items-start gap-2">
         <div
-          className={`min-h-12 flex-1 break-all text-right font-mono text-2xl font-bold sm:text-3xl ${hasError ? 'text-rose-300' : 'text-emerald-300'}`}
+          className={`flex-1 break-all text-right font-mono font-bold ${compact ? 'min-h-10 text-2xl' : 'min-h-12 text-2xl sm:text-3xl'} ${hasError ? 'text-rose-300' : 'text-emerald-300'}`}
         >
           {result}
         </div>

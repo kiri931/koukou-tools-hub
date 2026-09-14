@@ -725,6 +725,13 @@ export function useCalculator() {
     setState((prev) => ({ ...prev, panelMode }));
   };
 
+  /** 最初の選択画面から、モードだけをまとめて決める */
+  const applyPreset = (
+    preset: Partial<Pick<CalculatorState, 'angleMode' | 'formatMode' | 'digits' | 'base'>>
+  ) => {
+    setState((prev) => reformat(prev, { ...preset, engShift: 0 }));
+  };
+
   return {
     state,
     displayExpression,
@@ -733,5 +740,6 @@ export function useCalculator() {
     parenBalance,
     pressButton,
     setPanelMode,
+    applyPreset,
   };
 }

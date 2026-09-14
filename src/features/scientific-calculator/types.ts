@@ -1,6 +1,18 @@
 export type AngleMode = 'DEG' | 'RAD' | 'GRAD';
 export type PanelMode = 'none' | 'stats' | 'digits' | 'consts';
 
+/** 計算技術検定の級。calc-drill の DrillLevel と同じ文字列にそろえてある。 */
+export type ExamLevel = '4級' | '3級';
+
+/** 検定の出題区分。4級は集計計算、3級は関数計算が入る。 */
+export type ExamCategory = '四則計算' | '集計計算' | '関数計算' | '実務計算';
+
+/** 最初の画面で選んだ内容 */
+export interface ExamChoice {
+  level: ExamLevel;
+  category: ExamCategory;
+}
+
 /** 表示形式（FSEキーで切り替え）。Norm は従来どおりの見せ方。 */
 export type NumberFormatMode = 'NORM' | 'FIX' | 'SCI' | 'ENG';
 

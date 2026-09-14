@@ -768,6 +768,461 @@ const san_jitsumu: Template[] = [
   },
 ];
 
+// ────────────────────────────────────────────────────────────
+// 3級 過去問に合わせて足した形
+//
+// 手元の過去問（第82・83・85・86回、いずれも3級）を読んで、
+// 出題されている「形」をそのまま写したもの。数値だけ毎回作り直す。
+//   (1)四則計算  … 逆数の和・入れ子の波かっこ・極小の小数・×10ⁿ表記
+//   (2)関数計算  … x乗根と分数指数・関数の累乗と根・度分秒・[RAD]のπ分数
+//   (3)実務計算  … 表への代入・順列組合せの式・公式への代入
+// ────────────────────────────────────────────────────────────
+
+/** 分母が 0 に近いとき作り直すための、ありふれた保険 */
+function retryIfFlat(v: number, floor: number) {
+  return Math.abs(v) < floor;
+}
+
+const san_shisoku_kakomon: Template[] = [
+  // 第86回(1) 逆数の和 ÷ 商の差
+  (rng) => {
+    const a = decNonZero(rng, 0.5, 9.99, 2, 0.5);
+    const b = decNonZero(rng, 0.5, 9.99, 2, 0.5);
+    const c = dec(rng, 1, 9.99, 2);
+    const d = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const e = dec(rng, 1, 9.99, 2);
+    const f = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const denom = c.n / d.n - e.n / f.n;
+    if (retryIfFlat(denom, 0.15)) return san_shisoku_kakomon[1](rng);
+    return {
+      category: '四則計算',
+      question: `( - 1 ÷ ${a.tok} - 1 ÷ ${b.tok} ) ÷ ( ${c.tok} ÷ ${d.tok} - ${e.tok} ÷ ${f.tok} )`,
+      guide: ['(', '-', '1', '÷', a.tok, '-', '1', '÷', b.tok, ')', '÷',
+              '(', c.tok, '÷', d.tok, '-', e.tok, '÷', f.tok, ')', '='],
+      value: (-1 / a.n - 1 / b.n) / denom,
+      rounding: D2,
+    };
+  },
+
+  // 第86回(7) 4つの項をつなぐ長い式
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const d = dec(rng, 1, 9.99, 2);
+    const e = dec(rng, 1, 9.99, 2);
+    const f = spread(rng, 1, 9.99, 2, e.n, 0.4);
+    const g = dec(rng, 1, 9.99, 2);
+    const h = dec(rng, 1, 9.99, 2);
+    const i = dec(rng, 1, 9.99, 2);
+    const j = dec(rng, 1, 9.99, 2);
+    return {
+      category: '四則計算',
+      question: `${a.tok} × ( ${b.tok} - ${c.tok} ) + ${d.tok} ÷ ( ${e.tok} - ${f.tok} ) - ${g.tok} × ( ${h.tok} - ${i.tok} ) + ${j.tok}`,
+      guide: [a.tok, '×', '(', b.tok, '-', c.tok, ')', '+', d.tok, '÷', '(', e.tok, '-', f.tok, ')',
+              '-', g.tok, '×', '(', h.tok, '-', i.tok, ')', '+', j.tok, '='],
+      value: a.n * (b.n - c.n) + d.n / (e.n - f.n) - g.n * (h.n - i.n) + j.n,
+      rounding: D2,
+    };
+  },
+
+  // 第85回(7)・第83回(7) 波かっこ同士の積
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const d = spread(rng, 1, 9.99, 2, c.n, 0.4);
+    const e = dec(rng, 1, 9.99, 2);
+    const f = dec(rng, 1, 9.99, 2);
+    const g = dec(rng, 1, 9.99, 2);
+    const h = decNonZero(rng, 1, 9.99, 2, 0.5);
+    return {
+      category: '四則計算',
+      question: `{ ${a.tok} × ${b.tok} - ${e.tok} ÷ ( ${c.tok} - ${d.tok} ) } × { ${f.tok} × ( ${g.tok} - ${b.tok} ) + ${e.tok} ÷ ${h.tok} }`,
+      guide: ['(', a.tok, '×', b.tok, '-', e.tok, '÷', '(', c.tok, '-', d.tok, ')', ')', '×',
+              '(', f.tok, '×', '(', g.tok, '-', b.tok, ')', '+', e.tok, '÷', h.tok, ')', '='],
+      value: (a.n * b.n - e.n / (c.n - d.n)) * (f.n * (g.n - b.n) + e.n / h.n),
+      rounding: D2,
+    };
+  },
+
+  // 第83回(3) 分数を含むかっこで割る
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const d = dec(rng, 1, 9.99, 2);
+    const e = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const f = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const denom = c.n - d.n / (e.n / f.n);
+    if (retryIfFlat(denom, 0.15)) return san_shisoku_kakomon[1](rng);
+    return {
+      category: '四則計算',
+      question: `( ${a.tok} + ${b.tok} ) ÷ ( ${c.tok} - ${d.tok} ÷ ( ${e.tok} ÷ ${f.tok} ) )`,
+      guide: ['(', a.tok, '+', b.tok, ')', '÷', '(', c.tok, '-', d.tok, '÷', '(', e.tok, '÷', f.tok, ')', ')', '='],
+      value: (a.n + b.n) / denom,
+      rounding: D2,
+    };
+  },
+
+  // 第86回(8)・第82回(8) 極小の小数の積と商（有効数字3けた）
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const ea = int(rng, 7, 9);
+    const eb = int(rng, 8, 10);
+    const ec = int(rng, 8, 10);
+    const at = `0.${'0'.repeat(ea)}${String(a.n).replace('.', '')}`;
+    const bt = `0.${'0'.repeat(eb)}${String(b.n).replace('.', '')}`;
+    const ct = `0.${'0'.repeat(ec)}${String(c.n).replace('.', '')}`;
+    return {
+      category: '四則計算',
+      question: `- ${at} × ${bt} ÷ ${ct}`,
+      guide: ['-', at, '×', bt, '÷', ct, '='],
+      value: (-Number(at) * Number(bt)) / Number(ct),
+      rounding: S3,
+    };
+  },
+
+  // 第83回(8) 極小の小数の和と差（有効数字3けた）
+  //
+  // 過去問は引き算で桁が落ちる形だが、乱数で作ると打ち消し合って
+  // 10^-14 まで落ちることがある（実測）。答えの桁が過去問（10^-7 前後）に
+  // 収まるよう、3つの数の指数をそろえて作る。
+  (rng) => {
+    const a = dec(rng, 5, 9.99, 2);
+    const b = dec(rng, 1, 4.99, 2);
+    const c = dec(rng, 1, 4.99, 2);
+    const e = int(rng, 5, 7);
+    const at = `0.${'0'.repeat(e)}${String(a.n).replace('.', '')}`;
+    const bt = `0.${'0'.repeat(e + 1)}${String(b.n).replace('.', '')}`;
+    const ct = `0.${'0'.repeat(e + 1)}${String(c.n).replace('.', '')}`;
+    return {
+      category: '四則計算',
+      question: `${at} - ( ${bt} + ${ct} )`,
+      guide: [at, '-', '(', bt, '+', ct, ')', '='],
+      value: Number(at) - (Number(bt) + Number(ct)),
+      rounding: S3,
+    };
+  },
+
+  // 第86回(9)・第82回(9) ×10ⁿ 表記の積と商（有効数字3けた）
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const d = spread(rng, 1, 9.99, 2, c.n, 0.4);
+    const ec = int(rng, 5, 8);
+    const eb = int(rng, 3, 6);
+    // 指数が積み上がると答えが 10^14 を超えて練習にならない。
+    // 過去問（第86回(9) は 10^11 前後）に収まるよう頭を抑える。
+    const ea = int(rng, 4, Math.min(9, 11 - ec + eb));
+    return {
+      category: '四則計算',
+      question: `( ${a.tok} × 10^${ea} ) ÷ ( ${b.tok} × 10^${eb} ) × ( - ${c.tok} × 10^${ec} - ${d.tok} × 10^${ec} )`,
+      guide: ['(', a.tok, 'EXP', String(ea), ')', '÷', '(', b.tok, 'EXP', String(eb), ')', '×',
+              '(', '-', c.tok, 'EXP', String(ec), '-', d.tok, 'EXP', String(ec), ')', '='],
+      value: ((a.n * 10 ** ea) / (b.n * 10 ** eb)) * (-c.n * 10 ** ec - d.n * 10 ** ec),
+      rounding: S3,
+    };
+  },
+
+  // 第86回(10)・第85回(10) ×10ⁿ 表記の和差（負の指数、有効数字3けた）
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const d = dec(rng, 1, 9.99, 2);
+    const e1 = int(rng, 5, 8);
+    const e2 = int(rng, 6, 9);
+    return {
+      category: '四則計算',
+      question: `- ( - ${a.tok} × 10^-${e1} - ${b.tok} × 10^-${e2} ) - ( ${c.tok} × 10^-${e1} + ${d.tok} × 10^-${e2} )`,
+      guide: ['-', '(', '-', a.tok, 'EXP', '-', String(e1), '-', b.tok, 'EXP', '-', String(e2), ')',
+              '-', '(', c.tok, 'EXP', '-', String(e1), '+', d.tok, 'EXP', '-', String(e2), ')', '='],
+      value: -(-a.n * 10 ** -e1 - b.n * 10 ** -e2) - (c.n * 10 ** -e1 + d.n * 10 ** -e2),
+      rounding: S3,
+    };
+  },
+];
+
+const san_kansuu_kakomon: Template[] = [
+  // 第86回(1) 立方根と常用対数
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1.1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const d = dec(rng, 1.2, 9.99, 2);
+    const lg = Math.log10(d.n);
+    if (retryIfFlat(lg, 0.05)) return san_kansuu_kakomon[1](rng);
+    return {
+      category: '関数計算',
+      question: `${a.tok} × ³√${b.tok} - ${c.tok} ÷ log ${d.tok}`,
+      guide: [a.tok, '×', '³√', b.tok, '-', c.tok, '÷', 'log', d.tok, '='],
+      value: a.n * Math.cbrt(b.n) - c.n / lg,
+      rounding: D2,
+    };
+  },
+
+  // 第86回(2) 度分秒の tan と cos
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const d1 = int(rng, 20, 80);
+    const m1 = int(rng, 1, 59);
+    const s1 = int(rng, 1, 59);
+    const d2 = int(rng, 10, 70);
+    const m2 = int(rng, 1, 59);
+    const s2 = int(rng, 1, 59);
+    const t = Math.tan(toRad(dmsValue(d1, m1, s1)));
+    const c = Math.cos(toRad(dmsValue(d2, m2, s2)));
+    return {
+      category: '関数計算',
+      question: `${a.tok} × tan ${d1}°${m1}'${s1}" + ${b.tok} ÷ cos ${d2}°${m2}'${s2}"`,
+      guide: [a.tok, '×', 'tan', String(d1), '°\'"', String(m1), '°\'"', String(s1), '°\'"',
+              '+', b.tok, '÷', 'cos', String(d2), '°\'"', String(m2), '°\'"', String(s2), '°\'"', '='],
+      value: a.n * t + b.n / c,
+      rounding: D2,
+    };
+  },
+
+  // 第86回(3)・第85回(2) 分数指数と n 乗根
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1.2, 9.99, 2);
+    const c = dec(rng, 1.2, 9.99, 2);
+    const d = dec(rng, 1, 9.99, 2);
+    const n = int(rng, 3, 5);
+    const e = dec(rng, 1.2, 9.99, 2);
+    const denom = b.n ** (1 / c.n) - d.n * e.n ** (1 / n);
+    if (retryIfFlat(denom, 0.15)) return san_kansuu_kakomon[0](rng);
+    return {
+      category: '関数計算',
+      question: `${a.tok} ÷ ( ${b.tok}^(1÷${c.tok}) - ${d.tok} × ${n}√${e.tok} )`,
+      guide: [a.tok, '÷', '(', b.tok, 'x^y', '(', '1', '÷', c.tok, ')', '-', d.tok, '×', String(n), 'x√', e.tok, ')', '='],
+      value: a.n / denom,
+      rounding: D2,
+    };
+  },
+
+  // 第86回(5)・第85回(1) 三角関数の2乗と、三角関数の平方根
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 0.05, 0.95, 2);
+    const t1 = dec(rng, 15, 75, 1);
+    const t2 = dec(rng, 15, 75, 1);
+    const denom = Math.sin(toRad(t1.n)) ** 2 - b.n * Math.sqrt(Math.cos(toRad(t2.n)));
+    if (retryIfFlat(denom, 0.1)) return san_kansuu_kakomon[0](rng);
+    return {
+      category: '関数計算',
+      question: `- ${a.tok} ÷ ( sin² ${t1.tok}° - ${b.tok} × √cos ${t2.tok}° )`,
+      guide: ['-', a.tok, '÷', '(', '(', 'sin', t1.tok, ')', 'x²', '-', b.tok, '×', '√', 'cos', t2.tok, ')', '='],
+      value: -a.n / denom,
+      rounding: D2,
+    };
+  },
+
+  // 第86回(6)・第85回(6) 3乗と 10 のべき乗を含む分数（有効数字3けた）
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = spread(rng, 1, 9.99, 2, a.n, 0.3);
+    const c = dec(rng, 1.2, 9.99, 2);
+    const d = dec(rng, 0.5, 3, 2);
+    const denom = c.n ** 3 + 10 ** d.n;
+    return {
+      category: '関数計算',
+      question: `( ${a.tok} - ${b.tok} ) ÷ ( ${c.tok}³ + 10^${d.tok} )`,
+      guide: ['(', a.tok, '-', b.tok, ')', '÷', '(', c.tok, 'x³', '+', '10^x', d.tok, ')', '='],
+      value: (a.n - b.n) / denom,
+      rounding: S3,
+    };
+  },
+
+  // 第85回(7) n 乗根と分数指数の和にかける
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const n = int(rng, 3, 5);
+    const c = dec(rng, 1.2, 9.99, 2);
+    const d = dec(rng, 1.2, 9.99, 2);
+    const e = dec(rng, 0.1, 0.99, 2);
+    return {
+      category: '関数計算',
+      question: `${a.tok} × ( ${b.tok} × ${n}√${c.tok} + ${d.tok}^${e.tok} )`,
+      guide: [a.tok, '×', '(', b.tok, '×', String(n), 'x√', c.tok, '+', d.tok, 'x^y', e.tok, ')', '='],
+      value: a.n * (b.n * c.n ** (1 / n) + d.n ** e.n),
+      rounding: D2,
+    };
+  },
+
+  // 第85回(8) 常用対数と立方根の差にかける
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const c = dec(rng, 3, 9.99, 2);
+    const d = dec(rng, 1, 2.5, 2);
+    const e = dec(rng, 1.2, 9.99, 2);
+    const f = dec(rng, 1, 9.99, 2);
+    const inner = c.n - d.n;
+    if (retryIfFlat(inner, 0.3)) return san_kansuu_kakomon[0](rng);
+    return {
+      category: '関数計算',
+      question: `${a.tok} ÷ ${b.tok} × { log ( ${c.tok} - ${d.tok} ) - ³√${e.tok} + ${f.tok} }`,
+      guide: [a.tok, '÷', b.tok, '×', '(', 'log', '(', c.tok, '-', d.tok, ')', '-', '³√', e.tok, '+', f.tok, ')', '='],
+      value: (a.n / b.n) * (Math.log10(inner) - Math.cbrt(e.n) + f.n),
+      rounding: D2,
+    };
+  },
+
+  // 第86回(10)・第85回(10)・第83回(10)・第82回(10) [RAD] π の分数
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const p1 = int(rng, 1, 3);
+    const q1 = int(rng, p1 + 1, 5);
+    const p2 = int(rng, 1, 3);
+    const q2 = int(rng, p2 + 1, 5);
+    const q3 = int(rng, 4, 7);
+    const denom =
+      -c.n * Math.cos((p1 / q1) * Math.PI) +
+      Math.tan((p2 / q2) * Math.PI) * Math.sin((1 / q3) * Math.PI);
+    if (retryIfFlat(denom, 0.15)) return san_kansuu_kakomon[0](rng);
+    return {
+      category: '関数計算',
+      question: `( ${a.tok} + ${b.tok} ) ÷ ( - ${c.tok} × cos ${p1}/${q1}π + tan ${p2}/${q2}π × sin 1/${q3}π )`,
+      guide: ['(', a.tok, '+', b.tok, ')', '÷', '(', '-', c.tok, '×',
+              'cos', '(', String(p1), '÷', String(q1), '×', 'π', ')', '+',
+              'tan', '(', String(p2), '÷', String(q2), '×', 'π', ')', '×',
+              'sin', '(', '1', '÷', String(q3), '×', 'π', ')', ')', '='],
+      value: (a.n + b.n) / denom,
+      rounding: D2,
+      angleMode: 'RAD',
+    };
+  },
+];
+
+const san_jitsumu_kakomon: Template[] = [
+  // 第86回(1) y = ( a × b ) ÷ x² の表に x を代入
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const x = decNonZero(rng, 1, 9.99, 2, 0.8);
+    const negative = rng() < 0.5;
+    const xTok = negative ? `- ${x.tok}` : x.tok;
+    return {
+      category: '実務計算',
+      question: `y = ( ${a.tok} × ${b.tok} ) ÷ x² において、x = ${xTok} のときの y`,
+      guide: negative
+        ? ['(', a.tok, '×', b.tok, ')', '÷', '(', '-', x.tok, ')', 'x²', '=']
+        : ['(', a.tok, '×', b.tok, ')', '÷', x.tok, 'x²', '='],
+      value: (a.n * b.n) / (x.n * x.n),
+      rounding: D2,
+    };
+  },
+
+  // 第86回(2) y ÷ √x = a × ( - b ) の表に x を代入（小数第1位まで）
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const x = dec(rng, 1, 20, 2);
+    return {
+      category: '実務計算',
+      question: `y ÷ √x = ${a.tok} × ( - ${b.tok} ) において、x = ${x.tok} のときの y`,
+      guide: [a.tok, '×', '(', '-', b.tok, ')', '×', '√', x.tok, '='],
+      value: a.n * -b.n * Math.sqrt(x.n),
+      rounding: D1,
+    };
+  },
+
+  // 第82回(2) √x × y = k の表に x を代入（小数第1位まで）
+  (rng) => {
+    const k = dec(rng, 100, 999, 1);
+    const x = dec(rng, 5, 60, 2);
+    return {
+      category: '実務計算',
+      question: `√x × y = ${k.tok} において、x = ${x.tok} のときの y`,
+      guide: [k.tok, '÷', '√', x.tok, '='],
+      value: k.n / Math.sqrt(x.n),
+      rounding: D1,
+    };
+  },
+
+  // 第86回(4) 重複組合せ C = ( n + r - 1 )! ÷ { r! × ( n - 1 )! }
+  (rng) => {
+    const n = int(rng, 5, 9);
+    const r = int(rng, 2, 4);
+    return {
+      category: '実務計算',
+      question: `C = ( n + r - 1 )! ÷ { r! × ( n - 1 )! } において、n = ${n}, r = ${r} のときの C`,
+      guide: ['(', String(n), '+', String(r), '-', '1', ')', 'x!', '÷', '(',
+              String(r), 'x!', '×', '(', String(n), '-', '1', ')', 'x!', ')', '='],
+      value: fact(n + r - 1) / (fact(r) * fact(n - 1)),
+      rounding: D0,
+    };
+  },
+
+  // 第82回(3) 同じものを含む順列 P = n! ÷ ( p! × q! )
+  (rng) => {
+    const p = int(rng, 4, 8);
+    const q = int(rng, 2, 10 - p);
+    return {
+      category: '実務計算',
+      question: `P = 10! ÷ ( p! × q! ) において、p = ${p}, q = ${q} のときの P`,
+      guide: ['1', '0', 'x!', '÷', '(', String(p), 'x!', '×', String(q), 'x!', ')', '='],
+      value: fact(10) / (fact(p) * fact(q)),
+      rounding: D0,
+    };
+  },
+
+  // 第86回(5) t = - 1.44 T logₑ( N ÷ N₀ )
+  (rng) => {
+    const T = dec(rng, 1, 9.99, 2);
+    const n0 = dec(rng, 10, 40, 1);
+    const n = dec(rng, 1, n0.n - 1, 2);
+    return {
+      category: '実務計算',
+      question: `t = - 1.44 T logₑ( N ÷ N₀ ) において、T = ${T.tok}, N = ${n.tok}, N₀ = ${n0.tok} のときの t`,
+      guide: ['-', '1.44', '×', T.tok, '×', 'ln', '(', n.tok, '÷', n0.tok, ')', '='],
+      value: -1.44 * T.n * Math.log(n.n / n0.n),
+      rounding: D2,
+    };
+  },
+
+  // 第86回(8)・第82回(8) D = ( a + b )² - 4 a b cos²( θ ÷ 2 )
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const t = dec(rng, 20, 160, 1);
+    return {
+      category: '実務計算',
+      question: `D = ( a + b )² - 4 a b cos²( θ ÷ 2 ) において、a = ${a.tok}, b = ${b.tok}, θ = ${t.tok}° のときの D`,
+      guide: ['(', a.tok, '+', b.tok, ')', 'x²', '-', '4', '×', a.tok, '×', b.tok, '×',
+              'cos', '(', t.tok, '÷', '2', ')', ')', 'x²', '='],
+      value: (a.n + b.n) ** 2 - 4 * a.n * b.n * Math.cos(toRad(t.n / 2)) ** 2,
+      rounding: D2,
+    };
+  },
+
+  // 第85回(8) [RAD] θ = tan⁻¹( ( ωL - 1 ÷ ( ωC ) ) ÷ R )
+  (rng) => {
+    const w = dec(rng, 100, 400, 2);
+    const L = dec(rng, 0.02, 0.3, 3);
+    const C = dec(rng, 0.00002, 0.0002, 6);
+    const R = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const value = Math.atan((w.n * L.n - 1 / (w.n * C.n)) / R.n);
+    return {
+      category: '実務計算',
+      question: `θ = tan⁻¹( ( ωL - 1 ÷ ( ωC ) ) ÷ R ) において、ω = ${w.tok}, L = ${L.tok}, C = ${C.tok}, R = ${R.tok} のときの θ`,
+      guide: ['tan-1', '(', '(', w.tok, '×', L.tok, '-', '1', '÷', '(', w.tok, '×', C.tok, ')', ')', '÷', R.tok, ')', '='],
+      value,
+      rounding: D2,
+      angleMode: 'RAD',
+    };
+  },
+];
+
 function fact(n: number): number {
   let r = 1;
   for (let i = 2; i <= n; i += 1) r *= i;
@@ -781,9 +1236,9 @@ export const TEMPLATES: Record<DrillLevel, Record<string, Template[]>> = {
     実務計算: yon_jitsumu,
   },
   '3級': {
-    四則計算: san_shisoku,
-    関数計算: san_kansuu,
-    実務計算: san_jitsumu,
+    四則計算: [...san_shisoku, ...san_shisoku_kakomon],
+    関数計算: [...san_kansuu, ...san_kansuu_kakomon],
+    実務計算: [...san_jitsumu, ...san_jitsumu_kakomon],
   },
 };
 

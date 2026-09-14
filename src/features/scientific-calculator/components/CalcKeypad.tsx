@@ -378,6 +378,8 @@ interface CalcKeypadProps {
   shiftActive: boolean;
   /** ALT（第2機能）。ドリル側からは渡さないので既定は false。 */
   altActive?: boolean;
+  /** 親の高さいっぱいにキーを広げる（全画面の電卓で使う）。既定は false。 */
+  fill?: boolean;
   angleMode: AngleMode;
   onPress: (action: string) => void;
   highlightedAction?: string;
@@ -386,14 +388,22 @@ interface CalcKeypadProps {
 export default function CalcKeypad({
   shiftActive,
   altActive = false,
+  fill = false,
   angleMode,
   onPress,
   highlightedAction,
 }: CalcKeypadProps) {
   return (
-    <div className="space-y-1.5">
+    <div className={fill ? 'flex h-full min-h-0 flex-col gap-1.5' : 'space-y-1.5'}>
       {BUTTON_ROWS.map((row, rowIndex) => (
-        <div key={rowIndex} className="grid grid-cols-5 gap-1.5">
+        <div
+          key={rowIndex}
+          className={
+            fill
+              ? 'grid min-h-11 flex-1 grid-cols-5 gap-1.5'
+              : 'grid grid-cols-5 gap-1.5'
+          }
+        >
           {row.map((button, buttonIndex) => {
             const normalizedButton =
               button.action === 'toggle-angle'
@@ -412,6 +422,7 @@ export default function CalcKeypad({
                     button={normalizedButton}
                     shiftActive={shiftActive}
                     altActive={altActive}
+                    fill={fill}
                     onPress={onPress}
                     highlighted={
                       // highlightedAction を渡さない使い方（単体の関数電卓）では
@@ -425,7 +436,15 @@ export default function CalcKeypad({
                   />
                 </TooltipTrigger>
                 {tooltipText && (
-                  <TooltipContent side="top" className="max-w-[200px] text-center text-xs leading-snug">
+                  <TooltipContent
+                    side="top"
+                    // ツールチップは1つ上の行のキーに重なる。pointer-events を切らないと、
+                    // 上のキー(ALTなど)がクリックを受け取れなくなる。
+                    // Radix が開いている間 style="pointer-events:auto" を直接書くので、
+                    // クラスでは勝てない。インラインの style で上書きする。
+                    style={{ pointerEvents: 'none' }}
+                    className="max-w-[200px] text-center text-xs leading-snug"
+                  >
                     {tooltipText}
                   </TooltipContent>
                 )}
