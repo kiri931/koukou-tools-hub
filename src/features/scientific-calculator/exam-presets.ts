@@ -4,7 +4,14 @@
 // 表紙の指示をそのまま写したもの。4級の過去問は手元に無いため、
 // 3級の書式に合わせた一般的な指示にしてある。
 
-import type { AngleMode, ExamCategory, ExamChoice, ExamLevel, NumberBase, NumberFormatMode } from './types';
+import type {
+  AngleMode,
+  ExamCategory,
+  ExamChoice,
+  ExamLevel,
+  NumberBase,
+  NumberFormatMode,
+} from './types';
 
 export interface ExamPreset {
   /** 電卓の初期設定 */
@@ -25,7 +32,7 @@ export const CATEGORIES_BY_LEVEL: Record<ExamLevel, ExamCategory[]> = {
   '3級': ['四則計算', '関数計算', '実務計算'],
 };
 
-export const DEFAULT_CHOICE: ExamChoice = { level: '3級', category: '四則計算' };
+export const DEFAULT_CHOICE: ExamChoice = { level: '3級', category: '四則計算', mode: 'calc' };
 
 /**
  * 表示形式は Norm のままにしてある。
@@ -92,7 +99,8 @@ export function loadChoice(): ExamChoice {
     const category = categories.includes(parsed.category as ExamCategory)
       ? (parsed.category as ExamCategory)
       : categories[0];
-    return { level, category };
+    const mode = parsed.mode === 'problems' ? 'problems' : 'calc';
+    return { level, category, mode };
   } catch {
     return DEFAULT_CHOICE;
   }

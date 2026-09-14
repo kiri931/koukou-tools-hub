@@ -1,15 +1,29 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CATEGORIES_BY_LEVEL, LEVELS, presetFor } from '../exam-presets';
-import type { ExamCategory, ExamChoice, ExamLevel } from '../types';
+import { KEYPAD_THEMES, THEME_ORDER, type KeypadTheme } from '../keypad-themes';
+import type { CalculatorMode, ExamCategory, ExamChoice, ExamLevel } from '../types';
 
 interface CalculatorSetupProps {
   choice: ExamChoice;
   onChange: (choice: ExamChoice) => void;
+  theme: KeypadTheme;
+  onThemeChange: (theme: KeypadTheme) => void;
   onStart: () => void;
 }
 
-export default function CalculatorSetup({ choice, onChange, onStart }: CalculatorSetupProps) {
+const MODE_LABELS: Record<CalculatorMode, { label: string; description: string }> = {
+  calc: { label: '電卓だけ', description: '自分の問題集を解くときに使う' },
+  problems: { label: '問題を出す', description: '検定と同じ形の問題が出て、答え合わせができる' },
+};
+
+export default function CalculatorSetup({
+  choice,
+  onChange,
+  theme,
+  onThemeChange,
+  onStart,
+}: CalculatorSetupProps) {
   const preset = presetFor(choice);
   const categories = CATEGORIES_BY_LEVEL[choice.level];
 
@@ -63,9 +77,41 @@ export default function CalculatorSetup({ choice, onChange, onStart }: Calculato
         </div>
       </fieldset>
 
+      <fieldset>
+        <legend className="text-base font-semibold text-slate-900 dark:text-slate-100">使い方</legend>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {(['calc', 'problems'] as CalculatorMode[]).map((mode) => (
+            <ChoiceButton
+              key={mode}
+              selected={choice.mode === mode}
+              onClick={() => onChange({ ...choice, mode })}
+            >
+              {MODE_LABELS[mode].label}
+            </ChoiceButton>
+          ))}
+        </div>
+        <p className="mt-1 text-base text-slate-700 dark:text-slate-300">
+          {MODE_LABELS[choice.mode].description}
+        </p>
+      </fieldset>
+
+      <fieldset>
+        <legend className="text-base font-semibold text-slate-900 dark:text-slate-100">色</legend>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {THEME_ORDER.map((name) => (
+            <ChoiceButton key={name} selected={theme === name} onClick={() => onThemeChange(name)}>
+              {KEYPAD_THEMES[name].label}
+            </ChoiceButton>
+          ))}
+        </div>
+        <p className="mt-1 text-base text-slate-700 dark:text-slate-300">
+          {KEYPAD_THEMES[theme].description}
+        </p>
+      </fieldset>
+
       <div className="rounded-xl border border-slate-300 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
         <p className="text-base font-semibold text-slate-900 dark:text-slate-100">
-          {choice.level}・{choice.category}
+          {choice.level}・{choice.category}・{MODE_LABELS[choice.mode].label}
         </p>
         <ul className="mt-2 space-y-1 text-base text-slate-700 dark:text-slate-300">
           <li>答えの丸め方: {preset.roundingHint}</li>

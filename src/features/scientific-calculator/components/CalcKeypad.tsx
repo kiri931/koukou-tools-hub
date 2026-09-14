@@ -1,5 +1,6 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import CalcButton from './CalcButton';
+import { DEFAULT_THEME, type KeypadTheme } from '../keypad-themes';
 import type { AngleMode, ButtonDef } from '../types';
 
 export const BUTTON_ROWS: ButtonDef[][] = [
@@ -380,6 +381,8 @@ interface CalcKeypadProps {
   altActive?: boolean;
   /** 親の高さいっぱいにキーを広げる（全画面の電卓で使う）。既定は false。 */
   fill?: boolean;
+  /** キーの配色。ドリル側からは渡さないので既定の「おちつき」になる。 */
+  theme?: KeypadTheme;
   angleMode: AngleMode;
   onPress: (action: string) => void;
   highlightedAction?: string;
@@ -389,6 +392,7 @@ export default function CalcKeypad({
   shiftActive,
   altActive = false,
   fill = false,
+  theme = DEFAULT_THEME,
   angleMode,
   onPress,
   highlightedAction,
@@ -423,6 +427,7 @@ export default function CalcKeypad({
                     shiftActive={shiftActive}
                     altActive={altActive}
                     fill={fill}
+                    theme={theme}
                     onPress={onPress}
                     highlighted={
                       // highlightedAction を渡さない使い方（単体の関数電卓）では

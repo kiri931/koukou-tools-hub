@@ -8,13 +8,16 @@ import FullScreenCalculator from './FullScreenCalculator';
 import HelpSheet from './HelpSheet';
 import StatisticsPanel from './StatisticsPanel';
 import { DEFAULT_CHOICE, loadChoice, presetFor, saveChoice } from '../exam-presets';
+import { DEFAULT_THEME, loadTheme, saveTheme, type KeypadTheme } from '../keypad-themes';
 import { useCalculator } from '../hooks/useCalculator';
 import { useKeyboardInput } from '../hooks/useKeyboardInput';
+import { useProblemSession } from '../hooks/useProblemSession';
 import type { ExamChoice } from '../types';
 
 export default function ScientificCalculator() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [choice, setChoice] = useState<ExamChoice>(DEFAULT_CHOICE);
+  const [theme, setTheme] = useState<KeypadTheme>(DEFAULT_THEME);
   const [open, setOpen] = useState(false);
   const {
     state,
@@ -26,10 +29,13 @@ export default function ScientificCalculator() {
     applyPreset,
   } = useCalculator();
 
-  // 前回選んだ級・分野を既定にする。選択画面自体は毎回出す。
+  // 前回選んだ級・分野・色を既定にする。選択画面自体は毎回出す。
   useEffect(() => {
     setChoice(loadChoice());
+    setTheme(loadTheme());
   }, []);
+
+  const session = useProblemSession(choice, open && choice.mode === 'problems');
 
   // 電卓を開いている間だけ、裏のページがスクロールしないようにする
   useEffect(() => {
@@ -55,7 +61,14 @@ export default function ScientificCalculator() {
       base: preset.base,
     });
     saveChoice(choice);
+    saveTheme(theme);
+    session.restart();
     setOpen(true);
+  };
+
+  const changeTheme = (next: KeypadTheme) => {
+    setTheme(next);
+    saveTheme(next);
   };
 
   return (
@@ -69,7 +82,13 @@ export default function ScientificCalculator() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <CalculatorSetup choice={choice} onChange={setChoice} onStart={start} />
+            <CalculatorSetup
+              choice={choice}
+              onChange={setChoice}
+              theme={theme}
+              onThemeChange={changeTheme}
+              onStart={start}
+            />
           </CardContent>
         </Card>
 
@@ -87,6 +106,13 @@ export default function ScientificCalculator() {
               window.scrollTo({ top: 0 });
             }}
             onHelp={() => setHelpOpen(true)}
+            theme={theme}
+            problem={session.problem}
+            judgement={session.judgement}
+            answered={session.answered}
+            correct={session.correct}
+            onCheck={() => session.check(state.result)}
+            onNext={session.next}
           />
         )}
 
