@@ -82,7 +82,7 @@ const CalcButton = forwardRef<HTMLButtonElement, CalcButtonProps>(function CalcB
       {highlighted && (
         <span
           aria-hidden="true"
-          className="absolute left-1 top-0.5 text-[11px] font-bold leading-none text-amber-800 dark:text-amber-300"
+          className="absolute left-1 top-0.5 text-sm font-bold leading-none text-amber-800 dark:text-amber-300"
         >
           ▶
         </span>

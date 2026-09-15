@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -7,14 +7,16 @@ import { generateProblems } from '../data/problems';
 import { useCalcDrill } from '../hooks/useCalcDrill';
 import { clearMissCounts, loadMissCounts, sortByWeakness, type MissCounts } from '../lib/missLog';
 import { CATEGORIES_BY_LEVEL } from '../data/templates';
-import type { DrillChoice, DrillCategory, DrillLevelFilter } from '../types';
+import type { DrillChoice, DrillCategory, DrillLevel, DrillLevelFilter } from '../types';
 import DrillDisplay from './DrillDisplay';
 import InputTipsMode from './InputTipsMode';
 import PracticeMode from './PracticeMode';
+import SelectField from './SelectField';
 import WeakKeySummary from './WeakKeySummary';
 import MathText from '@/features/scientific-calculator/components/MathText';
 
-const LEVEL_FILTERS: DrillLevelFilter[] = ['すべて', '4級', '3級', '2級'];
+const LEVELS: DrillLevel[] = ['4級', '3級', '2級'];
+const LEVEL_FILTERS: DrillLevelFilter[] = ['すべて', ...LEVELS];
 const CATEGORY_FILTERS: (DrillCategory | 'すべて')[] = [
   'すべて',
   '四則計算',
@@ -59,6 +61,30 @@ export default function CalcDrill() {
   const [weakFirst, setWeakFirst] = useState(false);
   const [mode, setMode] = useState<'guide' | 'solo' | 'sheet' | 'tips'>('guide');
   const [assist, setAssist] = useState(false);
+  // 上の設定（練習のしかた・級・分野）をたたんでおけるようにする。
+  // 解答用紙や電卓は縦に長く、設定が常に出ていると画面を圧迫するため。
+  const [settingsOpen, setSettingsOpen] = useState(true);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem('calc-drill.settings-open');
+      if (saved !== null) setSettingsOpen(saved === '1');
+    } catch {
+      // 読めなくても使えるので、ここは黙って諦める
+    }
+  }, []);
+
+  const toggleSettings = () => {
+    setSettingsOpen((open) => {
+      const next = !open;
+      try {
+        window.localStorage.setItem('calc-drill.settings-open', next ? '1' : '0');
+      } catch {
+        // 保存できなくても使える
+      }
+      return next;
+    });
+  };
 
   // 「自分で解く」と「解答用紙」は区分を1つに決めてから始める。
   // 絞り込みが「すべて」のままなら、その級でいちばん最初に解く区分にする。
@@ -73,6 +99,19 @@ export default function CalcDrill() {
           : categories[0],
     };
   })();
+  // 分野の選択肢は、選んだ級に実在するものだけにする。
+  // 「4級」に「関数計算」を出しても0問になるだけで、選べる意味がない。
+  const categoryOptions = useMemo<(DrillCategory | 'すべて')[]>(
+    () =>
+      levelFilter === 'すべて'
+        ? CATEGORY_FILTERS
+        : ['すべて', ...CATEGORIES_BY_LEVEL[levelFilter]],
+    [levelFilter]
+  );
+
+  // ガイド練習だけは級・分野をまたいで続けて解ける。他は1つに決める。
+  const needsOneChoice = mode !== 'guide';
+
   // 開くたびに違う種にする。過去問をそのまま出すのではなく、同じ形の問題を作っている
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
   const displayRef = useRef<HTMLDivElement>(null);
@@ -144,57 +183,22 @@ export default function CalcDrill() {
           mode === 'sheet' ? 'max-w-6xl' : mode === 'guide' ? 'max-w-[30rem]' : 'max-w-2xl'
         }`}
       >
-        <div className="mb-3 flex flex-wrap gap-1.5">
-          {MODES.map((m) => (
-            <Button
-              key={m.key}
-              type="button"
-              size="sm"
-              variant={mode === m.key ? 'default' : 'outline'}
-              onClick={() => setMode(m.key)}
-              aria-pressed={mode === m.key}
-            >
-              {m.label}
-            </Button>
-          ))}
-        </div>
-
-        <p className="mb-3 text-base text-slate-600 dark:text-slate-300">
-          {MODES.find((m) => m.key === mode)?.description}
-        </p>
-
-        <div className="mb-3 space-y-1.5">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-base text-slate-600 dark:text-slate-300">級</span>
-            {LEVEL_FILTERS.map((filter) => (
-              <Button
-                key={filter}
-                type="button"
-                size="sm"
-                variant={levelFilter === filter ? 'default' : 'outline'}
-                onClick={() => setLevelFilter(filter)}
-                aria-pressed={levelFilter === filter}
-              >
-                {filter}
-              </Button>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-base text-slate-600 dark:text-slate-300">分野</span>
-            {CATEGORY_FILTERS.map((filter) => (
-              <Button
-                key={filter}
-                type="button"
-                size="sm"
-                variant={categoryFilter === filter ? 'default' : 'outline'}
-                onClick={() => setCategoryFilter(filter)}
-                aria-pressed={categoryFilter === filter}
-              >
-                {filter}
-              </Button>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-1.5">
+        {/* たたんだときは、いま何を練習しているかの1行だけ残す */}
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <Button type="button" size="sm" variant="outline" onClick={toggleSettings} aria-expanded={settingsOpen}>
+            {/* 開閉は色ではなく記号と文言で示す */}
+            {settingsOpen ? '▲ 設定をたたむ' : '▼ 設定をひらく'}
+          </Button>
+          {!settingsOpen && (
+            <span className="text-base text-slate-700 dark:text-slate-300">
+              {MODES.find((m) => m.key === mode)?.label}／
+              {needsOneChoice ? practiceChoice.level : levelFilter}・
+              {needsOneChoice ? practiceChoice.category : categoryFilter}
+              {mode !== 'guide' && mode !== 'tips' && `／入力補助 ${assist ? '入' : '切'}`}
+            </span>
+          )}
+          <span className="ml-auto flex items-center gap-2">
+            <span className="text-base text-slate-700 dark:text-slate-300">{filteredProblems.length} 問</span>
             <Button
               type="button"
               size="sm"
@@ -202,13 +206,48 @@ export default function CalcDrill() {
               onClick={() => setSeed(Math.floor(Math.random() * 2 ** 31))}
             >
               <RefreshCw className="size-4" aria-hidden="true" />
-              問題を作り直す
+              作り直す
             </Button>
-            <span className="text-base text-slate-600 dark:text-slate-300">
-              {filteredProblems.length} 問
-            </span>
-          </div>
+          </span>
         </div>
+
+        {settingsOpen && (
+          <>
+          {/* 1つだけ選ぶものはメニューにまとめる。
+              ボタンで並べると、キーパッドの前に15個のボタンが並んでしまう。 */}
+          <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <SelectField
+              label="練習"
+              value={mode}
+              options={MODES.map((m) => m.key)}
+              display={(key) => MODES.find((m) => m.key === key)?.label ?? key}
+              onChange={setMode}
+            />
+            {/* 「自分で解く」「解答用紙」「打ち方のコツ」は級と分野を1つに決めてから始めるので、
+                「すべて」を選べるようにしない。選べてしまうと、メニューは「すべて」なのに
+                画面には3級が出ている、という食い違いになる。 */}
+            <SelectField
+              label="級"
+              value={needsOneChoice ? practiceChoice.level : levelFilter}
+              options={needsOneChoice ? LEVELS : LEVEL_FILTERS}
+              onChange={setLevelFilter}
+            />
+            <SelectField
+              label="分野"
+              value={needsOneChoice ? practiceChoice.category : categoryFilter}
+              options={
+                needsOneChoice ? CATEGORIES_BY_LEVEL[practiceChoice.level] : categoryOptions
+              }
+              onChange={setCategoryFilter}
+            />
+          </div>
+
+          <p className="mb-3 text-base text-slate-700 dark:text-slate-300">
+            {MODES.find((m) => m.key === mode)?.description}
+          </p>
+
+          </>
+        )}
 
         {mode === 'tips' ? (
           <InputTipsMode choice={practiceChoice} />

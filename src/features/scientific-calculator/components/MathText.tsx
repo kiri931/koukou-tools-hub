@@ -32,7 +32,9 @@ export default function MathText({ children }: { children: string }) {
           {part.base}
           {part.exponent !== undefined && (
             // 上付きは行の高さを押し上げないようにしておく
-            <sup className="text-[0.75em] leading-none">
+            // 上付きも14pxを下回らない。指数を読み違えると答えが変わる。
+            // （実測: 0.75em だと 16px の本文で 12px になっていた）
+            <sup className="text-[max(14px,0.8em)] leading-none">
               {part.exponent.replace(/-/g, '−')}
             </sup>
           )}
