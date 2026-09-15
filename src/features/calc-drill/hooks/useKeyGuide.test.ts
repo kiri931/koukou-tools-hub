@@ -72,6 +72,32 @@ describe('useKeyGuide', () => {
     expect(result.current.nextAction).toBe('1');
   });
 
+  it('余計に打ったぶんを消すと、案内が自動で戻る', () => {
+    // 式の長さを渡すと、外れた時点まで消えたところで案内が戻る。
+    // 「ACして最初から」しか道が無いと、1打まちがえただけで
+    // それまでの入力を全部捨てることになる。
+    const { result, rerender } = renderHook(
+      ({ length }) => useKeyGuide(problem, true, length),
+      { initialProps: { length: 1 } }
+    );
+    act(() => result.current.observe('1'));   // ここまでは手順どおり（式は "1"）
+    act(() => result.current.observe('9'));   // 余計な1打
+    expect(result.current.offTrack).toBe(true);
+
+    rerender({ length: 2 });                   // "19" になった
+    expect(result.current.extraLength).toBe(1);
+
+    rerender({ length: 1 });                   // DEL で "1" に戻した
+    expect(result.current.offTrack).toBe(false);
+    expect(result.current.nextAction).toBe('+');
+  });
+
+  it('消すキーでは手順から外れたことにしない', () => {
+    const { result } = renderHook(() => useKeyGuide(problem, true, 1));
+    act(() => result.current.observe('del'));
+    expect(result.current.offTrack).toBe(false);
+  });
+
   it('やり直すと先頭から案内しなおす', () => {
     const { result } = renderHook(() => useKeyGuide(problem, true));
     act(() => result.current.observe('9'));

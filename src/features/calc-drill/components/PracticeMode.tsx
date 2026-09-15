@@ -34,7 +34,7 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
   const sheet = useAnswerSheet(choice, kind === 'sheet');
 
   const problem = kind === 'solo' ? session.problem : (sheet.rows[sheet.activeIndex]?.problem ?? null);
-  const guide = useKeyGuide(problem, assist);
+  const guide = useKeyGuide(problem, assist, state.expression.length);
 
   // 補助を入れている間は、表示形式もその問題の丸め方に合わせる。
   // 本番の四則計算は (1)〜(7) が小数第2位、(8)〜(10) が有効数字3けたで、
@@ -113,19 +113,35 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
           : '本番と同じく、手順は自分で決めます'}
       </span>
       {guide.offTrack && (
-        <span className="flex flex-wrap items-center gap-2 rounded border border-amber-700 bg-amber-50 px-2 py-1 text-base text-amber-950">
-          ⚠ 手順から外れたので案内を止めました
+        // 手順から外れたことは、色だけでなく記号と文言でも示す
+        <span className="flex flex-wrap items-center gap-2 rounded border-2 border-rose-800 bg-rose-50 px-2 py-1 text-base font-bold text-rose-900 dark:bg-rose-950 dark:text-rose-100">
+          ✗ 手順から外れました。
+          {guide.extraLength > 0
+            ? ` DEL で ${guide.extraLength} 文字消すと、案内が戻ります。`
+            : ' DEL で消すと、案内が戻ります。'}
           <Button
             type="button"
             size="sm"
             variant="outline"
-            className="border-amber-700"
+            className="border-rose-800 font-bold"
+            onClick={() => {
+              // 余計に打ったぶんだけ消す。ここまでの入力は捨てない。
+              for (let i = 0; i < guide.extraLength; i += 1) pressButton('del');
+            }}
+          >
+            余計に打ったぶんを消す
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className="border-rose-800"
             onClick={() => {
               pressButton('ac');
               guide.reset();
             }}
           >
-            手順を最初から
+            最初からやり直す
           </Button>
         </span>
       )}
