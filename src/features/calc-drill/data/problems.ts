@@ -6,20 +6,28 @@ import type { DrillLevel, DrillProblem, Rounding } from '../types';
 /** rounding の指示どおりに丸める。答え合わせの基準を人間と揃えるため。 */
 export function roundTo(value: number, rounding?: Rounding): number {
   if (!rounding) return value;
-  if (rounding.kind === 'decimals') {
-    const f = 10 ** rounding.value;
-    return Math.round(value * f) / f;
+  const f = 10 ** rounding.value;
+  switch (rounding.kind) {
+    case 'decimals':
+      return Math.round(value * f) / f;
+    case 'ceil':
+      // 不等式で「範囲に収まるように切り上げる」ための丸め
+      return Math.ceil(value * f) / f;
+    case 'floor':
+      return Math.floor(value * f) / f;
+    case 'sigfigs': {
+      if (value === 0) return 0;
+      const digits = rounding.value - 1 - Math.floor(Math.log10(Math.abs(value)));
+      const g = 10 ** digits;
+      return Math.round(value * g) / g;
+    }
   }
-  if (value === 0) return 0;
-  const digits = rounding.value - 1 - Math.floor(Math.log10(Math.abs(value)));
-  const f = 10 ** digits;
-  return Math.round(value * f) / f;
 }
 
 function formatAnswer(value: number, rounding: Rounding): string {
   const rounded = roundTo(value, rounding);
-  if (rounding.kind === 'decimals') return rounded.toFixed(rounding.value);
-  return String(rounded);
+  if (rounding.kind === 'sigfigs') return String(rounded);
+  return rounded.toFixed(rounding.value);
 }
 
 function toDrillProblem(raw: RawProblem, level: DrillLevel, id: string): DrillProblem {
@@ -45,7 +53,7 @@ export function generateProblems(seed: number, perTemplate = 2): DrillProblem[] 
   const rng: Rng = makeRng(seed);
   const problems: DrillProblem[] = [];
 
-  for (const level of ['4級', '3級'] as const) {
+  for (const level of ['4級', '3級', '2級'] as const) {
     for (const category of CATEGORIES_BY_LEVEL[level]) {
       const templates = TEMPLATES[level][category] ?? [];
       templates.forEach((template, templateIndex) => {

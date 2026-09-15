@@ -31,7 +31,9 @@ export function useAnswerSheet(choice: DrillChoice, enabled: boolean) {
 
   const problems = useMemo(() => {
     if (!enabled) return [];
-    const pool = generateProblems(seed, 1).filter(
+    // 1テンプレートにつき2問作る。2級は区分あたり8テンプレートしかなく、
+    // 1問ずつだと10問の用紙が埋まらない。
+    const pool = generateProblems(seed, 2).filter(
       (p) => p.level === choice.level && p.category === choice.category
     );
 

@@ -6,6 +6,7 @@ import CalcKeypad from '@/features/scientific-calculator/components/CalcKeypad';
 import { generateProblems } from '../data/problems';
 import { useCalcDrill } from '../hooks/useCalcDrill';
 import { clearMissCounts, loadMissCounts, sortByWeakness, type MissCounts } from '../lib/missLog';
+import { CATEGORIES_BY_LEVEL } from '../data/templates';
 import type { DrillChoice, DrillCategory, DrillLevelFilter } from '../types';
 import DrillDisplay from './DrillDisplay';
 import InputTipsMode from './InputTipsMode';
@@ -13,13 +14,15 @@ import PracticeMode from './PracticeMode';
 import WeakKeySummary from './WeakKeySummary';
 import MathText from '@/features/scientific-calculator/components/MathText';
 
-const LEVEL_FILTERS: DrillLevelFilter[] = ['両方', '4級', '3級'];
+const LEVEL_FILTERS: DrillLevelFilter[] = ['すべて', '4級', '3級', '2級'];
 const CATEGORY_FILTERS: (DrillCategory | 'すべて')[] = [
   'すべて',
   '四則計算',
   '集計計算',
   '関数計算',
   '実務計算',
+  '方程式と不等式',
+  '応用計算',
 ];
 
 const MODES = [
@@ -50,7 +53,7 @@ const MODES = [
 ];
 
 export default function CalcDrill() {
-  const [levelFilter, setLevelFilter] = useState<DrillLevelFilter>('両方');
+  const [levelFilter, setLevelFilter] = useState<DrillLevelFilter>('すべて');
   const [categoryFilter, setCategoryFilter] = useState<DrillCategory | 'すべて'>('すべて');
   const [listOpen, setListOpen] = useState(false);
   const [weakFirst, setWeakFirst] = useState(false);
@@ -58,11 +61,18 @@ export default function CalcDrill() {
   const [assist, setAssist] = useState(false);
 
   // 「自分で解く」と「解答用紙」は区分を1つに決めてから始める。
-  // 絞り込みが「両方」「すべて」のままなら、検定でいちばん最初に解く区分にする。
-  const practiceChoice: DrillChoice = {
-    level: levelFilter === '両方' ? '3級' : levelFilter,
-    category: categoryFilter === 'すべて' ? '四則計算' : categoryFilter,
-  };
+  // 絞り込みが「すべて」のままなら、その級でいちばん最初に解く区分にする。
+  const practiceChoice: DrillChoice = (() => {
+    const level = levelFilter === 'すべて' ? '3級' : levelFilter;
+    const categories = CATEGORIES_BY_LEVEL[level];
+    return {
+      level,
+      category:
+        categoryFilter !== 'すべて' && categories.includes(categoryFilter)
+          ? categoryFilter
+          : categories[0],
+    };
+  })();
   // 開くたびに違う種にする。過去問をそのまま出すのではなく、同じ形の問題を作っている
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
   const displayRef = useRef<HTMLDivElement>(null);
@@ -73,7 +83,7 @@ export default function CalcDrill() {
     () =>
       allProblems.filter(
         (problem) =>
-          (levelFilter === '両方' || problem.level === levelFilter) &&
+          (levelFilter === 'すべて' || problem.level === levelFilter) &&
           (categoryFilter === 'すべて' || problem.category === categoryFilter)
       ),
     [allProblems, levelFilter, categoryFilter]

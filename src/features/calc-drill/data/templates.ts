@@ -1228,6 +1228,387 @@ const san_jitsumu_kakomon: Template[] = [
   },
 ];
 
+// ────────────────────────────────────────────────────────────
+// 2級
+//
+// 2級は3級・4級と構成が違い、四則計算が無く「方程式と不等式」が入る。
+//   (1) 関数計算（15分）    … n乗・n乗根、三角・逆三角、指数・対数、順列組合せ
+//   (2) 方程式と不等式（20分）… 1〜3次方程式、連立方程式、不等式
+//   (3) 応用計算（30分）    … 式の変形、三角関数と三平方の定理
+//
+// **手元に2級の過去問が無い。** ここに書いてあるのは、公表されている
+// 出題範囲（全国工業高等学校長協会／Wikipedia、および倉敷工業高校
+// 「計算技術検定2級受験のポイント」）に沿って作った形であって、
+// 過去問から写したものではない。3級のテンプレートとはそこが違う。
+//
+// 答え方の決まりも同じ資料から:
+//   - 解答の途中で四捨五入しない
+//   - 不等式は、まず四捨五入せずに解き、解答欄の ≦ ≧ の向きに合わせて
+//     切上げ・切捨てる（単純な四捨五入にしない）
+// ────────────────────────────────────────────────────────────
+
+const D4: Rounding = { kind: 'decimals', value: 4 };
+const CEIL2: Rounding = { kind: 'ceil', value: 2 };
+const FLOOR2: Rounding = { kind: 'floor', value: 2 };
+
+const ni_kansuu: Template[] = [
+  // n乗と n乗根
+  (rng) => {
+    const a = dec(rng, 1.2, 9.99, 2);
+    const b = dec(rng, 1.1, 3.5, 2);
+    const n = int(rng, 3, 6);
+    const c = dec(rng, 1.2, 99.9, 2);
+    return {
+      category: '関数計算',
+      question: `${a.tok}^${b.tok} + ${n}√${c.tok}`,
+      guide: [a.tok, 'x^y', b.tok, ')', '+', String(n), 'x√', c.tok, '='],
+      value: a.n ** b.n + c.n ** (1 / n),
+      rounding: D4,
+    };
+  },
+
+  // 逆三角関数。答えは度で出す
+  (rng) => {
+    const x = dec(rng, 0.05, 0.95, 3);
+    const y = dec(rng, 0.05, 0.95, 3);
+    return {
+      category: '関数計算',
+      question: `sin⁻¹ ${x.tok} + cos⁻¹ ${y.tok}  （答えは度）`,
+      guide: ['sin-1', x.tok, '+', 'cos-1', y.tok, '='],
+      value: (Math.asin(x.n) * 180) / Math.PI + (Math.acos(y.n) * 180) / Math.PI,
+      rounding: D2,
+    };
+  },
+
+  // 度分秒をラジアンで表す（2級の資料にある「32°20′ は 0.564323(RAD)」の形）
+  (rng) => {
+    const d = int(rng, 10, 80);
+    const m = int(rng, 1, 59);
+    const value = ((d + m / 60) * Math.PI) / 180;
+    return {
+      category: '関数計算',
+      question: `${d}°${m}′ は何ラジアンか`,
+      guide: [String(d), '°\'"', String(m), '°\'"', '×', 'π', '÷', '1', '8', '0', '='],
+      value,
+      rounding: { kind: 'decimals', value: 6 },
+    };
+  },
+
+  // 指数関数と自然対数
+  (rng) => {
+    const a = dec(rng, 0.5, 2.5, 2);
+    const b = dec(rng, 1.2, 9.99, 2);
+    return {
+      category: '関数計算',
+      question: `e^${a.tok} - logₑ ${b.tok}`,
+      guide: ['e^x', a.tok, ')', '-', 'ln', b.tok, '='],
+      value: Math.exp(a.n) - Math.log(b.n),
+      rounding: D4,
+    };
+  },
+
+  // 常用対数と 10 のべき乗
+  (rng) => {
+    const a = dec(rng, 1.2, 9.99, 2);
+    const b = dec(rng, 0.2, 2.5, 2);
+    return {
+      category: '関数計算',
+      question: `log ${a.tok} × 10^${b.tok}`,
+      guide: ['log', a.tok, ')', '×', '10^x', b.tok, '='],
+      value: Math.log10(a.n) * 10 ** b.n,
+      rounding: D4,
+    };
+  },
+
+  // 順列と組合せ
+  (rng) => {
+    const n = int(rng, 6, 12);
+    const r = int(rng, 2, 4);
+    return {
+      category: '関数計算',
+      question: `${n}P${r} ÷ ${n}C${r}`,
+      guide: [String(n), 'nPr', String(r), '÷', '(', String(n), 'nCr', String(r), ')', '='],
+      value: (fact(n) / fact(n - r)) / (fact(n) / (fact(r) * fact(n - r))),
+      rounding: D2,
+    };
+  },
+
+  // 三角関数の合成
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const t = dec(rng, 5, 85, 1);
+    return {
+      category: '関数計算',
+      question: `${a.tok} sin ${t.tok}° + ${b.tok} cos ${t.tok}°`,
+      guide: [a.tok, '×', 'sin', t.tok, '+', b.tok, '×', 'cos', t.tok, '='],
+      value: a.n * Math.sin(toRad(t.n)) + b.n * Math.cos(toRad(t.n)),
+      rounding: D4,
+    };
+  },
+
+  // 割合（％）。資料に「数値と単位は分けて考える。特に％は注意」とある
+  (rng) => {
+    const a = dec(rng, 1, 99.9, 2);
+    const b = decNonZero(rng, 10, 199.9, 2, 5);
+    return {
+      category: '関数計算',
+      question: `R = ${a.tok} ÷ ${b.tok} × 100 の R は何 %`,
+      guide: [a.tok, '÷', b.tok, '×', '1', '0', '0', '='],
+      value: (a.n / b.n) * 100,
+      rounding: D2,
+    };
+  },
+];
+
+const ni_houteishiki: Template[] = [
+  // 1次方程式。係数項と定数項に整理して x = 定数項 ÷ 係数項
+  (rng) => {
+    const a = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const d = dec(rng, 1, 9.99, 2);
+    const coef = a.n - c.n;
+    if (Math.abs(coef) < 0.3) return ni_houteishiki[1](rng);
+    return {
+      category: '方程式と不等式',
+      question: `${a.tok} x + ${b.tok} = ${c.tok} x + ${d.tok} の x`,
+      guide: ['(', d.tok, '-', b.tok, ')', '÷', '(', a.tok, '-', c.tok, ')', '='],
+      value: (d.n - b.n) / coef,
+      rounding: D2,
+    };
+  },
+
+  // 1次方程式（分数の形）
+  (rng) => {
+    const a = decNonZero(rng, 1, 9.99, 2, 0.5);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = decNonZero(rng, 1, 9.99, 2, 0.5);
+    return {
+      category: '方程式と不等式',
+      question: `x ÷ ${a.tok} + ${b.tok} = ${c.tok} の x`,
+      guide: ['(', c.tok, '-', b.tok, ')', '×', a.tok, '='],
+      value: (c.n - b.n) * a.n,
+      rounding: D2,
+    };
+  },
+
+  // 2次方程式（解の公式・大きい方の解）
+  //
+  // 係数は正の数だけを出し、符号は式の見た目に書く。
+  // ガイドに "-6.22" のような負のトークンを入れると、
+  // そのままでは押せるキーに対応しない。
+  (rng) => {
+    const a = decNonZero(rng, 0.5, 3, 2, 0.5);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const disc = b.n * b.n + 4 * a.n * c.n;
+    return {
+      category: '方程式と不等式',
+      question: `${a.tok} x² - ${b.tok} x - ${c.tok} = 0 の大きい方の解`,
+      guide: ['(', b.tok, '+', '√', '(', b.tok, 'x²', '+', '4', '×', a.tok, '×', c.tok, ')', ')',
+              '÷', '(', '2', '×', a.tok, ')', '='],
+      value: (b.n + Math.sqrt(disc)) / (2 * a.n),
+      rounding: D2,
+    };
+  },
+
+  // 2次方程式（小さい方の解）
+  (rng) => {
+    const a = decNonZero(rng, 0.5, 3, 2, 0.5);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 9.99, 2);
+    const disc = b.n * b.n + 4 * a.n * c.n;
+    return {
+      category: '方程式と不等式',
+      question: `${a.tok} x² - ${b.tok} x - ${c.tok} = 0 の小さい方の解`,
+      guide: ['(', b.tok, '-', '√', '(', b.tok, 'x²', '+', '4', '×', a.tok, '×', c.tok, ')', ')',
+              '÷', '(', '2', '×', a.tok, ')', '='],
+      value: (b.n - Math.sqrt(disc)) / (2 * a.n),
+      rounding: D2,
+    };
+  },
+
+  // 連立方程式（2元1次）の x
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 99.9, 2);
+    const d = dec(rng, 1, 9.99, 2);
+    const e = dec(rng, 1, 9.99, 2);
+    const f = dec(rng, 1, 99.9, 2);
+    const det = a.n * e.n - b.n * d.n;
+    if (Math.abs(det) < 0.5) return ni_houteishiki[0](rng);
+    return {
+      category: '方程式と不等式',
+      question: `${a.tok} x + ${b.tok} y = ${c.tok} , ${d.tok} x + ${e.tok} y = ${f.tok} の x`,
+      guide: ['(', c.tok, '×', e.tok, '-', b.tok, '×', f.tok, ')', '÷',
+              '(', a.tok, '×', e.tok, '-', b.tok, '×', d.tok, ')', '='],
+      value: (c.n * e.n - b.n * f.n) / det,
+      rounding: D2,
+    };
+  },
+
+  // 連立方程式の y
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 1, 99.9, 2);
+    const d = dec(rng, 1, 9.99, 2);
+    const e = dec(rng, 1, 9.99, 2);
+    const f = dec(rng, 1, 99.9, 2);
+    const det = a.n * e.n - b.n * d.n;
+    if (Math.abs(det) < 0.5) return ni_houteishiki[0](rng);
+    return {
+      category: '方程式と不等式',
+      question: `${a.tok} x + ${b.tok} y = ${c.tok} , ${d.tok} x + ${e.tok} y = ${f.tok} の y`,
+      guide: ['(', a.tok, '×', f.tok, '-', c.tok, '×', d.tok, ')', '÷',
+              '(', a.tok, '×', e.tok, '-', b.tok, '×', d.tok, ')', '='],
+      value: (a.n * f.n - c.n * d.n) / det,
+      rounding: D2,
+    };
+  },
+
+  // 不等式（≦）。範囲に収まるよう切り捨てる
+  (rng) => {
+    const a = dec(rng, 1.1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 20, 99.9, 2);
+    return {
+      category: '方程式と不等式',
+      question: `${a.tok} x + ${b.tok} ≦ ${c.tok} を満たす x （x ≦ □）`,
+      guide: ['(', c.tok, '-', b.tok, ')', '÷', a.tok, '='],
+      value: (c.n - b.n) / a.n,
+      rounding: FLOOR2,
+    };
+  },
+
+  // 不等式（≧）。範囲に収まるよう切り上げる
+  (rng) => {
+    const a = dec(rng, 1.1, 9.99, 2);
+    const b = dec(rng, 1, 9.99, 2);
+    const c = dec(rng, 20, 99.9, 2);
+    return {
+      category: '方程式と不等式',
+      question: `${a.tok} x - ${b.tok} ≧ ${c.tok} を満たす x （x ≧ □）`,
+      guide: ['(', c.tok, '+', b.tok, ')', '÷', a.tok, '='],
+      value: (c.n + b.n) / a.n,
+      rounding: CEIL2,
+    };
+  },
+];
+
+const ni_ouyou: Template[] = [
+  // 三平方の定理
+  (rng) => {
+    const a = dec(rng, 1, 99.9, 2);
+    const b = dec(rng, 1, 99.9, 2);
+    return {
+      category: '応用計算',
+      question: `直角をはさむ2辺が ${a.tok} と ${b.tok} の直角三角形の斜辺`,
+      guide: ['√', '(', a.tok, 'x²', '+', b.tok, 'x²', ')', '='],
+      value: Math.sqrt(a.n ** 2 + b.n ** 2),
+      rounding: D2,
+    };
+  },
+
+  // 余弦定理
+  (rng) => {
+    const b = dec(rng, 1, 99.9, 2);
+    const c = dec(rng, 1, 99.9, 2);
+    const t = dec(rng, 20, 160, 1);
+    return {
+      category: '応用計算',
+      question: `2辺が ${b.tok} と ${c.tok}、その間の角が ${t.tok}° の三角形の残りの辺`,
+      guide: ['√', '(', b.tok, 'x²', '+', c.tok, 'x²', '-', '2', '×', b.tok, '×', c.tok, '×', 'cos', t.tok, ')', '='],
+      value: Math.sqrt(b.n ** 2 + c.n ** 2 - 2 * b.n * c.n * Math.cos(toRad(t.n))),
+      rounding: D2,
+    };
+  },
+
+  // 正弦定理
+  (rng) => {
+    const b = dec(rng, 1, 99.9, 2);
+    const A = dec(rng, 15, 80, 1);
+    const B = dec(rng, 15, 80, 1);
+    return {
+      category: '応用計算',
+      question: `b = ${b.tok}, A = ${A.tok}°, B = ${B.tok}° の三角形の a （正弦定理）`,
+      guide: [b.tok, '×', 'sin', A.tok, '÷', 'sin', B.tok, '='],
+      value: (b.n * Math.sin(toRad(A.n))) / Math.sin(toRad(B.n)),
+      rounding: D2,
+    };
+  },
+
+  // 三角形の面積
+  (rng) => {
+    const a = dec(rng, 1, 99.9, 2);
+    const b = dec(rng, 1, 99.9, 2);
+    const t = dec(rng, 15, 165, 1);
+    return {
+      category: '応用計算',
+      question: `2辺が ${a.tok} と ${b.tok}、その間の角が ${t.tok}° の三角形の面積`,
+      guide: ['0.5', '×', a.tok, '×', b.tok, '×', 'sin', t.tok, '='],
+      value: 0.5 * a.n * b.n * Math.sin(toRad(t.n)),
+      rounding: D2,
+    };
+  },
+
+  // 式の変形（y = (a - b) x を x について解く）
+  (rng) => {
+    const a = dec(rng, 1, 9.99, 2);
+    const b = spread(rng, 1, 9.99, 2, a.n, 0.5);
+    const y = dec(rng, 1, 99.9, 2);
+    return {
+      category: '応用計算',
+      question: `y = ( a - b ) x を x について解き、a = ${a.tok}, b = ${b.tok}, y = ${y.tok} のときの x`,
+      guide: [y.tok, '÷', '(', a.tok, '-', b.tok, ')', '='],
+      value: y.n / (a.n - b.n),
+      rounding: D2,
+    };
+  },
+
+  // 減衰（自然対数を使って時間を求める）
+  (rng) => {
+    const n0 = dec(rng, 10, 99.9, 2);
+    const n = dec(rng, 1, n0.n - 1, 2);
+    const k = dec(rng, 0.05, 0.9, 3);
+    return {
+      category: '応用計算',
+      question: `N = N₀ e^( - k t ) を t について解き、N₀ = ${n0.tok}, N = ${n.tok}, k = ${k.tok} のときの t`,
+      guide: ['-', 'ln', '(', n.tok, '÷', n0.tok, ')', '÷', k.tok, '='],
+      value: -Math.log(n.n / n0.n) / k.n,
+      rounding: D4,
+    };
+  },
+
+  // 常用対数（利得）
+  (rng) => {
+    const pin = dec(rng, 0.5, 9.99, 2);
+    const pout = dec(rng, 10, 999.9, 2);
+    return {
+      category: '応用計算',
+      question: `G = 10 log ( P₂ ÷ P₁ ) において、P₁ = ${pin.tok}, P₂ = ${pout.tok} のときの G`,
+      guide: ['1', '0', '×', 'log', '(', pout.tok, '÷', pin.tok, ')', '='],
+      value: 10 * Math.log10(pout.n / pin.n),
+      rounding: D2,
+    };
+  },
+
+  // 円弧の長さ（度をラジアンに直す）
+  (rng) => {
+    const r = dec(rng, 1, 99.9, 2);
+    const t = dec(rng, 10, 350, 1);
+    return {
+      category: '応用計算',
+      question: `半径 ${r.tok}、中心角 ${t.tok}° の円弧の長さ`,
+      guide: [r.tok, '×', t.tok, '×', 'π', '÷', '1', '8', '0', '='],
+      value: (r.n * t.n * Math.PI) / 180,
+      rounding: D2,
+    };
+  },
+];
+
 function fact(n: number): number {
   let r = 1;
   for (let i = 2; i <= n; i += 1) r *= i;
@@ -1240,6 +1621,11 @@ export const TEMPLATES: Record<DrillLevel, Record<string, Template[]>> = {
     集計計算: yon_shukei,
     実務計算: yon_jitsumu,
   },
+  '2級': {
+    関数計算: ni_kansuu,
+    方程式と不等式: ni_houteishiki,
+    応用計算: ni_ouyou,
+  },
   '3級': {
     四則計算: [...san_shisoku, ...san_shisoku_kakomon],
     関数計算: [...san_kansuu, ...san_kansuu_kakomon],
@@ -1250,4 +1636,5 @@ export const TEMPLATES: Record<DrillLevel, Record<string, Template[]>> = {
 export const CATEGORIES_BY_LEVEL: Record<DrillLevel, DrillCategory[]> = {
   '4級': ['四則計算', '集計計算', '実務計算'],
   '3級': ['四則計算', '関数計算', '実務計算'],
+  '2級': ['関数計算', '方程式と不等式', '応用計算'],
 };

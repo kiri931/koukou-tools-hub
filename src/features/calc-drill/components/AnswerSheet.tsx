@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import MathText from '@/features/scientific-calculator/components/MathText';
+import { CATEGORIES_BY_LEVEL } from '../data/templates';
 import { roundingLabel } from '../types';
 import type { DrillChoice } from '../types';
 import { PASSING_SCORE } from '../lib/grading';
@@ -20,12 +21,14 @@ interface AnswerSheetProps {
   onRestart: () => void;
 }
 
-const SECTION_NO: Record<string, string> = {
-  四則計算: '(1)',
-  集計計算: '(2)',
-  関数計算: '(2)',
-  実務計算: '(3)',
-};
+/**
+ * 用紙の区分番号。級によって並びが違うので、級ごとの区分表から引く。
+ * 例: 関数計算は3級では(2)だが、2級では(1)。
+ */
+function sectionNumberFor(choice: DrillChoice): string {
+  const index = CATEGORIES_BY_LEVEL[choice.level]?.indexOf(choice.category) ?? -1;
+  return index >= 0 ? `(${index + 1})` : '';
+}
 
 function formatRemaining(sec: number) {
   const m = Math.floor(sec / 60);
@@ -62,7 +65,7 @@ export default function AnswerSheet({
       <div className="shrink-0 border-b border-slate-700 px-3 py-2">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <span className="text-lg font-bold">
-            {choice.level} {SECTION_NO[choice.category] ?? ''} {choice.category}
+            {choice.level} {sectionNumberFor(choice)} {choice.category}
           </span>
           <span className="text-base">（制限時間 10分）</span>
           <span className="ml-auto font-mono text-lg font-bold tabular-nums">

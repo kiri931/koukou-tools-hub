@@ -101,7 +101,7 @@ const out = process.argv[2] ?? 'problems.json';
 const rng = makeRng(SEED);
 
 const problems = [];
-for (const level of ['4級', '3級'] as DrillLevel[]) {
+for (const level of ['4級', '3級', '2級'] as DrillLevel[]) {
   for (const category of CATEGORIES_BY_LEVEL[level]) {
     const templates = TEMPLATES[level][category] ?? [];
     templates.forEach((template, templateIndex) => {

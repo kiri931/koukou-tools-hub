@@ -93,16 +93,18 @@ describe('計算技術検定ドリルの類題生成', () => {
     expect(generateProblems(42)).not.toEqual(generateProblems(43));
   });
 
-  it('出題は3級・4級だけで、区分も検定どおり', () => {
+  it('出題は2級・3級・4級で、区分も検定どおり', () => {
     const problems = generateProblems(7);
     const seen = new Map<string, Set<string>>();
     for (const p of problems) {
       if (!seen.has(p.level)) seen.set(p.level, new Set());
       seen.get(p.level)!.add(p.category);
     }
-    expect([...seen.keys()].sort()).toEqual(['3級', '4級']);
+    expect([...seen.keys()].sort()).toEqual(['2級', '3級', '4級']);
     expect([...seen.get('4級')!].sort()).toEqual(['四則計算', '実務計算', '集計計算'].sort());
     expect([...seen.get('3級')!].sort()).toEqual(['四則計算', '実務計算', '関数計算'].sort());
+    // 2級だけ構成が違う。四則計算が無く、方程式と不等式が入る。
+    expect([...seen.get('2級')!].sort()).toEqual(['応用計算', '方程式と不等式', '関数計算'].sort());
   });
 
   it('答えが極端な値になる問題を出さない', () => {

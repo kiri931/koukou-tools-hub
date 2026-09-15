@@ -22,6 +22,7 @@ const TOKEN_ACTION_MAP: Record<string, string> = {
   'x√': 'xroot(',
   'x^y': '^(',
   '10^x': 'pow10(',
+  'e^x': 'exp(',
   log: 'log(',
   ln: 'ln(',
   sin: 'sin(',
