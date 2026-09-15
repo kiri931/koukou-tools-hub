@@ -1083,7 +1083,12 @@ const san_kansuu_kakomon: Template[] = [
     const p1 = int(rng, 1, 3);
     const q1 = int(rng, p1 + 1, 5);
     const p2 = int(rng, 1, 3);
-    const q2 = int(rng, p2 + 1, 5);
+    // tan(π/2) は定義されない。p2/q2 が 1/2 になる組み合わせを避ける。
+    // （JavaScript の Math.tan(π/2) は巨大だが有限の値を返すので、
+    //   値の大きさを見るだけでは気づけない。実測: iPad版の電卓が
+    //   「tanの定義域エラー」で止まって見つかった）
+    let q2 = int(rng, p2 + 1, 5);
+    if (q2 === p2 * 2) q2 += 1;
     const q3 = int(rng, 4, 7);
     const denom =
       -c.n * Math.cos((p1 / q1) * Math.PI) +
