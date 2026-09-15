@@ -13,15 +13,17 @@ export const BUTTON_ROWS: ButtonDef[][] = [
     },
     {
       label: '△',
-      action: 'cursor-home',
+      // △ が「1つ前に打った式」。iPad 版と同じ割り当てにしてある。
+      // 中が抜けている △ が「前に打ったものを出す」ほうが、押した見た目と合う。
+      action: 'history-up',
       altLabel: 'DEC',
       altAction: 'base:DEC',
-      shiftLabel: '▲履歴',
-      shiftAction: 'history-up',
+      shiftLabel: '▲先頭',
+      shiftAction: 'cursor-home',
       variant: 'action',
-      description: 'カーソルを式の先頭へ移します。',
+      description: '1つ前に計算した式を呼び戻します。',
       altDescription: '10進モードに戻します。',
-      shiftDescription: '1つ前に計算した式を呼び戻します。',
+      shiftDescription: 'カーソルを式の先頭へ移します。',
     },
     {
       label: '◀',
@@ -52,7 +54,7 @@ export const BUTTON_ROWS: ButtonDef[][] = [
       action: 'del-forward',
       altLabel: 'BIN',
       altAction: 'base:BIN',
-      shiftLabel: '▼履歴',
+      shiftLabel: '▼次の式',
       shiftAction: 'history-down',
       variant: 'action',
       description: 'カーソルの位置にある1文字を消します。DELはカーソルの手前を消します。',
