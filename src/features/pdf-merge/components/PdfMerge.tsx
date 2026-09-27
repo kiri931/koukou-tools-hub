@@ -187,7 +187,7 @@ export function PdfMerge() {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">ファイル一覧</h2>
           <span className="text-base text-muted-foreground">
-            ドラッグして並び替えできます
+            ドラッグして並べ替えできます
           </span>
         </div>
 

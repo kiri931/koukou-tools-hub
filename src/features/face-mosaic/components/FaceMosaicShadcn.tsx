@@ -242,9 +242,9 @@ export default function FaceMosaicShadcn() {
         {/* Privacy Notice */}
         <Alert className="border-[var(--color-success)] bg-[var(--kj-success-soft)]">
           <ShieldCheck className="h-4 w-4 text-[var(--color-success)]" />
-          <AlertTitle className="text-[var(--color-success)]">画像はサーバーに送信されません</AlertTitle>
+          <AlertTitle className="text-[var(--color-success)]">画像はサーバに送信されません</AlertTitle>
           <AlertDescription className="text-base text-[var(--color-text)]">
-            アップロードした画像はすべてお使いのブラウザ内でのみ処理されます。インターネット経由でサーバーに送信されることは一切ありません。
+            アップロードした画像はすべてお使いのブラウザ内でのみ処理されます。インターネット経由でサーバに送信されることは一切ありません。
           </AlertDescription>
         </Alert>
 

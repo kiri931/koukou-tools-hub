@@ -30,7 +30,7 @@
     {"id": "sg-clickjacking", "topic": "脅威と攻撃手法", "question": "透明化した悪意あるボタンを正規のページ上に重ねて配置し、意図しない操作をさせる攻撃を何という?", "answers": ["クリックジャッキング"], "explanation": "見た目とは異なる操作をさせられる攻撃。"},
     {"id": "sg-directory-traversal", "topic": "脅威と攻撃手法", "question": "上位階層のディレクトリを指定することで、本来アクセスできないファイルに不正にアクセスする攻撃を何という?", "answers": ["ディレクトリトラバーサル"], "explanation": "ファイルパスの入力チェック不備が原因となる。"},
     {"id": "sg-buffer-overflow", "topic": "脅威と攻撃手法", "question": "プログラムが確保した記憶領域を超えるデータを送り込み、誤動作させる攻撃を何という?", "answers": ["バッファオーバフロー攻撃"], "explanation": "プログラムの制御を乗っ取られることがある。"},
-    {"id": "sg-dns-cache-poisoning", "topic": "脅威と攻撃手法", "question": "DNSサーバーのキャッシュに偽の情報を送り込み、利用者を偽サイトに誘導する攻撃を何という?", "answers": ["DNSキャッシュポイズニング"], "explanation": "正しいドメイン名でも偽サイトに誘導されてしまう。"},
+    {"id": "sg-dns-cache-poisoning", "topic": "脅威と攻撃手法", "question": "DNSサーバのキャッシュに偽の情報を送り込み、利用者を偽サイトに誘導する攻撃を何という?", "answers": ["DNSキャッシュポイズニング"], "explanation": "正しいドメイン名でも偽サイトに誘導されてしまう。"},
     {"id": "sg-ids", "topic": "対策技術", "question": "ネットワークやシステムへの不正なアクセスを検知する仕組みを何という?", "answers": ["IDS", "不正侵入検知システム"], "explanation": "Intrusion Detection Systemの略。"},
     {"id": "sg-ips", "topic": "対策技術", "question": "不正なアクセスを検知するだけでなく、自動的に防御・遮断する仕組みを何という?", "answers": ["IPS", "不正侵入防止システム"], "explanation": "Intrusion Prevention Systemの略。"},
     {"id": "sg-waf", "topic": "対策技術", "question": "Webアプリケーションへの攻撃を検知・防御する仕組みを何という?", "answers": ["WAF"], "explanation": "Web Application Firewallの略。"},

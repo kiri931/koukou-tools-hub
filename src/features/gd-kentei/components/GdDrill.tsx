@@ -14,7 +14,7 @@ import type { FieldId, GdQuestion, Level } from "../types";
  * 分野別ドリルと復習。
  *
  * **1問ごとに正誤と解説を出す**軽い練習用で、模擬試験（15題から10題選ぶ本番形式）とは別。
- * 間違えた問題の id はこの端末の localStorage にだけ残す。サーバーへ送らない。
+ * 間違えた問題の id はこの端末の localStorage にだけ残す。サーバへ送らない。
  */
 
 const WRONG_KEY = "gd-kentei-wrong-ids";
@@ -115,7 +115,7 @@ export default function GdDrill() {
 
         {wrongIds.length > 0 && (
           <p className="mt-8 text-base text-[var(--color-text-muted)]">
-            まちがえた問題は、この端末の中にだけ残しています（サーバーへは送りません）。
+            まちがえた問題は、この端末の中にだけ残しています（サーバへは送りません）。
             <button
               type="button"
               onClick={() => {
