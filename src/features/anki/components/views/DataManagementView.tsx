@@ -191,7 +191,16 @@ export default function DataManagementView(props: Props) {
                 }
               }}
             />
-            <p className="text-xs text-slate-500">`public/sample-dataset.json` を使って動作確認できます。</p>
+            <p className="text-xs text-slate-500">
+              <a
+                href="/tools/anki/sample-dataset.json"
+                download
+                className="text-blue-700 underline dark:text-blue-300"
+              >
+                サンプルのデータセット（JSON）
+              </a>
+              をダウンロードしてインポートすると、動作確認できます。
+            </p>
             <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-slate-50 p-3 dark:bg-slate-900/30">
               <p className="text-sm text-slate-600 dark:text-slate-300">プリセット: 情報I頻出用語（141件）</p>
               <Button
