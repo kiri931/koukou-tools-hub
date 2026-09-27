@@ -136,8 +136,12 @@ export default {
     ) {
       const withSlash = new URL(url);
       withSlash.pathname = `${url.pathname}/`;
+      // redirect: "manual" が要る。/tools/anki/index/ のように実体の無いパスは ASSETS が
+      // 307 で /tools/anki/ へ戻すので、転送を追うと最後の 200 を見て「スラッシュ付きが実体」と
+      // 誤判定し、/index ⇄ /index/ の無限ループになった(2026-09-27、本番の check-subpath で判明。
+      // メインサイトの worker と同じ直し方)。
       const probe = await env.ASSETS.fetch(
-        new Request(withSlash.toString(), { method: "HEAD" }),
+        new Request(withSlash.toString(), { method: "HEAD", redirect: "manual" }),
       );
       if (probe.status === 200) {
         return Response.redirect(withSlash.toString(), 301);
