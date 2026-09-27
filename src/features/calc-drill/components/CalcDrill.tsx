@@ -178,8 +178,9 @@ export default function CalcDrill() {
   return (
     <TooltipProvider delayDuration={500} skipDelayDuration={100}>
       {/* ガイド練習は片手で押せる幅にする。解答用紙は用紙と電卓を横に並べるので広げる。 */}
-      <main
-        className={`mx-auto px-4 py-4 text-slate-900 dark:text-slate-100 ${
+      {/* <main> はページ側（.astro）に1つだけ置く。余白と外枠はページの kj-tool-frame が持つ */}
+      <div
+        className={`mx-auto ${
           mode === 'sheet' ? 'max-w-6xl' : mode === 'guide' ? 'max-w-[30rem]' : 'max-w-2xl'
         }`}
       >
@@ -190,7 +191,7 @@ export default function CalcDrill() {
             {settingsOpen ? '▲ 設定をたたむ' : '▼ 設定をひらく'}
           </Button>
           {!settingsOpen && (
-            <span className="text-base text-slate-700 dark:text-slate-300">
+            <span className="text-base text-[var(--color-text-muted)]">
               {MODES.find((m) => m.key === mode)?.label}／
               {needsOneChoice ? practiceChoice.level : levelFilter}・
               {needsOneChoice ? practiceChoice.category : categoryFilter}
@@ -198,7 +199,7 @@ export default function CalcDrill() {
             </span>
           )}
           <span className="ml-auto flex items-center gap-2">
-            <span className="text-base text-slate-700 dark:text-slate-300">{filteredProblems.length} 問</span>
+            <span className="text-base text-[var(--color-text-muted)]">{filteredProblems.length} 問</span>
             <Button
               type="button"
               size="sm"
@@ -242,7 +243,7 @@ export default function CalcDrill() {
             />
           </div>
 
-          <p className="mb-3 text-base text-slate-700 dark:text-slate-300">
+          <p className="mb-3 text-base text-[var(--color-text-muted)]">
             {MODES.find((m) => m.key === mode)?.description}
           </p>
 
@@ -302,14 +303,14 @@ export default function CalcDrill() {
                 type="button"
                 onClick={() => setListOpen((prev) => !prev)}
                 aria-expanded={listOpen}
-                className="rounded text-base font-semibold text-slate-700 underline underline-offset-2 dark:text-slate-200"
+                className="rounded text-base font-semibold text-[var(--color-text)] underline underline-offset-2"
               >
                 問題一覧（{filteredProblems.length}問）を{listOpen ? 'たたむ' : 'ひらく'}
               </button>
               {listOpen && (
-                <div className="mt-2 max-h-80 overflow-auto rounded-md border border-slate-300 dark:border-slate-800">
+                <div className="mt-2 max-h-80 overflow-auto rounded-md border border-[var(--color-border)]">
                   <table className="w-full text-base">
-                    <thead className="sticky top-0 bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                    <thead className="sticky top-0 bg-[var(--color-surface-strong)] text-[var(--color-text)]">
                       <tr>
                         <th className="px-3 py-2 text-left font-medium">#</th>
                         <th className="px-3 py-2 text-left font-medium">級</th>
@@ -321,10 +322,11 @@ export default function CalcDrill() {
                       {filteredProblems.map((problem, index) => (
                         <tr
                           key={problem.id}
+                          aria-current={index === problemIndex ? 'true' : undefined}
                           className={
                             index === problemIndex
-                              ? 'bg-amber-100 dark:bg-amber-900/30'
-                              : 'border-t border-slate-200 dark:border-slate-800'
+                              ? 'bg-[var(--kj-marker)]'
+                              : 'border-t border-[var(--kj-divider)]'
                           }
                         >
                           <td className="px-3 py-2 align-top tabular-nums">{index + 1}</td>
@@ -353,11 +355,11 @@ export default function CalcDrill() {
             </div>
           </>
         ) : (
-          <p className="rounded-lg border border-slate-300 bg-slate-50 p-4 text-base text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+          <p className="rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] p-4 text-base text-[var(--color-text)]">
             この条件に当てはまる問題がありません。級か分野の絞り込みを変えてください。
           </p>
         )}
-      </main>
+      </div>
     </TooltipProvider>
   );
 }

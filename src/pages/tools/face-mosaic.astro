@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { Header } from '../../components/Header';
+import PageHead from '../../components/PageHead.astro';
 import { FaceMosaicShadcn } from '../../features/face-mosaic';
 import '../../styles/global.css';
 ---
@@ -9,47 +9,53 @@ import '../../styles/global.css';
   title="顔モザイクツール - Face Mosaic"
   description="顔モザイクツール。OpenCV.jsによるブラウザ内完結の自動顔検出・モザイク処理。画像データはサーバーに送信されず、完全プライバシー対応。"
 >
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <Header client:load currentPath={Astro.url.pathname} />
-      <h1 class="sr-only">顔モザイクツール</h1>
+  <main class="kj-container th-page">
+    <PageHead
+      label="ツール"
+      title="顔モザイクツール"
+      lead="画像内の顔を検出し、モザイク・ぼかし・黒塗りを選んで加工できます。"
+      safe={true}
+    />
+    <section aria-label="ツール本体" class="kj-tool-frame th-tool-body">
       <FaceMosaicShadcn client:only="react" />
-      <section class="mx-auto mt-8 max-w-5xl px-4 pb-12 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">顔モザイクツールについて</h2>
-        <p class="mt-3">
-          このツールは画像内の顔を検出し、モザイク・ぼかし・黒塗りを選んで加工できます。OpenCV.jsを利用したブラウザ内処理のため、
-          画像ファイルはサーバーに送信されず、授業資料や写真の匿名化を手元で行えます。
-        </p>
+    </section>
+    <section class="th-about">
+      <h2>顔モザイクツールについて</h2>
+      <p>
+        このツールは画像内の顔を検出し、モザイク・ぼかし・黒塗りを選んで加工できます。OpenCV.jsを利用したブラウザ内処理のため、
+        画像ファイルはサーバーに送信されず、授業資料や写真の匿名化を手元で行えます。
+      </p>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">使い方</h2>
-        <ol class="mt-2 list-decimal space-y-1 pl-5">
-          <li>画像を読み込みます。</li>
-          <li>加工方法（モザイク・ぼかし・黒塗り）と強さを選びます。</li>
-          <li>処理結果を確認し、必要に応じて保存します。</li>
-        </ol>
+      <h2>使い方</h2>
+      <ol>
+        <li>画像を読み込みます。</li>
+        <li>加工方法（モザイク・ぼかし・黒塗り）と強さを選びます。</li>
+        <li>処理結果を確認し、必要に応じて保存します。</li>
+      </ol>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">仕様・対応環境</h2>
-        <ul class="mt-2 list-disc space-y-1 pl-5">
-          <li>画像処理はブラウザ内で完結し、サーバー送信は行いません。</li>
-          <li>一般的な画像形式（PNG/JPEG）に対応します。</li>
-          <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
-        </ul>
+      <h2>仕様・対応環境</h2>
+      <ul>
+        <li>画像処理はブラウザ内で完結し、サーバー送信は行いません。</li>
+        <li>一般的な画像形式（PNG/JPEG）に対応します。</li>
+        <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
+      </ul>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">注意事項</h2>
-        <p class="mt-2">著作権や肖像権に配慮し、学校利用時は校内ルールに従ってください。</p>
+      <h2>注意事項</h2>
+      <p>著作権や肖像権に配慮し、学校利用時は校内ルールに従ってください。</p>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">よくある質問</h2>
-        <dl class="mt-2 space-y-2">
-          <div>
-            <dt class="font-medium text-slate-900 dark:text-slate-100">Q. 画像は外部に送られますか？</dt>
-            <dd>A. 送られません。処理は端末のブラウザ内で完結します。</dd>
-          </div>
-          <div>
-            <dt class="font-medium text-slate-900 dark:text-slate-100">Q. 顔が検出されない場合は？</dt>
-            <dd>A. 画像の解像度や明るさを調整し、別の写真で再度お試しください。</dd>
-          </div>
-        </dl>
-      </section>
-    </div>
+      <h2>よくある質問</h2>
+      <dl>
+        <div>
+          <dt>Q. 画像は外部に送られますか？</dt>
+          <dd>A. 送られません。処理は端末のブラウザ内で完結します。</dd>
+        </div>
+        <div>
+          <dt>Q. 顔が検出されない場合は？</dt>
+          <dd>A. 画像の解像度や明るさを調整し、別の写真で再度お試しください。</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
     <script
       type="application/ld+json"
       set:html={JSON.stringify({

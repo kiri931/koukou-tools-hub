@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { Header } from '../../components/Header';
+import PageHead from '../../components/PageHead.astro';
 import { LinkCard } from '../../components/LinkCard';
 import { SectionHeading } from '../../components/SectionHeading';
 import { sections, audienceOf, sendsDataOf } from '../../lib/site-links';
@@ -25,91 +25,98 @@ import '../../styles/global.css';
 	title="ツール一覧 - 高校情報"
 	description="高校生向けWebツール一覧。すべてブラウザ上で動作し、個人情報のサーバー送信なし。顔モザイク・PDFマージ・タイピング練習・席替えアプリなど。"
 >
-	<div class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-		<Header client:load currentPath={Astro.url.pathname} />
+	<main class="kj-container th-page">
+		<PageHead title="ツール一覧">
+			<p class="kj-lead">
+				ほとんどのツールはブラウザの中だけで動き、入力した内容や画像を送信することはありません。
+				<strong>「共有・送信あり」</strong>の印が付いたものだけ、共有リンクを作ったり内容を送ったりしたときに通信します。
+			</p>
+		</PageHead>
 
-		<main class="mx-auto max-w-5xl px-4 py-12 sm:py-16">
-			<section class="mb-10">
-				<h1 class="text-3xl font-bold tracking-tight sm:text-4xl">ツール一覧</h1>
-				<p class="mt-4 text-base leading-[1.8] text-slate-600 dark:text-slate-400">
-					ほとんどのツールはブラウザの中だけで動き、入力した内容や画像を送信することはありません。
-					<strong class="font-semibold text-slate-900 dark:text-slate-100">「共有・送信あり」</strong>
-					の印が付いたものだけ、共有リンクを作ったり内容を送ったりしたときに通信します。
-				</p>
-			</section>
+		{/* 絞り込み。JS が動かないときは出さない（押しても動かないボタンを出さない）。
+		    その場合も全件が分類ごとに並ぶので、一覧としては成立している。 */}
+		<nav data-audience-filter hidden aria-label="使う人でしぼり込む">
+			<p class="audience-question">どなたが使いますか</p>
+			<ul class="audience-list">
+				{[
+					{ value: 'all', label: 'すべて' },
+					{ value: 'student', label: '生徒が使う' },
+					{ value: 'teacher', label: '先生が使う' },
+				].map((option) => (
+					<li>
+						<button
+							type="button"
+							data-audience={option.value}
+							aria-pressed={option.value === 'all'}
+							class="audience-tab"
+						>
+							{option.label}
+						</button>
+					</li>
+				))}
+			</ul>
+			<p role="status" aria-live="polite" class="sr-only" data-audience-status />
+		</nav>
 
-			{/* 絞り込み。JS が動かないときは出さない（押しても動かないボタンを出さない）。
-			    その場合も全件が分類ごとに並ぶので、一覧としては成立している。 */}
-			<nav data-audience-filter hidden aria-label="使う人でしぼり込む" class="mb-8">
-				<p class="mb-3 text-base font-semibold text-slate-900 dark:text-slate-100">
-					どなたが使いますか
-				</p>
-				<ul class="flex flex-wrap gap-2">
-					{[
-						{ value: 'all', label: 'すべて' },
-						{ value: 'student', label: '生徒が使う' },
-						{ value: 'teacher', label: '先生が使う' },
-					].map((option) => (
-						<li>
-							<button
-								type="button"
-								data-audience={option.value}
-								aria-pressed={option.value === 'all'}
-								class="audience-tab min-h-11 rounded-full border border-slate-300 px-4 text-sm font-semibold dark:border-slate-700"
-							>
-								{option.label}
-							</button>
-						</li>
-					))}
-				</ul>
-				<p role="status" aria-live="polite" class="sr-only" data-audience-status />
-			</nav>
-
-			{
-				sections.map((section) => (
-					<section class="mb-12" data-tool-section>
-						<SectionHeading title={section.label} desc={section.desc} />
-						<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-							{section.items.map((item) => (
-								<LinkCard
-									href={item.href}
-									label={item.label}
-									desc={item.desc}
-									icon={item.icon}
-									accent={item.accent}
-									audience={audienceOf(item.href)}
-									badge={sendsDataOf(item.href) ? '共有・送信あり' : undefined}
-								/>
-							))}
-						</div>
-					</section>
-				))
-			}
-		</main>
-	</div>
+		{
+			sections.map((section) => (
+				<section data-tool-section>
+					<SectionHeading title={section.label} desc={section.desc} />
+					<div class="kj-grid">
+						{section.items.map((item) => (
+							<LinkCard
+								href={item.href}
+								label={item.label}
+								desc={item.desc}
+								icon={item.icon}
+								accent={item.accent}
+								audience={audienceOf(item.href)}
+								badge={sendsDataOf(item.href) ? '共有・送信あり' : undefined}
+							/>
+						))}
+					</div>
+				</section>
+			))
+		}
+	</main>
 </Layout>
 
 <style>
+	/* 色は kj の変数だけ（明暗は kj.css が切り替える） */
+	.audience-question {
+		margin: 0 0 12px;
+		font-weight: 700;
+	}
+
+	.audience-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
 	.audience-tab {
-		background: white;
-		color: #0f172a;
+		min-height: var(--kj-hit);
+		padding: 0 20px;
+		border: 2px solid var(--color-border); /* 面に対して 3:1 以上 */
+		border-radius: 999px;
+		background: var(--color-surface);
+		color: var(--color-text);
+		font: 700 var(--kj-text-base) / 1.5 var(--kj-font);
+		cursor: pointer;
 	}
 
-	:global(html.dark) .audience-tab {
-		background: rgb(15 23 42 / 0.5);
-		color: #f1f5f9;
+	.audience-tab:hover {
+		background: var(--color-surface-strong);
 	}
 
-	/* 選択中は色だけでなく背景の濃さでも分かるようにする */
+	/* 選択中は色だけでなく塗りでも分かるようにする（状態は aria-pressed で読み上げにも出る） */
 	.audience-tab[aria-pressed='true'] {
-		background: #4f46e5;
-		border-color: #4f46e5;
-		color: #ffffff;
-	}
-
-	:global(html.dark) .audience-tab[aria-pressed='true'] {
-		background: #6366f1;
-		border-color: #6366f1;
+		border-color: var(--color-accent);
+		background: var(--color-accent);
+		color: var(--color-on-accent); /* accent 6.29:1（ダークは #0f172a on #818cf8） */
 	}
 </style>
 

@@ -36,12 +36,12 @@ export default function FsrsExplainer() {
         <CardDescription>復習する日を、忘れかけたころに合わせて決めています。</CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+      <CardContent className="space-y-4 text-base leading-relaxed text-[var(--color-text)]">
         <p>
           おぼえた内容は、時間がたつと思い出しにくくなります。
           だからといって毎日ぜんぶ見直すのは時間がかかりすぎますし、
           まだよく覚えているものを見ても復習にはなりません。
-          <strong className="font-semibold text-slate-900 dark:text-slate-100">
+          <strong className="font-semibold text-[var(--color-text)]">
             少し迷うくらいのときに思い出す
           </strong>
           のが、いちばん記憶に残ります。
@@ -52,17 +52,17 @@ export default function FsrsExplainer() {
           Free Spaced Repetition Scheduler）といいます。
         </p>
 
-        <dl className="space-y-2 rounded-lg border bg-slate-50 p-4 dark:bg-slate-900/40">
+        <dl className="space-y-2 rounded-lg border bg-[var(--color-background)] p-4">
           {HIGHLIGHTS.map((item) => (
             <div key={item.term}>
-              <dt className="font-semibold text-slate-900 dark:text-slate-100">{item.term}</dt>
+              <dt className="font-semibold text-[var(--color-text)]">{item.term}</dt>
               <dd className="mt-0.5">{item.body}</dd>
             </div>
           ))}
         </dl>
 
         <details className="rounded-lg border p-4">
-          <summary className="cursor-pointer font-semibold text-slate-900 dark:text-slate-100">
+          <summary className="cursor-pointer font-semibold text-[var(--color-text)]">
             採点ボタンの選び方
           </summary>
           <div className="mt-3 space-y-2">
@@ -89,7 +89,7 @@ export default function FsrsExplainer() {
         </details>
 
         <details className="rounded-lg border p-4">
-          <summary className="cursor-pointer font-semibold text-slate-900 dark:text-slate-100">
+          <summary className="cursor-pointer font-semibold text-[var(--color-text)]">
             目標保持率と試験日を変えるとどうなるか
           </summary>
           <div className="mt-3 space-y-2">
@@ -108,11 +108,11 @@ export default function FsrsExplainer() {
           </div>
         </details>
 
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-[var(--color-text-muted)]">
           忘却曲線や分散学習の背景をもっと詳しく知りたいときは、
           <a
             href="/guides/spaced-repetition-fsrs/"
-            className="rounded text-indigo-600 underline underline-offset-4 hover:text-indigo-800 dark:text-indigo-300 dark:hover:text-indigo-200"
+            className="rounded text-[var(--color-accent)] underline underline-offset-4"
           >
             FSRSとは？暗記効率を上げる分散学習の仕組み
           </a>

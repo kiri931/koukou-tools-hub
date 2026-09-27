@@ -80,17 +80,17 @@ export default function DrillDisplay({
       {/* メタ */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-700 px-3 py-1.5 text-base">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded bg-indigo-500 px-2 py-0.5 text-sm font-semibold text-white">
+          <span className="rounded bg-indigo-600 px-2 py-0.5 text-base font-semibold text-white">
             {problem.level}
           </span>
-          <span className="rounded bg-zinc-700 px-2 py-0.5 text-sm font-semibold text-zinc-100">
+          <span className="rounded bg-zinc-700 px-2 py-0.5 text-base font-semibold text-zinc-100">
             {problem.category}
           </span>
-          <span className="rounded bg-zinc-700 px-2 py-0.5 text-sm font-semibold text-zinc-100">
+          <span className="rounded bg-zinc-700 px-2 py-0.5 text-base font-semibold text-zinc-100">
             {angleMode}
           </span>
           {shiftActive && (
-            <span className="rounded bg-violet-500 px-2 py-0.5 text-sm font-semibold text-white">
+            <span className="rounded bg-violet-700 px-2 py-0.5 text-base font-semibold text-white">
               SHIFT
             </span>
           )}
@@ -167,7 +167,7 @@ export default function DrillDisplay({
               {wrongKeyHint ? (
                 <>
                   <span aria-hidden="true" className="shrink-0 text-amber-300">！</span>
-                  <span className="shrink-0 font-bold text-amber-300">ちがいます。つぎは</span>
+                  <span className="min-w-0 truncate font-bold text-amber-300">ちがいます。つぎは</span>
                   <span className="shrink-0 rounded bg-zinc-700 px-2 py-0.5 font-mono font-bold text-amber-300">
                     {nextKeyLabel}
                   </span>
@@ -175,7 +175,7 @@ export default function DrillDisplay({
               ) : (
                 <>
                   <span aria-hidden="true" className="shrink-0 text-amber-300">▶</span>
-                  <span className="shrink-0 text-zinc-300">つぎに押すキー</span>
+                  <span className="min-w-0 truncate text-zinc-300">つぎに押すキー</span>
                   <span className="shrink-0 rounded bg-zinc-700 px-2 py-0.5 font-mono font-bold text-zinc-50">
                     {nextKeyLabel}
                   </span>
@@ -187,8 +187,9 @@ export default function DrillDisplay({
               <span className="tabular-nums text-base text-zinc-300">
                 {Math.min(stepIndex, totalSteps)} / {totalSteps}
               </span>
+              {/* 幅の狭い画面（kj-tool-frame の中の 390 幅）では文言と重なるので、棒は隠して数字だけにする */}
               <div
-                className="h-2 w-16 overflow-hidden rounded-full bg-zinc-700"
+                className="hidden h-2 w-16 overflow-hidden rounded-full bg-zinc-700 sm:block"
                 role="progressbar"
                 aria-valuenow={progressPercent}
                 aria-valuemin={0}

@@ -450,7 +450,7 @@ export default function CalcKeypad({
                     // Radix が開いている間 style="pointer-events:auto" を直接書くので、
                     // クラスでは勝てない。インラインの style で上書きする。
                     style={{ pointerEvents: 'none' }}
-                    className="max-w-[200px] text-center text-xs leading-snug"
+                    className="max-w-[200px] text-center text-sm leading-snug"
                   >
                     {tooltipText}
                   </TooltipContent>

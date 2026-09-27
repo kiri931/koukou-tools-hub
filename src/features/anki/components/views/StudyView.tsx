@@ -21,22 +21,22 @@ type Props = {
 };
 
 const gradeButtons: Array<{ grade: Grade; label: string; keyHint: string; className: string }> = [
-  { grade: 2, label: 'Hard', keyHint: '2', className: 'bg-amber-600 text-white hover:bg-amber-700' },
-  { grade: 3, label: 'Good', keyHint: '3', className: 'bg-green-600 text-white hover:bg-green-700' },
-  { grade: 4, label: 'Easy', keyHint: '4', className: 'bg-sky-600 text-white hover:bg-sky-700' },
+  { grade: 2, label: 'Hard', keyHint: '2', className: 'bg-[var(--color-warning)] text-[var(--color-on-warning)] hover:opacity-90' },
+  { grade: 3, label: 'Good', keyHint: '3', className: 'bg-[var(--color-success)] text-[var(--color-on-success)] hover:opacity-90' },
+  { grade: 4, label: 'Easy', keyHint: '4', className: 'bg-[var(--color-accent)] text-[var(--color-on-accent)] hover:opacity-90' },
 ];
 
 function ProgressBar({ session }: { session: StudySessionState }) {
   const percent = session.total > 0 ? (session.index / session.total) * 100 : 0;
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between text-xs text-slate-500">
+      <div className="flex items-center justify-between text-sm text-[var(--color-text-muted)]">
         <span>進捗</span>
         <span className="font-mono">{session.index} / {session.total}</span>
       </div>
-      <div className="h-2 rounded-full bg-slate-200 dark:bg-slate-800">
+      <div className="h-2 rounded-full bg-[var(--color-surface-strong)]">
         <div
-          className="h-full rounded-full bg-green-500 transition-all"
+          className="h-full rounded-full bg-[var(--color-success)] transition-all"
           style={{ width: `${Math.max(0, Math.min(100, percent))}%` }}
         />
       </div>
@@ -45,7 +45,7 @@ function ProgressBar({ session }: { session: StudySessionState }) {
 }
 
 function Kbd({ children }: { children: string }) {
-  return <kbd className="rounded border px-1.5 py-0.5 font-mono text-xs">{children}</kbd>;
+  return <kbd className="rounded border px-1.5 py-0.5 font-mono text-sm">{children}</kbd>;
 }
 
 export default function StudyView(props: Props) {
@@ -139,7 +139,6 @@ export default function StudyView(props: Props) {
               <Button
                 key={dataset.datasetId}
                 variant={(session.datasetId ?? selectedDatasetId) === dataset.datasetId ? 'default' : 'outline'}
-                className={(session.datasetId ?? selectedDatasetId) === dataset.datasetId ? 'bg-green-600 text-white hover:bg-green-700' : ''}
                 onClick={() => onSelectDataset(dataset.datasetId)}
                 disabled={session.status === 'loading'}
               >
@@ -147,7 +146,7 @@ export default function StudyView(props: Props) {
               </Button>
             ))}
             {selectedDatasetId && session.status !== 'question' && session.status !== 'reviewing' && (
-              <Button onClick={() => onStartSession(selectedDatasetId)} className="bg-green-600 text-white hover:bg-green-700">
+              <Button onClick={() => onStartSession(selectedDatasetId)}>
                 セッション開始
               </Button>
             )}
@@ -155,13 +154,13 @@ export default function StudyView(props: Props) {
               <Button variant="outline" onClick={onResetSession}>リセット</Button>
             )}
           </div>
-          {session.error && <p className="text-sm text-red-500">{session.error}</p>}
+          {session.error && <p className="text-base text-[var(--color-danger)]">{session.error}</p>}
         </CardContent>
       </Card>
 
       {session.status === 'idle' && (
         <Card>
-          <CardContent className="pt-6 text-sm text-slate-600 dark:text-slate-300">
+          <CardContent className="pt-6 text-base text-[var(--color-text-muted)]">
             {datasets.length === 0 ? 'データセットがありません。データ管理タブで JSON をインポートしてください。' : 'データセットを選択して「セッション開始」を押してください。'}
           </CardContent>
         </Card>
@@ -196,7 +195,7 @@ export default function StudyView(props: Props) {
 
             {session.mode === 'choice' ? (
               <div className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-300">
+                <p className="text-base text-[var(--color-text-muted)]">
                   初めての問題です。あてはまるものを選んでください。
                 </p>
                 <ul className="space-y-2">
@@ -207,7 +206,7 @@ export default function StudyView(props: Props) {
                         className="h-auto w-full justify-start whitespace-normal py-3 text-left text-base"
                         onClick={() => onSubmitAnswer(choice)}
                       >
-                        <span className="mr-3 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border font-mono text-sm">
+                        <span className="mr-3 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border font-mono text-base">
                           {index + 1}
                         </span>
                         <span>{choice}</span>
@@ -219,10 +218,10 @@ export default function StudyView(props: Props) {
             ) : (
               <>
                 {hints.length > 0 && (
-                  <div className="space-y-1 rounded-lg border bg-slate-50 p-4 dark:bg-slate-900/40" aria-live="polite">
+                  <div className="space-y-1 rounded-lg border bg-[var(--color-background)] p-4" aria-live="polite">
                     {hints.map((hint) => (
-                      <p key={hint.label} className="text-sm">
-                        <span className="text-slate-500">{hint.label}: </span>
+                      <p key={hint.label} className="text-base">
+                        <span className="text-[var(--color-text-muted)]">{hint.label}: </span>
                         <span className="font-medium">{hint.value}</span>
                       </p>
                     ))}
@@ -245,7 +244,7 @@ export default function StudyView(props: Props) {
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Button onClick={handleSubmit} disabled={!answerText.trim()} className="bg-green-600 text-white hover:bg-green-700">
+                  <Button onClick={handleSubmit} disabled={!answerText.trim()}>
                     送信
                   </Button>
                   {hintLeft && (
@@ -266,7 +265,7 @@ export default function StudyView(props: Props) {
             <ProgressBar session={session} />
             <div className="flex items-center justify-between gap-3">
               <CardTitle>採点</CardTitle>
-              <Badge className={session.isCorrect ? 'bg-green-600 text-white' : 'bg-rose-600 text-white'}>
+              <Badge className={session.isCorrect ? 'bg-[var(--color-success)] text-[var(--color-on-success)]' : 'bg-[var(--color-danger)] text-[var(--color-on-danger)]'}>
                 {session.isCorrect ? '正解' : '不正解'}
               </Badge>
             </div>
@@ -277,29 +276,29 @@ export default function StudyView(props: Props) {
           <CardContent className="space-y-4">
             <div className="grid gap-3 md:grid-cols-2">
               <div className="rounded-lg border p-4">
-                <p className="mb-1 text-sm text-slate-500">問題</p>
+                <p className="mb-1 text-base text-[var(--color-text-muted)]">問題</p>
                 {/* 答え合わせの場では伏せない。元の問題文を出す */}
                 <p className="whitespace-pre-wrap">{session.current.card.question}</p>
                 {session.current.card.topic && (
-                  <p className="mt-2 text-sm text-slate-500">カテゴリ: {session.current.card.topic}</p>
+                  <p className="mt-2 text-base text-[var(--color-text-muted)]">カテゴリ: {session.current.card.topic}</p>
                 )}
               </div>
               <div className="rounded-lg border p-4">
-                <p className="mb-1 text-sm text-slate-500">
+                <p className="mb-1 text-base text-[var(--color-text-muted)]">
                   {session.mode === 'choice' ? 'あなたが選んだもの' : 'あなたの回答'}
                 </p>
                 <p className="whitespace-pre-wrap">{session.userAnswer || '（未入力）'}</p>
-                <p className="mt-2 text-sm text-slate-500">正答例: {session.current.card.answers.join(' / ')}</p>
-                {session.matchedAnswer && <p className="mt-1 text-sm text-green-600">一致: {session.matchedAnswer}</p>}
+                <p className="mt-2 text-base text-[var(--color-text-muted)]">正答例: {session.current.card.answers.join(' / ')}</p>
+                {session.matchedAnswer && <p className="mt-1 text-base text-[var(--color-success)]">一致: {session.matchedAnswer}</p>}
               </div>
             </div>
             {session.current.card.explanation && (
-              <div className="rounded-lg border bg-slate-50 p-4 text-sm dark:bg-slate-900/40">
+              <div className="rounded-lg border bg-[var(--color-background)] p-4 text-base">
                 <p className="mb-1 font-medium">解説</p>
                 <p className="whitespace-pre-wrap">{session.current.card.explanation}</p>
               </div>
             )}
-            {capReason && <p className="text-sm text-slate-600 dark:text-slate-300">{capReason}</p>}
+            {capReason && <p className="text-base text-[var(--color-text-muted)]">{capReason}</p>}
             <div className="flex flex-wrap gap-2">
               {!session.isCorrect && (
                 <Button variant="outline" onClick={() => onSubmitGrade(1)}>
@@ -327,23 +326,23 @@ export default function StudyView(props: Props) {
             <CardDescription>{currentDataset?.title ?? '選択中データセット'} の期限切れカードを処理しました。</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <p className="text-sm text-slate-600 dark:text-slate-300">今回の対象件数: {session.total} 件</p>
+            <p className="text-base text-[var(--color-text-muted)]">今回の対象件数: {session.total} 件</p>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-lg border p-3">
-                <p className="text-xs text-slate-500">正解</p>
-                <p className="font-mono text-xl font-bold text-green-600">{session.correctCount}</p>
+                <p className="text-sm text-[var(--color-text-muted)]">正解</p>
+                <p className="font-mono text-xl font-bold text-[var(--color-success)]">{session.correctCount}</p>
               </div>
               <div className="rounded-lg border p-3">
-                <p className="text-xs text-slate-500">不正解</p>
-                <p className="font-mono text-xl font-bold text-rose-600">{session.incorrectCount}</p>
+                <p className="text-sm text-[var(--color-text-muted)]">不正解</p>
+                <p className="font-mono text-xl font-bold text-[var(--color-danger)]">{session.incorrectCount}</p>
               </div>
               <div className="rounded-lg border p-3">
-                <p className="text-xs text-slate-500">正答率</p>
+                <p className="text-sm text-[var(--color-text-muted)]">正答率</p>
                 <p className="font-mono text-xl font-bold">{accuracy == null ? '-' : `${accuracy.toFixed(1)}%`}</p>
               </div>
             </div>
             {selectedDatasetId && (
-              <Button onClick={() => onStartSession(selectedDatasetId)} className="bg-green-600 text-white hover:bg-green-700">
+              <Button onClick={() => onStartSession(selectedDatasetId)}>
                 もう一度開始
               </Button>
             )}

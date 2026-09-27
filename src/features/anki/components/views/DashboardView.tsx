@@ -49,10 +49,10 @@ export default function DashboardView({ stats }: Props) {
         </CardHeader>
         <CardContent>
           {stats.topConfusions.length === 0 ? (
-            <p className="text-sm text-slate-500">まだ記録がありません。</p>
+            <p className="text-base text-[var(--color-text-muted)]">まだ記録がありません。</p>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-base">
                 <thead>
                   <tr className="border-b text-left">
                     <th className="px-2 py-2">回数</th>
@@ -67,7 +67,7 @@ export default function DashboardView({ stats }: Props) {
                       <td className="px-2 py-2 font-mono">{row.count}</td>
                       <td className="px-2 py-2">{row.labelA}</td>
                       <td className="px-2 py-2">{row.labelB}</td>
-                      <td className="px-2 py-2 font-mono text-xs text-slate-500">{row.datasetId}</td>
+                      <td className="px-2 py-2 font-mono text-sm text-[var(--color-text-muted)]">{row.datasetId}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   ChevronLeft,
   ChevronRight,
-  FileStack,
   Upload,
   Trash2,
 } from "lucide-react";
@@ -143,23 +142,11 @@ export function PdfMerge() {
   }, [merge, outputName]);
 
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-10">
-      <header className="space-y-3">
-        <div className="flex items-center gap-3 text-slate-900 dark:text-slate-50">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 text-orange-400">
-            <FileStack className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold">PDFマージ</h1>
-            <p className="text-sm text-muted-foreground">
-              複数のPDFを並び替えて、1つのファイルに結合します。
-            </p>
-          </div>
-        </div>
-        <div className="rounded-lg border border-border bg-card/60 px-4 py-3 text-sm text-muted-foreground">
-          すべての処理はブラウザ内で完結します。ファイルは外部へ送信されません。
-        </div>
-      </header>
+    // ページの <main>・h1・説明と、幅・余白は pages/tools/pdf-merge.astro が持つ（kj の T4）。
+    <div className="flex w-full flex-col gap-8">
+      <p className="rounded-lg border border-border bg-card/60 px-4 py-3 text-base text-muted-foreground">
+        すべての処理はブラウザ内で完結します。ファイルは外部へ送信されません。
+      </p>
 
       <Card>
         <CardContent className="space-y-4">
@@ -177,8 +164,8 @@ export function PdfMerge() {
               <Upload className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium">PDFファイルをドラッグ&ドロップ</p>
-              <p className="text-xs text-muted-foreground">またはボタンから選択</p>
+              <p className="text-base font-medium">PDFファイルをドラッグ&ドロップ</p>
+              <p className="text-sm text-muted-foreground">またはボタンから選択</p>
             </div>
             <Button type="button" onClick={handleSelectClick} variant="secondary">
               ファイルを選択
@@ -199,14 +186,14 @@ export function PdfMerge() {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">ファイル一覧</h2>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-base text-muted-foreground">
             ドラッグして並び替えできます
           </span>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           {files.length === 0 && (
-            <div className="rounded-lg border border-dashed border-border bg-card px-6 py-10 text-center text-sm text-muted-foreground">
+            <div className="rounded-lg border border-dashed border-border bg-card px-6 py-10 text-center text-base text-muted-foreground">
               まだPDFがありません。上のエリアから追加してください。
             </div>
           )}
@@ -232,8 +219,9 @@ export function PdfMerge() {
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
             <div className="space-y-2">
-              <label className="text-sm font-medium">出力ファイル名</label>
+              <label htmlFor="pdf-merge-output-name" className="text-base font-medium">出力ファイル名</label>
               <Input
+                id="pdf-merge-output-name"
                 value={outputName}
                 onChange={(event) => setOutputName(event.target.value)}
                 placeholder="merged.pdf"
@@ -260,13 +248,13 @@ export function PdfMerge() {
               </Button>
             </div>
           </div>
-          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-wrap gap-4 text-base text-muted-foreground">
             <span>ファイル数: {files.length}</span>
             <span>合計ページ数: {totalPages}</span>
           </div>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
 

@@ -36,20 +36,14 @@ export default function GdGlossary() {
   }, [query, field, level]);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-      <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50">
-        グラフィックデザイン検定 用語辞典
-      </h1>
-      <p className="mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-300">
-        企画・写真・編集レイアウト・写真製版・印刷・製本の6分野の用語を集めました。
-        第26〜30回の出題をもとに、説明はすべて書き下ろしています。
-      </p>
-
-      <div className="mt-8 space-y-4">
+    // 見出し（h1）と説明はページ側（Astro の PageHead）が SSR で出す。
+    // <main> もページ側にあるので div にする。
+    <div>
+      <div className="space-y-4">
         <div>
           <label
             htmlFor="gd-glossary-search"
-            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
+            className="block text-base font-bold"
           >
             用語・読み・説明から探す
           </label>
@@ -86,12 +80,12 @@ export default function GdGlossary() {
         </FilterRow>
       </div>
 
-      <p className="mt-6 text-sm text-slate-600 dark:text-slate-400" aria-live="polite">
+      <p className="mt-6 text-base text-[var(--color-text-muted)]" aria-live="polite">
         {shown.length}語 / 全{allTerms.length}語
       </p>
 
       {shown.length === 0 ? (
-        <p className="mt-8 rounded-lg border border-slate-300 p-6 text-base text-slate-700 dark:border-slate-800 dark:text-slate-300">
+        <p className="mt-8 rounded-lg border border-[var(--color-border)] p-6 text-base">
           あてはまる用語がありません。読みをひらがなで入れるか、分野の絞り込みを外してみてください。
         </p>
       ) : (
@@ -101,14 +95,14 @@ export default function GdGlossary() {
           ))}
         </ul>
       )}
-    </main>
+    </div>
   );
 }
 
 function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}</p>
+      <p className="text-base font-bold">{label}</p>
       <div className="mt-2 flex flex-wrap gap-2">{children}</div>
     </div>
   );
@@ -133,7 +127,7 @@ function FilterChip({
         "min-h-11 rounded-full border px-4 text-base transition-colors",
         active
           ? "border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
-          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800",
+          : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[var(--color-surface-strong)]",
       )}
     >
       {children}
@@ -146,11 +140,11 @@ function TermCard({ term }: { term: GdTerm }) {
   return (
     <li
       id={term.id}
-      className="scroll-mt-20 rounded-lg border border-slate-300 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+      className="scroll-mt-20 rounded-lg border border-[var(--kj-divider)] bg-[var(--color-surface)] p-5"
     >
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50">{term.term}</h2>
-        <span className="text-sm text-slate-600 dark:text-slate-400">{term.reading}</span>
+        <span className="text-base text-[var(--color-text-muted)]">{term.reading}</span>
       </div>
 
       <div className="mt-2 flex flex-wrap gap-2">
@@ -166,12 +160,12 @@ function TermCard({ term }: { term: GdTerm }) {
         {term.short}
       </p>
       {term.body && (
-        <p className="mt-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">
+        <p className="mt-2 text-base leading-relaxed">
           {renderEmphasis(term.body)}
         </p>
       )}
 
-      <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mt-3 text-sm text-[var(--color-text-muted)]">
         {term.seenIn.length > 0
           ? `第26〜30回で${term.seenIn.length}回問われています`
           : "出題箇所は特定できていません（表記が違う形で出ています）"}

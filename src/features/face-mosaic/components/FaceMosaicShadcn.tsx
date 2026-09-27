@@ -236,14 +236,14 @@ export default function FaceMosaicShadcn() {
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 pb-16">
+    // ページの <main>・h1・説明と、幅・余白は pages/tools/face-mosaic.astro が持つ（kj の T4）。
+    <div className="flex flex-col gap-4">
 
         {/* Privacy Notice */}
-        <Alert className="border-emerald-500/30 bg-emerald-500/10">
-          <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-          <AlertTitle className="text-emerald-700 dark:text-emerald-300">画像はサーバーに送信されません</AlertTitle>
-          <AlertDescription className="text-emerald-700/80 dark:text-emerald-300/80 text-xs">
+        <Alert className="border-[var(--color-success)] bg-[var(--kj-success-soft)]">
+          <ShieldCheck className="h-4 w-4 text-[var(--color-success)]" />
+          <AlertTitle className="text-[var(--color-success)]">画像はサーバーに送信されません</AlertTitle>
+          <AlertDescription className="text-base text-[var(--color-text)]">
             アップロードした画像はすべてお使いのブラウザ内でのみ処理されます。インターネット経由でサーバーに送信されることは一切ありません。
           </AlertDescription>
         </Alert>
@@ -252,7 +252,7 @@ export default function FaceMosaicShadcn() {
         <Alert
           className={`border ${
             opencvStatus === "ready"
-              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+              ? "border-[var(--color-success)] bg-[var(--kj-success-soft)] text-[var(--color-success)]"
               : opencvStatus === "error"
                 ? "border-destructive/30 bg-destructive/10 text-destructive"
                 : "border-primary/30 bg-primary/10 text-primary"
@@ -274,7 +274,7 @@ export default function FaceMosaicShadcn() {
             そのとき何ができるのかを、その場に書く。
           */}
           {opencvStatus === "error" && (
-            <AlertDescription className="mt-2 text-sm">
+            <AlertDescription className="mt-2 text-base">
               <p>
                 自動で顔を見つける機能だけが使えません。
                 <strong>手動で囲めば、モザイク・ぼかし・黒塗りはこのまま使えます。</strong>
@@ -421,7 +421,7 @@ export default function FaceMosaicShadcn() {
                     variant="outline"
                     className={`py-1 px-2.5 ${
                       detectedRects.length > 0
-                        ? "border-emerald-500/40 text-emerald-700 dark:text-emerald-300"
+                        ? "border-[var(--color-success)] text-[var(--color-success)]"
                         : "border-border text-muted-foreground"
                     }`}
                   >
@@ -632,7 +632,6 @@ export default function FaceMosaicShadcn() {
           </CardContent>
         </Card>
 
-      </div>
     </div>
   );
 }

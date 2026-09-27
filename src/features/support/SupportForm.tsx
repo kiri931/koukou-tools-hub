@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { Info } from "lucide-react";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -111,25 +113,18 @@ export function SupportForm() {
     }
   };
 
+  // 見出し（h1）と説明はページ側（feature-request.astro の PageHead）が出す。
+  // 幅と外枠もページ側の kj-container / kj-tool-frame が持つ。
   return (
-    <div className="mx-auto w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-          こうだったらいいのに、を教えてください
-        </h1>
-        <p className="mt-2 text-base leading-relaxed text-slate-600 dark:text-slate-400">
-          使っていて困ったこと、あったらいいもの、記事の間違い。どれでもかまいません。
-          名前もメールアドレスも要りません。
-        </p>
-      </div>
-
-      <form className="space-y-5" onSubmit={handleSubmit}>
-        <fieldset className="space-y-2">
-          <legend className="text-base font-semibold text-slate-900 dark:text-slate-100">
+    <div>
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <fieldset className="space-y-3">
+          <legend className="mb-3 text-base font-bold">
             どれに近いですか？
           </legend>
           {/* 選択肢はボタンで出す。開いた瞬間に4つとも見えるほうが、
-              閉じたプルダウンより選びやすい（1タップ減る） */}
+              閉じたプルダウンより選びやすい（1タップ減る）。
+              選択中は塗り＋「✓」＋aria-pressed で、色だけに頼らない */}
           <div className="flex flex-wrap gap-2">
             {categories.map((item) => {
               const selected = category === item.value;
@@ -142,10 +137,10 @@ export function SupportForm() {
                     setCategory(item.value);
                     resetFeedback();
                   }}
-                  className={`min-h-11 rounded-lg border px-4 text-sm font-semibold transition-colors ${
+                  className={`min-h-11 rounded-lg border-2 px-4 text-base font-bold transition-colors ${
                     selected
-                      ? "border-indigo-600 bg-indigo-600 text-white"
-                      : "border-slate-300 bg-white text-slate-900 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                      ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-[var(--color-on-accent)]"
+                      : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[var(--color-surface-strong)]"
                   }`}
                 >
                   {selected ? "✓ " : ""}
@@ -157,8 +152,10 @@ export function SupportForm() {
         </fieldset>
 
         <div className="space-y-2">
-          <Label htmlFor="support-content">内容</Label>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <Label htmlFor="support-content" className="text-base font-bold">
+            内容
+          </Label>
+          <p className="text-base text-[var(--color-text-muted)]">
             「どのツールで」「何をしたら」「どうなったか」の3つがあると直しやすいです。
           </p>
           <textarea
@@ -172,13 +169,15 @@ export function SupportForm() {
             required
             aria-invalid={status === "error" && !content.trim()}
             placeholder={placeholders[category] ?? "気づいたことを書いてください（先に上の4つから選ぶと、書き方の例が出ます）"}
-            className="border-input bg-background placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:ring-destructive/40 flex min-h-32 w-full rounded-md border px-3 py-2 text-sm shadow-xs outline-none transition-[color,box-shadow] focus-visible:ring-[3px]"
+            className="placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex min-h-32 w-full rounded-md border-2 border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-base leading-relaxed text-[var(--color-text)] outline-none transition-[color,box-shadow] focus-visible:ring-[3px]"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="support-email">返信用メール（任意）</Label>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <Label htmlFor="support-email" className="text-base font-bold">
+            返信用メール（任意）
+          </Label>
+          <p className="text-base text-[var(--color-text-muted)]">
             書かなければ匿名のままです。返事が要るときだけ入れてください。
           </p>
           <Input
@@ -190,31 +189,41 @@ export function SupportForm() {
               resetFeedback();
             }}
             placeholder="you@example.com"
+            className="h-12 border-2 bg-[var(--color-surface)] text-base md:text-base dark:bg-[var(--color-surface)]"
           />
         </div>
 
-        {/* 送る前の不安をその場でなくす。誰が読むのか、送ったあとどうなるのか */}
-        <div className="rounded-lg border border-slate-300 border-l-4 border-l-indigo-600 bg-slate-50 p-4 text-sm leading-relaxed text-slate-700 dark:border-slate-700 dark:border-l-indigo-400 dark:bg-slate-900/50 dark:text-slate-300">
-          送られた内容は、このサイトを作っている担当者だけが読みます。
-          直したものは、変更があった日にサイトへ反映されます。すぐ直せるものと、時間がかかるものがあります。
+        {/* 送る前の不安をその場でなくす。誰が読むのか、送ったあとどうなるのか。
+            kj-notice の子は「アイコン」と「<div>」の2つにする（kj.css の決まり） */}
+        <div className="kj-notice kj-notice--info">
+          <Info aria-hidden="true" className="mt-1 size-5 shrink-0 text-[var(--color-accent)]" />
+          <div>
+            送られた内容は、このサイトを作っている担当者だけが読みます。
+            直したものは、変更があった日にサイトへ反映されます。すぐ直せるものと、時間がかかるものがあります。
+          </div>
         </div>
 
         {status === "success" && (
-          <Alert>
-            <AlertTitle>送信完了</AlertTitle>
-            <AlertDescription>{message}</AlertDescription>
+          <Alert className="border-2 border-[var(--color-success)] bg-[var(--kj-success-soft)] px-5 py-4 text-base text-[var(--color-text)]">
+            <AlertTitle className="font-bold">送信完了</AlertTitle>
+            <AlertDescription className="text-base text-[var(--color-text)]">{message}</AlertDescription>
           </Alert>
         )}
 
         {status === "error" && (
-          <Alert variant="destructive">
-            <AlertTitle>送信エラー</AlertTitle>
-            <AlertDescription>{message}</AlertDescription>
+          <Alert
+            variant="destructive"
+            className="border-2 border-[var(--color-danger)] bg-[var(--kj-danger-soft)] px-5 py-4 text-base text-[var(--color-text)]"
+          >
+            <AlertTitle className="font-bold text-[var(--color-danger)]">送信エラー</AlertTitle>
+            <AlertDescription className="text-base">
+              {message}
+            </AlertDescription>
           </Alert>
         )}
 
         <div className="flex items-center justify-end">
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="h-12 px-6 text-base font-bold">
             {isSubmitting ? "送信中..." : "送信する"}
           </Button>
         </div>

@@ -31,12 +31,13 @@ const programmingLanguageOptions: { value: ProgrammingLanguage; label: string }[
 
 const durationOptions = [30, 60, 120];
 
-const primaryButton = 'bg-sky-700 text-base text-white hover:bg-sky-800';
+// 主ボタンは Button の既定（--primary = kj の藍）に任せ、文字だけ本文の大きさにする
+const primaryButton = 'text-base';
 // shadcn 既定の border-input は白背景に対して 1.26:1 しかなく、
 // 「どこが選択肢の丸なのか」が見えない(DADS 非テキスト3:1)
 const radioMark = 'border-slate-500 dark:border-slate-400';
 const optionLabel =
-  'flex cursor-pointer items-center gap-3 rounded-lg border border-slate-300 px-4 py-3 text-base font-medium text-slate-700 transition hover:border-sky-600 hover:bg-sky-50 dark:border-slate-800 dark:text-slate-200 dark:hover:border-sky-500 dark:hover:bg-slate-800';
+  'flex cursor-pointer items-center gap-3 rounded-lg border border-slate-300 px-4 py-3 text-base font-medium text-slate-700 transition hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-strong)] dark:border-slate-800 dark:text-slate-200';
 const sectionHeading = 'text-base font-semibold tracking-wide text-slate-600 dark:text-slate-400';
 
 // 半角スペースを「打つ場所」として見せるチップ。
@@ -48,7 +49,7 @@ function SpaceMark({ tone }: { tone: 'question' | 'input' }) {
   const toneClass =
     tone === 'question'
       ? 'border-slate-500 bg-slate-100 text-slate-700 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-200'
-      : 'border-sky-600 bg-sky-100 text-sky-800 dark:border-sky-500 dark:bg-sky-950 dark:text-sky-200';
+      : 'border-[var(--color-accent)] bg-[var(--color-surface-strong)] text-[var(--color-accent)]';
 
   return (
     <span className={`${base} ${toneClass}`}>
@@ -183,18 +184,16 @@ export default function TypingGame() {
   }, [errorSignal]);
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8 text-slate-900 dark:text-slate-100">
-      <Card className="border-slate-300 bg-white/95 dark:border-slate-800 dark:bg-slate-900/70">
-        <CardHeader>
-          <CardTitle className="text-2xl">タイピング練習</CardTitle>
-          <CardDescription>
-            {isProgramming
-              ? 'プログラミングで使う特殊文字をコードで練習するタイピングゲーム'
-              : 'ひらがなのローマ字入力を練習するタイピングゲーム'}
-          </CardDescription>
-        </CardHeader>
+    // ページの <main>・h1 と、幅・枠は pages/tools/typing-japanese.astro が持つ（kj の T4）。
+    // 以前ここにあった外側の Card は kj-tool-frame と二重の枠になるので外した。
+    <div>
+      <p className="mb-6 text-base text-[var(--color-text-muted)]">
+        {isProgramming
+          ? 'プログラミングで使う特殊文字をコードで練習するタイピングゲーム'
+          : 'ひらがなのローマ字入力を練習するタイピングゲーム'}
+      </p>
 
-        <CardContent>
+      <div>
           {gameState === 'home' && (
             <div className="space-y-8">
               <section className="space-y-3" aria-labelledby="typing-mode-heading">
@@ -333,7 +332,7 @@ export default function TypingGame() {
                 <div className="flex items-center gap-3">
                   <Badge
                     variant="outline"
-                    className="border-sky-700 text-base text-sky-800 dark:border-sky-500 dark:text-sky-200"
+                    className="border-[var(--color-accent)] text-base text-[var(--color-accent)]"
                   >
                     入力中
                   </Badge>
@@ -341,7 +340,7 @@ export default function TypingGame() {
                     {problemNumber} / {problemCount} 問目
                   </span>
                 </div>
-                <div className="font-mono text-2xl font-bold tabular-nums text-sky-800 dark:text-sky-200">
+                <div className="font-mono text-2xl font-bold tabular-nums text-[var(--color-accent)]">
                   残り {timeLeft}秒
                 </div>
               </div>
@@ -349,7 +348,7 @@ export default function TypingGame() {
               {imeDetected && (
                 <div
                   role="alert"
-                  className="rounded-lg border-2 border-amber-700 bg-amber-50 px-4 py-3 text-base font-medium text-amber-900 dark:border-amber-500 dark:bg-amber-950/60 dark:text-amber-100"
+                  className="rounded-lg border-2 border-[var(--color-warning)] bg-[var(--kj-notice-bg)] px-4 py-3 text-base font-medium text-[var(--color-text)]"
                 >
                   日本語入力（IME）がオンになっています。半角英数に切り替えてください。
                   <span className="mt-1 block text-sm font-normal">
@@ -374,12 +373,12 @@ export default function TypingGame() {
                   <div
                     className={`rounded-lg border bg-slate-50 px-4 py-3 font-mono text-xl leading-relaxed break-all dark:bg-slate-950/50 ${
                       showInputError
-                        ? 'border-2 border-red-700 dark:border-red-400'
+                        ? 'border-2 border-[var(--color-danger)]'
                         : 'border-slate-500 dark:border-slate-600'
                     }`}
                   >
                     <span>{renderUserInput(userInput)}</span>
-                    <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-sky-600 align-middle dark:bg-sky-400" />
+                    <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-[var(--color-accent)] align-middle" />
                   </div>
 
                   {/* 色だけでなく文字でも知らせる。高さを常に確保して画面が揺れないようにする */}
@@ -387,7 +386,7 @@ export default function TypingGame() {
                     role="status"
                     aria-live="polite"
                     className={`min-h-6 text-base font-medium ${
-                      showInputError ? 'text-red-800 dark:text-red-300' : 'text-transparent'
+                      showInputError ? 'text-[var(--color-danger)]' : 'text-transparent'
                     }`}
                   >
                     {showInputError ? '✗ その文字はここには入りません。お題を見て打ち直してください。' : '　'}
@@ -445,8 +444,7 @@ export default function TypingGame() {
               </Button>
             </div>
           )}
-        </CardContent>
-      </Card>
-    </main>
+      </div>
+    </div>
   );
 }

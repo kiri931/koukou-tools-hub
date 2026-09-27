@@ -25,15 +25,13 @@ export default function AnkiApp() {
   const anki = useAnki();
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 text-slate-900 dark:text-slate-100">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">覚える君</h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">短答入力 × 分散復習（FSRS）で暗記を進める学習ツール</p>
-        </div>
+    // ページの <main> と見出し（h1・説明）は pages/tools/anki.astro が持つ（kj の T4）。
+    // ここはツール本体の枠（kj-tool-frame）の中身だけ。
+    <div>
+      <div className="mb-6 flex flex-wrap items-center justify-end gap-3">
         <div className="flex items-center gap-2">
           <Badge variant="outline">問題集 {anki.datasets.length}</Badge>
-          <Badge className="bg-green-600 text-white">
+          <Badge className="bg-[var(--color-success)] text-[var(--color-on-success)]">
             復習まち {anki.dashboard.due.overdue}
           </Badge>
         </div>
@@ -46,8 +44,8 @@ export default function AnkiApp() {
           role="status"
           className={
             anki.deckLink.status === 'error'
-              ? 'mb-6 rounded-lg border border-red-300 bg-red-50 p-4 text-base text-red-900 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-200'
-              : 'mb-6 rounded-lg border border-indigo-300 bg-indigo-50 p-4 text-base text-indigo-900 dark:border-indigo-500/40 dark:bg-indigo-500/10 dark:text-indigo-100'
+              ? 'mb-6 rounded-lg border border-[var(--color-danger)] bg-[var(--kj-danger-soft)] p-4 text-base text-[var(--color-text)]'
+              : 'mb-6 rounded-lg border border-[var(--color-accent)] bg-[var(--kj-accent-soft)] p-4 text-base text-[var(--color-text)]'
           }
         >
           {anki.deckLink.status === 'loading' && <>「{anki.deckLink.label}」を読み込んでいます…</>}
@@ -55,7 +53,7 @@ export default function AnkiApp() {
             <>
               <strong className="font-semibold">「{anki.deckLink.label}」を取り込みました。</strong>
               （{anki.deckLink.cardCount}問）
-              <span className="mt-1 block text-sm">
+              <span className="mt-1 block text-base">
                 すでに覚えたぶんの記録は消えていません。下の一覧から選んで「学習」に進んでください。
               </span>
             </>
@@ -63,7 +61,7 @@ export default function AnkiApp() {
           {anki.deckLink.status === 'error' && (
             <>
               <strong className="font-semibold">「{anki.deckLink.label}」を読み込めませんでした。</strong>
-              <span className="mt-1 block text-sm">
+              <span className="mt-1 block text-base">
                 {anki.deckLink.message}／通信できていない可能性があります。時間をおいて開き直してください。
               </span>
             </>
@@ -71,11 +69,11 @@ export default function AnkiApp() {
         </div>
       )}
 
-      <Card className="mb-6 border-slate-200 bg-white/95 dark:border-slate-800 dark:bg-slate-900/70">
+      <Card className="mb-6 bg-[var(--color-surface)]">
         <CardHeader>
           <CardTitle className="text-xl">使い方</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-5 text-sm text-slate-700 dark:text-slate-300">
+        <CardContent className="space-y-5 text-base text-[var(--color-text)]">
           <div>
             <ol className="list-decimal space-y-1 pl-5">
               <li>トップでデータセットを選ぶ（または新規作成）</li>
@@ -87,8 +85,8 @@ export default function AnkiApp() {
             </ol>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+          <div className="rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-4">
+            <h2 className="mb-2 text-base font-semibold text-[var(--color-text-muted)]">
               この単元とのつながり
             </h2>
             <p>
@@ -100,23 +98,23 @@ export default function AnkiApp() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+            <h2 className="text-base font-semibold text-[var(--color-text-muted)]">
               よくある質問
             </h2>
             <div className="space-y-3">
               <div>
-                <p className="font-medium text-slate-900 dark:text-slate-100">Q. 自分で問題（カード）を追加できますか?</p>
+                <p className="font-medium text-[var(--color-text)]">Q. 自分で問題（カード）を追加できますか?</p>
                 <p>「データ管理」タブからカードの追加・編集・削除ができます。JSON形式でのインポートにも対応しています。</p>
               </div>
               <div>
-                <p className="font-medium text-slate-900 dark:text-slate-100">Q. データはどこに保存されますか?</p>
+                <p className="font-medium text-[var(--color-text)]">Q. データはどこに保存されますか?</p>
                 <p>
                   ブラウザのIndexedDBに保存されます。端末やブラウザを変えると引き継がれない点にご注意ください。
                   バックアップ機能で保存内容をエクスポートしておくと安心です。
                 </p>
               </div>
               <div>
-                <p className="font-medium text-slate-900 dark:text-slate-100">Q. 目標に合わせて復習頻度を調整できますか?</p>
+                <p className="font-medium text-[var(--color-text)]">Q. 目標に合わせて復習頻度を調整できますか?</p>
                 <p>「設定」タブで目標保持率や試験日を指定すると、それに応じて復習間隔が調整されます。</p>
               </div>
             </div>
@@ -125,8 +123,8 @@ export default function AnkiApp() {
       </Card>
 
       {(anki.error || anki.dbError) && (
-        <Card className="mb-4 border-red-300">
-          <CardContent className="pt-6 text-sm text-red-600">{anki.error ?? anki.dbError}</CardContent>
+        <Card className="mb-4 border-[var(--color-danger)]">
+          <CardContent className="pt-6 text-base text-[var(--color-danger)]">{anki.error ?? anki.dbError}</CardContent>
         </Card>
       )}
 
@@ -201,6 +199,6 @@ export default function AnkiApp() {
           </TabsContent>
         </Tabs>
       )}
-    </main>
+    </div>
   );
 }

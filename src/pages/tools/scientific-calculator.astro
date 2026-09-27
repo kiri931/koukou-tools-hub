@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { Header } from '../../components/Header';
+import PageHead from '../../components/PageHead.astro';
 import { ScientificCalculator } from '../../features/scientific-calculator';
 import '../../styles/global.css';
 ---
@@ -9,34 +9,40 @@ import '../../styles/global.css';
   title="関数電卓 - ツール"
   description="画面いっぱいで使える関数電卓。三角関数・逆三角関数・対数・nPr/nCr・統計処理に加えて、DEG/RAD/GRAD、Fix/Sci/Engの表示形式、2進・8進・16進、度分秒、Pol/Rec、物理定数に対応。キーの色は4種類から選べます。ブラウザだけで動きます。"
 >
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <Header client:load currentPath={Astro.url.pathname} />
-    <h1 class="sr-only">関数電卓</h1>
-    <ScientificCalculator client:only="react" />
-    <section class="mx-auto mt-8 max-w-5xl px-4 pb-12 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">関数電卓について</h2>
-      <p class="mt-3">
+  <main class="kj-container th-page">
+    <PageHead
+      label="ツール"
+      title="関数電卓"
+      lead="画面いっぱいで使える関数電卓。ブラウザだけで動きます。"
+      safe={true}
+    />
+    <section aria-label="ツール本体" class="kj-tool-frame th-tool-body">
+      <ScientificCalculator client:only="react" />
+    </section>
+    <section class="th-about">
+      <h2>関数電卓について</h2>
+      <p>
         計算技術検定3級・4級を想定し、四則演算だけでなく三角関数、対数、組合せ、統計処理まで扱える関数電卓です。
         授業での演習や検定準備に合わせて、計算手順を確認しながら利用できます。
       </p>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">使い方</h2>
-      <ol class="mt-2 list-decimal space-y-1 pl-5">
+      <h2>使い方</h2>
+      <ol>
         <li>キーの色を選びます（おちつき・かみ・よる・にぎやか）。次に開いたときも覚えています。</li>
         <li>「電卓をひらく」を押すと、画面いっぱいの電卓になります（iPadなら1画面で収まります）。</li>
         <li>角度や表示形式を変えるときは ALT を押してから DEG（DRG）や SHIFT（FSE）を押します。</li>
         <li>キーの左上に「◆」が付いたボタンは、ALT を押すともう1つの機能になります。右上の「●」は SHIFT です。</li>
       </ol>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">検定の練習をしたいとき</h2>
-      <p class="mt-2">
+      <h2>検定の練習をしたいとき</h2>
+      <p>
         検定と同じ形の問題を解く練習は
-        <a class="underline" href="/tools/calc-drill/">計算技術検定ドリル</a>
+        <a href="/tools/calc-drill/">計算技術検定ドリル</a>
         にあります。押すキーを1つずつ教えるガイド練習、自分で解く練習、解答用紙と同じ版面で10問を10分で解く本番形式が、同じ電卓で使えます。
       </p>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">仕様・対応環境</h2>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
+      <h2>仕様・対応環境</h2>
+      <ul>
         <li>ブラウザ上で完結し、入力内容をサーバーに送信しません。</li>
         <li>キーの色は「おちつき・かみ・よる・にぎやか」から選べます（次に開いたときも覚えています）。</li>
         <li>三角関数と逆三角関数、指数対数、nPr/nCr、統計の基本処理に対応します。</li>
@@ -47,26 +53,26 @@ import '../../styles/global.css';
         <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
       </ul>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">注意事項</h2>
-      <p class="mt-2">実際の検定要件は年度や実施団体の案内を必ず確認してください。</p>
+      <h2>注意事項</h2>
+      <p>実際の検定要件は年度や実施団体の案内を必ず確認してください。</p>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">よくある質問</h2>
-      <dl class="mt-2 space-y-2">
+      <h2>よくある質問</h2>
+      <dl>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. 検定本番と同じ機種ですか？</dt>
+          <dt>Q. 検定本番と同じ機種ですか？</dt>
           <dd>A. 本番機種そのものではありませんが、学習用途に必要な機能を備えています。</dd>
         </div>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. 問題は出ますか？</dt>
-          <dd>A. このページは電卓だけです。問題を解く練習は<a class="underline" href="/tools/calc-drill/">計算技術検定ドリル</a>にまとめてあります。</dd>
+          <dt>Q. 問題は出ますか？</dt>
+          <dd>A. このページは電卓だけです。問題を解く練習は<a href="/tools/calc-drill/">計算技術検定ドリル</a>にまとめてあります。</dd>
         </div>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. 入力履歴は残りますか？</dt>
+          <dt>Q. 入力履歴は残りますか？</dt>
           <dd>A. セッション中は参照できますが、恒久保存はブラウザ仕様に依存します。</dd>
         </div>
       </dl>
     </section>
-  </div>
+  </main>
   <script
     type="application/ld+json"
     set:html={JSON.stringify({

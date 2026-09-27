@@ -271,18 +271,18 @@ export default function HelpSheet({ open, onOpenChange }: HelpSheetProps) {
         <div className="space-y-5 px-6 pb-6">
           {HELP_SECTIONS.map((section) => (
             <section key={section.title} className="space-y-2">
-              <h3 className="text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-200">{section.title}</h3>
+              <h3 className="text-base font-semibold text-[var(--color-text)]">{section.title}</h3>
               <div className="space-y-2">
                 {section.items.map((item) => (
                   <div key={`${section.title}-${item.label}`} className="rounded-lg border p-3">
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
-                      <span className="rounded bg-slate-100 px-1.5 py-0.5 font-mono font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-100">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base">
+                      <span className="rounded bg-[var(--color-surface-strong)] px-1.5 py-0.5 font-mono font-semibold text-[var(--color-text)]">
                         {item.label}
                       </span>
                       <span className="text-muted-foreground">{item.description}</span>
                     </div>
                     {item.shiftLabel && item.shiftDescription && (
-                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-base">
                         <span className="rounded bg-blue-100 px-1.5 py-0.5 font-mono font-semibold text-blue-900 dark:bg-blue-500/15 dark:text-blue-200">
                           SHIFT: {item.shiftLabel}
                         </span>
@@ -290,7 +290,7 @@ export default function HelpSheet({ open, onOpenChange }: HelpSheetProps) {
                       </div>
                     )}
                     {item.altLabel && item.altDescription && (
-                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-base">
                         <span className="rounded bg-amber-100 px-1.5 py-0.5 font-mono font-semibold text-amber-900 dark:bg-amber-500/15 dark:text-amber-100">
                           ALT: {item.altLabel}
                         </span>

@@ -1,0 +1,30 @@
+---
+// ページの頭（ラベル → h1 → 説明）。kj の型（T2〜T4）で共通の並び。
+// パンくずは Layout が出すので、ここでは扱わない。
+//
+// 「データは端末の外に出ません」（safe）は、本当にそうなっているツールだけに付ける。
+// 付けると「送信しない」と約束したことになる。
+interface Props {
+	title: string;
+	lead?: string;
+	/** h1 の上の小さなラベル（「ツール」「学習ガイド」など） */
+	label?: string;
+	/** true なら「データは端末の外に出ません」の印を出す */
+	safe?: boolean;
+	/** header に足すクラス（印刷時の扱いをページ側で変えたいときなど） */
+	class?: string;
+}
+const { title, lead, label, safe = false, class: className } = Astro.props;
+---
+
+<header class:list={['th-page-head', className]}>
+	{label || safe ? (
+		<div class="th-tags kj-no-print">
+			{label ? <span class="kj-tag">{label}</span> : null}
+			{safe ? <span class="kj-tag kj-tag--safe">データは端末の外に出ません</span> : null}
+		</div>
+	) : null}
+	<h1 class="kj-page-title">{title}</h1>
+	{lead ? <p class="kj-lead">{lead}</p> : null}
+	<slot />
+</header>

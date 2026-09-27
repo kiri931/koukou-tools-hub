@@ -33,7 +33,7 @@ export default function ProblemBar({
 }: ProblemBarProps) {
   if (!problem) {
     return (
-      <div className="flex flex-wrap items-center gap-2 rounded-lg border border-slate-500 bg-white px-3 py-2 text-base text-slate-700 dark:border-slate-400 dark:bg-slate-900 dark:text-slate-300">
+      <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-base text-[var(--color-text-muted)]">
         {leading}
         <span className="flex-1">この分野の問題を作れませんでした。分野を選び直してください。</span>
         {trailing}
@@ -44,16 +44,16 @@ export default function ProblemBar({
   const hint = roundingLabel(problem.rounding);
 
   return (
-    <div className="rounded-lg border border-slate-500 bg-white px-3 py-2 dark:border-slate-400 dark:bg-slate-900">
+    <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         {leading}
 
-        <p className="min-w-0 flex-1 text-lg font-bold text-slate-900 dark:text-slate-100">
+        <p className="min-w-0 flex-1 text-lg font-bold text-[var(--color-text)]">
           <MathText>{problem.question}</MathText>
         </p>
 
         {hint && (
-          <span className="text-base text-slate-700 dark:text-slate-300">{hint}</span>
+          <span className="text-base text-[var(--color-text-muted)]">{hint}</span>
         )}
 
         {problem.angleMode === 'RAD' && (
@@ -63,7 +63,7 @@ export default function ProblemBar({
           </span>
         )}
 
-        <span className="text-base text-slate-700 dark:text-slate-300">
+        <span className="text-base text-[var(--color-text-muted)]">
           {answered} 問中 {correct} 問
         </span>
 
@@ -72,8 +72,8 @@ export default function ProblemBar({
           <span
             className={`text-lg font-bold ${
               judgement.kind === 'correct'
-                ? 'text-emerald-800 dark:text-emerald-300'
-                : 'text-rose-800 dark:text-rose-300'
+                ? 'text-[var(--color-success)]'
+                : 'text-[var(--color-danger)]'
             }`}
           >
             {judgement.kind === 'correct' ? '✓ 正解' : `✗ 不正解 → ${judgement.answer}`}

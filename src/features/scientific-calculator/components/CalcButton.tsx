@@ -78,11 +78,13 @@ const CalcButton = forwardRef<HTMLButtonElement, CalcButtonProps>(function CalcB
       aria-pressed={isShiftKey ? shiftActive : isAltKey ? altActive : undefined}
       {...buttonProps}
     >
-      {/* 色だけに情報を乗せないための印。枠線と併用する。 */}
+      {/* 色だけに情報を乗せないための印。枠線と併用する。
+          色はキーの文字色（currentColor）に合わせる。amber-800 固定だと「よる」の濃いキーの上で
+          1.3:1 ほどになり見えなかった。キーの文字色は、どの配色でもキー背景と 4.5:1 以上にしてある。 */}
       {highlighted && (
         <span
           aria-hidden="true"
-          className="absolute left-1 top-0.5 text-sm font-bold leading-none text-amber-800 dark:text-amber-300"
+          className="absolute left-1 top-0.5 text-sm font-bold leading-none text-current"
         >
           ▶
         </span>

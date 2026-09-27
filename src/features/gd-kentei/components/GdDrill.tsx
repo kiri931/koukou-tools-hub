@@ -62,16 +62,9 @@ export default function GdDrill() {
 
   if (!session) {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50">
-          グラフィックデザイン検定ドリル
-        </h1>
-        <p className="mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-300">
-          1問ずつ答えて、その場で正誤と解説を見る練習です。問題はすべて書き下ろしたもので、
-          過去問そのものではありません。
-        </p>
-
-        <div className="mt-8 space-y-5">
+      // 見出し（h1）と説明はページ側（Astro の PageHead）が SSR で出す。<main> もページ側。
+      <div>
+        <div className="space-y-5">
           <Picker label="出題の種類">
             <Chip active={mode === "field"} onClick={() => setMode("field")}>
               分野別ドリル
@@ -108,7 +101,7 @@ export default function GdDrill() {
           </Picker>
         </div>
 
-        <p className="mt-6 text-base text-slate-700 dark:text-slate-300">
+        <p className="mt-6 text-base">
           この条件で出せる問題は{available}問です。ここから最大10問を出します。
         </p>
 
@@ -121,7 +114,7 @@ export default function GdDrill() {
         </Button>
 
         {wrongIds.length > 0 && (
-          <p className="mt-8 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-8 text-base text-[var(--color-text-muted)]">
             まちがえた問題は、この端末の中にだけ残しています（サーバーへは送りません）。
             <button
               type="button"
@@ -135,7 +128,7 @@ export default function GdDrill() {
             </button>
           </p>
         )}
-      </main>
+      </div>
     );
   }
 
@@ -177,9 +170,9 @@ export default function GdDrill() {
   };
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+    <div>
       <div className="flex flex-wrap items-center gap-3">
-        <p className="text-base font-medium text-slate-700 dark:text-slate-300">
+        <p className="text-base font-bold">
           {index + 1} / {session.length}問
         </p>
         <Badge variant="secondary">{fields.find((f) => f.id === question.field)?.label}</Badge>
@@ -187,14 +180,13 @@ export default function GdDrill() {
       </div>
 
       {banner && (
-        <p className="mt-4 rounded-lg border-2 border-amber-500 bg-amber-50 px-4 py-3 text-base font-bold text-amber-950 dark:border-amber-600 dark:bg-amber-950 dark:text-amber-100">
+        <p className="mt-4 rounded-lg border-2 border-[var(--color-warning)] bg-[var(--kj-notice-bg)] px-4 py-3 text-base font-bold text-[var(--color-text)]">
           この問題は「{banner}」問題です
         </p>
       )}
 
-      <h1 className="mt-4 text-xl leading-relaxed font-bold text-slate-900 dark:text-slate-50">
-        {question.stem}
-      </h1>
+      {/* ページの h1 はツール名。問題文は画面ごとに変わるので h2 にする */}
+      <h2 className="mt-4 text-xl leading-relaxed font-bold">{question.stem}</h2>
 
       <ul className="mt-5 space-y-3">
         {question.choices.map((choice, i) => {
@@ -214,11 +206,11 @@ export default function GdDrill() {
                 className={cn(
                   "flex w-full items-start gap-3 rounded-lg border-2 p-4 text-left text-base leading-relaxed transition-colors",
                   state === "idle" &&
-                    "border-slate-300 bg-white text-slate-900 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800",
+                    "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[var(--color-surface-strong)]",
                   state === "correct" &&
-                    "border-emerald-600 bg-emerald-50 text-emerald-950 dark:border-emerald-500 dark:bg-emerald-950 dark:text-emerald-50",
+                    "border-[var(--color-success)] bg-[var(--kj-success-soft)] text-[var(--color-text)]",
                   state === "wrong" &&
-                    "border-rose-600 bg-rose-50 text-rose-950 dark:border-rose-500 dark:bg-rose-950 dark:text-rose-50",
+                    "border-[var(--color-danger)] bg-[var(--kj-danger-soft)] text-[var(--color-text)]",
                 )}
               >
                 <span className="font-bold">{CHOICE_LABELS[i]}</span>
@@ -233,22 +225,20 @@ export default function GdDrill() {
       </ul>
 
       {answered && (
-        <div className="mt-6 rounded-lg border border-slate-300 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mt-6 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
           <p
             className={cn(
               "text-lg font-bold",
-              isCorrect
-                ? "text-emerald-800 dark:text-emerald-300"
-                : "text-rose-800 dark:text-rose-300",
+              isCorrect ? "text-[var(--color-success)]" : "text-[var(--color-danger)]",
             )}
           >
             {isCorrect ? "正解" : "まちがい"}
           </p>
-          <p className="mt-2 text-base leading-relaxed text-slate-900 dark:text-slate-100">
+          <p className="mt-2 text-base leading-relaxed">
             {question.explanation}
           </p>
           {question.termIds.length > 0 && (
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-3 text-base text-[var(--color-text-muted)]">
               関係する用語:{" "}
               {question.termIds
                 .map((id) => allTerms.find((t) => t.id === id)?.term)
@@ -257,7 +247,7 @@ export default function GdDrill() {
               <span aria-hidden="true"> / </span>
               <a
                 href={`/study/graphic-design/${question.field}/`}
-                className="underline underline-offset-2 hover:no-underline"
+                className="text-[var(--color-accent)] underline underline-offset-2 hover:no-underline"
               >
                 この分野の解説を読む
               </a>
@@ -274,7 +264,7 @@ export default function GdDrill() {
           </Button>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 
@@ -290,14 +280,15 @@ function Finished({
   message?: string;
 }) {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">おつかれさまでした</h1>
+    <div>
+      {/* ページの h1 はツール名なので、結果の見出しは h2 */}
+      <h2 className="text-2xl font-bold">おつかれさまでした</h2>
       {message ? (
-        <p className="mt-4 text-base leading-relaxed text-slate-800 dark:text-slate-200">
+        <p className="mt-4 text-base leading-relaxed">
           {message}
         </p>
       ) : (
-        <p className="mt-4 text-lg text-slate-800 dark:text-slate-200">
+        <p className="mt-4 text-lg">
           {total}問中 <strong className="text-2xl font-bold">{correct}</strong> 問正解（
           {total === 0 ? 0 : Math.round((correct / total) * 100)}点）
         </p>
@@ -305,14 +296,14 @@ function Finished({
       <Button onClick={onRestart} className="mt-6 min-h-12 px-6 text-base">
         条件を選び直す
       </Button>
-    </main>
+    </div>
   );
 }
 
 function Picker({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}</p>
+      <p className="text-base font-bold">{label}</p>
       <div className="mt-2 flex flex-wrap gap-2">{children}</div>
     </div>
   );
@@ -339,7 +330,7 @@ function Chip({
         "min-h-11 rounded-full border px-4 text-base transition-colors disabled:opacity-50",
         active
           ? "border-slate-900 bg-slate-900 text-white dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
-          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800",
+          : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[var(--color-surface-strong)]",
       )}
     >
       {children}

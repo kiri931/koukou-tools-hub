@@ -107,14 +107,14 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
         {/* 入／切は色だけでなく文字でも示す */}
         入力補助 {assist ? '入' : '切'}
       </Button>
-      <span className="text-base text-slate-600 dark:text-slate-300">
+      <span className="text-base text-[var(--color-text-muted)]">
         {assist
           ? '次に押すキーを光らせ、表示形式も問題に合わせます'
           : '本番と同じく、手順は自分で決めます'}
       </span>
       {guide.offTrack && (
         // 手順から外れたことは、色だけでなく記号と文言でも示す
-        <span className="flex flex-wrap items-center gap-2 rounded border-2 border-rose-800 bg-rose-50 px-2 py-1 text-base font-bold text-rose-900 dark:bg-rose-950 dark:text-rose-100">
+        <span className="flex flex-wrap items-center gap-2 rounded border-2 border-[var(--color-danger)] bg-[var(--kj-danger-soft)] px-2 py-1 text-base font-bold text-[var(--color-danger)]">
           ✗ 手順から外れました。
           {guide.extraLength > 0
             ? ` DEL で ${guide.extraLength} 文字消すと、案内が戻ります。`
@@ -123,7 +123,7 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
             type="button"
             size="sm"
             variant="outline"
-            className="border-rose-800 font-bold"
+            className="border-[var(--color-danger)] font-bold"
             onClick={() => {
               // 余計に打ったぶんだけ消す。ここまでの入力は捨てない。
               for (let i = 0; i < guide.extraLength; i += 1) pressButton('del');
@@ -135,7 +135,7 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
             type="button"
             size="sm"
             variant="outline"
-            className="border-rose-800"
+            className="border-[var(--color-danger)]"
             onClick={() => {
               pressButton('ac');
               guide.reset();

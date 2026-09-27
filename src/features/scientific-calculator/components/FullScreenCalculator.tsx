@@ -42,7 +42,7 @@ export default function FullScreenCalculator({
             type="button"
             variant="outline"
             onClick={onHelp}
-            className="min-h-11 gap-1 border-slate-500 dark:border-slate-400"
+            className="min-h-11 gap-1 border-[var(--color-border)]"
           >
             <HelpCircle className="size-4" aria-hidden="true" />
             使い方
@@ -51,7 +51,7 @@ export default function FullScreenCalculator({
             type="button"
             variant="outline"
             onClick={onBack}
-            className="min-h-11 gap-1 border-slate-500 dark:border-slate-400"
+            className="min-h-11 gap-1 border-[var(--color-border)]"
           >
             <X className="size-4" aria-hidden="true" />
             とじる

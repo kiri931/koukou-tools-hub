@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { terms as allTerms } from "../data/terms";
 import type { Lesson, LessonFigure } from "../data/lessons/types";
-import { getField, levelLabels } from "../lib/fields";
+import { levelLabels } from "../lib/fields";
 import type { GdTerm } from "../types";
 
 const termById = new Map<string, GdTerm>(allTerms.map((t) => [t.id, t]));
@@ -34,20 +34,13 @@ function figureSvg(fileName: string): string | undefined {
  * 「ページ番号は ノンブル ［定義］ 、章や書名を…」と文が割れて読めなくなる。
  */
 export default function GdLesson({ lesson }: { lesson: Lesson }) {
-  const field = getField(lesson.field);
   const used = useMemo(() => collectTermIds(lesson), [lesson]);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-      <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-        グラフィックデザイン検定
-      </p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50">
-        {field.label}
-      </h1>
-      <p className="mt-3 text-base text-slate-700 dark:text-slate-300">{lesson.scope}</p>
-
-      <div className="mt-6 space-y-4">
+    // 見出し（分野名の h1）と説明（lesson.scope）はページ側（Astro の PageHead）が SSR で出す。
+    // ここは本文だけ。<main> もページ側にあるので div にする。
+    <div>
+      <div className="space-y-4">
         {lesson.intro.map((paragraph) => (
           <Paragraph key={paragraph} text={paragraph} />
         ))}
@@ -55,7 +48,7 @@ export default function GdLesson({ lesson }: { lesson: Lesson }) {
 
       {lesson.sections.map((section) => (
         <section key={section.heading} className="mt-14">
-          <h2 className="border-b border-slate-300 pb-2 text-2xl font-bold text-slate-900 dark:border-slate-800 dark:text-slate-50">
+          <h2 className="border-b border-[var(--kj-divider)] pb-2 text-2xl font-bold">
             {section.heading}
           </h2>
           <div className="mt-5 space-y-4">
@@ -67,15 +60,15 @@ export default function GdLesson({ lesson }: { lesson: Lesson }) {
         </section>
       ))}
 
-      <section className="mt-14 rounded-lg border border-amber-400 bg-amber-50 p-6 dark:border-amber-700 dark:bg-amber-950">
-        <h2 className="text-xl font-bold text-amber-950 dark:text-amber-100">
+      <section className="mt-14 rounded-lg border-2 border-[var(--color-warning)] bg-[var(--kj-notice-bg)] p-6 text-[var(--color-text)]">
+        <h2 className="text-xl font-bold">
           取り違えやすいところ
         </h2>
         <ul className="mt-3 list-disc space-y-2 pl-5">
           {lesson.pitfalls.map((pitfall) => (
             <li
               key={pitfall}
-              className="text-base leading-relaxed text-amber-950 dark:text-amber-100"
+              className="text-base leading-relaxed"
             >
               {renderInline(pitfall, () => {})}
             </li>
@@ -83,31 +76,31 @@ export default function GdLesson({ lesson }: { lesson: Lesson }) {
         </ul>
       </section>
 
-      <p className="mt-10 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mt-10 text-base text-[var(--color-text-muted)]">
         この解説で扱った用語は{used.length}語です。すべて
         <a
           href="/study/graphic-design/glossary/"
-          className="mx-1 underline underline-offset-2 hover:no-underline"
+          className="mx-1 text-[var(--color-accent)] underline underline-offset-2 hover:no-underline"
         >
           用語辞典
         </a>
         にも載っています。
       </p>
 
-      <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <p className="mt-4 text-sm leading-relaxed text-[var(--color-text-muted)]">
         出題の傾向は、公益社団法人 全国工業高等学校長協会が公開している
         <a
           href="https://zenkoukyo.or.jp/index_kentei/exam_result/"
           target="_blank"
           rel="noreferrer noopener"
-          className="mx-1 underline underline-offset-2 hover:no-underline"
+          className="mx-1 text-[var(--color-accent)] underline underline-offset-2 hover:no-underline"
         >
           検定試験の実施結果
         </a>
         （第26〜30回）をもとにしています。このページの文章と例はすべて書き下ろしたもので、
         過去問そのものは掲載していません。
       </p>
-    </main>
+    </div>
   );
 }
 
@@ -121,10 +114,10 @@ function Figure({ figure }: { figure: LessonFigure }) {
         aria-label={figure.alt}
         // 線と文字は currentColor。ここで文字色を決めるので、
         // ライトでもダークでも背景とのコントラストが保たれる
-        className="w-full overflow-x-auto rounded-lg border border-slate-300 bg-white p-4 text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 [&>svg]:h-auto [&>svg]:w-full"
+        className="w-full overflow-x-auto rounded-lg border border-[var(--kj-divider)] bg-[var(--color-surface)] p-4 text-[var(--color-text)] [&>svg]:h-auto [&>svg]:w-full"
         dangerouslySetInnerHTML={{ __html: svg }}
       />
-      <figcaption className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <figcaption className="mt-2 text-base leading-relaxed text-[var(--color-text-muted)]">
         {figure.caption}
       </figcaption>
     </figure>
@@ -160,7 +153,7 @@ function renderInline(text: string, onToggle: (id: string) => void, openId?: str
           type="button"
           onClick={() => onToggle(id)}
           aria-expanded={openId === id}
-          className="rounded font-bold text-sky-800 underline decoration-dotted underline-offset-4 hover:bg-sky-100 dark:text-sky-300 dark:hover:bg-sky-950"
+          className="rounded font-bold text-[var(--color-accent)] underline decoration-dotted underline-offset-4 hover:bg-[var(--kj-accent-soft)]"
         >
           {term.term}
         </button>
@@ -179,10 +172,10 @@ function renderInline(text: string, onToggle: (id: string) => void, openId?: str
 
 function TermPanel({ term, onClose }: { term: GdTerm; onClose: () => void }) {
   return (
-    <div className="mt-3 rounded-lg border border-sky-300 bg-sky-50 p-4 dark:border-sky-800 dark:bg-sky-950">
+    <div className="mt-3 rounded-lg border border-[var(--color-accent)] bg-[var(--kj-accent-soft)] p-4 text-[var(--color-text)]">
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-base font-bold text-slate-900 dark:text-slate-50">{term.term}</span>
-        <span className="text-sm text-slate-600 dark:text-slate-400">{term.reading}</span>
+        <span className="text-base text-[var(--color-text-muted)]">{term.reading}</span>
         {term.levels.map((l) => (
           <Badge key={l} variant="outline">
             {levelLabels[l]}で出題
@@ -191,7 +184,7 @@ function TermPanel({ term, onClose }: { term: GdTerm; onClose: () => void }) {
         <button
           type="button"
           onClick={onClose}
-          className="ml-auto min-h-11 rounded px-2 text-sm text-slate-700 underline underline-offset-2 hover:no-underline dark:text-slate-300"
+          className="ml-auto min-h-11 rounded px-2 text-base underline underline-offset-2 hover:no-underline"
         >
           閉じる
         </button>
@@ -200,7 +193,7 @@ function TermPanel({ term, onClose }: { term: GdTerm; onClose: () => void }) {
         {term.short}
       </p>
       {term.body && (
-        <p className="mt-1 text-base leading-relaxed text-slate-700 dark:text-slate-300">
+        <p className="mt-1 text-base leading-relaxed">
           {term.body.replaceAll("**", "")}
         </p>
       )}

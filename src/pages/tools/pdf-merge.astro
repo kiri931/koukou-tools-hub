@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { Header } from '../../components/Header';
+import PageHead from '../../components/PageHead.astro';
 import { PdfMerge } from '../../features/pdf-merge';
 import '../../styles/global.css';
 ---
@@ -9,46 +9,53 @@ import '../../styles/global.css';
   title="PDFマージ - ツール"
   description="PDFマージツール。複数のPDFファイルをブラウザ上で結合・並び替え。サーバー不要、ファイルはローカル処理されます。"
 >
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <Header client:load currentPath={Astro.url.pathname} />
-    <PdfMerge client:only="react" />
-    <section class="mx-auto mt-8 max-w-5xl px-4 pb-12 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">PDFマージについて</h2>
-      <p class="mt-3">
+  <main class="kj-container th-page">
+    <PageHead
+      label="ツール"
+      title="PDFマージ"
+      lead="複数のPDFを並び替えて、1つのファイルに結合します。"
+      safe={true}
+    />
+    <section aria-label="ツール本体" class="kj-tool-frame th-tool-body">
+      <PdfMerge client:only="react" />
+    </section>
+    <section class="th-about">
+      <h2>PDFマージについて</h2>
+      <p>
         複数のPDFファイルを1つに結合し、必要に応じてページ順を調整できるツールです。処理はブラウザ内で行われるため、
         学校資料や配布物をサーバーに送らずに編集できます。
       </p>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">使い方</h2>
-      <ol class="mt-2 list-decimal space-y-1 pl-5">
+      <h2>使い方</h2>
+      <ol>
         <li>結合したいPDFを複数選択します。</li>
         <li>表示順をドラッグ操作で並び替えます。</li>
         <li>結合を実行し、完成したPDFをダウンロードします。</li>
       </ol>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">仕様・対応環境</h2>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
+      <h2>仕様・対応環境</h2>
+      <ul>
         <li>ブラウザ上で完結し、ファイルはサーバーに送信されません。</li>
         <li>一般的なPDF形式に対応します。暗号化PDFは処理できない場合があります。</li>
         <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
       </ul>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">注意事項</h2>
-      <p class="mt-2">著作権や配布権限を確認し、第三者の資料を無断で再配布しないようにしてください。</p>
+      <h2>注意事項</h2>
+      <p>著作権や配布権限を確認し、第三者の資料を無断で再配布しないようにしてください。</p>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">よくある質問</h2>
-      <dl class="mt-2 space-y-2">
+      <h2>よくある質問</h2>
+      <dl>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. PDFの内容は保存されますか？</dt>
+          <dt>Q. PDFの内容は保存されますか？</dt>
           <dd>A. 運営者側では保存しません。処理は利用中の端末内で完結します。</dd>
         </div>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. 大容量ファイルでも使えますか？</dt>
+          <dt>Q. 大容量ファイルでも使えますか？</dt>
           <dd>A. 端末性能やブラウザメモリにより処理時間が長くなる場合があります。</dd>
         </div>
       </dl>
     </section>
-  </div>
+  </main>
   <script
     type="application/ld+json"
     set:html={JSON.stringify({

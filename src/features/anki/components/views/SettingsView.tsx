@@ -49,7 +49,7 @@ export default function SettingsView({ settings, onSave }: Props) {
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <Label>目標保持率</Label>
-            <span className="font-mono text-sm">{(targetRetentionRate * 100).toFixed(0)}%</span>
+            <span className="font-mono text-base">{(targetRetentionRate * 100).toFixed(0)}%</span>
           </div>
           <Slider
             min={0.7}
@@ -58,7 +58,7 @@ export default function SettingsView({ settings, onSave }: Props) {
             value={[targetRetentionRate]}
             onValueChange={([value]) => setTargetRetentionRate(value)}
           />
-          <p className="text-xs text-slate-500">
+          <p className="text-sm text-[var(--color-text-muted)]">
             「思い出せる見込みがこの値まで下がったら、もう一度出す」という目安です。
             高くすると忘れにくくなりますが、1日にこなす枚数が増えます。既定は90%。
           </p>
@@ -69,22 +69,22 @@ export default function SettingsView({ settings, onSave }: Props) {
           <input
             id="anki-exam-date"
             type="date"
-            className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+            className="h-10 rounded-md border border-input bg-background px-3 py-2 text-base"
             value={examDate}
             onChange={(event) => setExamDate(event.target.value)}
           />
-          <p className="text-xs text-slate-500">
+          <p className="text-sm text-[var(--color-text-muted)]">
             入れておくと、復習の間隔がこの日を飛び越えないように調整されます。
             「試験前に一度も出ないまま本番」を防ぐためのものです。
           </p>
         </section>
 
         <div className="flex items-center gap-2">
-          <Button onClick={save} disabled={saving} className="bg-green-600 text-white hover:bg-green-700">
+          <Button onClick={save} disabled={saving}>
             保存
           </Button>
-          {message && <p className="text-sm text-green-600">{message}</p>}
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {message && <p className="text-base text-[var(--color-success)]">{message}</p>}
+          {error && <p className="text-base text-[var(--color-danger)]">{error}</p>}
         </div>
       </CardContent>
     </Card>

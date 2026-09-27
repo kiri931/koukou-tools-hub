@@ -86,20 +86,20 @@ export default function CalcDisplay({
         <span className="rounded bg-white/15 px-2 py-0.5">{base}</span>
         <span className="rounded bg-white/15 px-2 py-0.5">[{angleMode}]</span>
         {shiftActive && (
-          <span className="rounded bg-violet-500 px-2 py-0.5 text-white">SHIFT</span>
+          <span className="rounded bg-violet-700 px-2 py-0.5 text-white">SHIFT</span>
         )}
         {altActive && <span className="rounded bg-amber-300 px-2 py-0.5 text-slate-950">ALT</span>}
         {normalizedMemory !== 0 && (
-          <span className="rounded bg-emerald-600 px-2 py-0.5 text-white">
+          <span className="rounded bg-emerald-700 px-2 py-0.5 text-white">
             M {normalizedMemory.toFixed(4).replace(/\.0+$/, '')}
           </span>
         )}
         {engShift !== 0 && (
-          <span className="rounded bg-sky-600 px-2 py-0.5 text-white">
+          <span className="rounded bg-sky-700 px-2 py-0.5 text-white">
             ENG {engShift > 0 ? `+${engShift}` : engShift}
           </span>
         )}
-        {dmsView && <span className="rounded bg-sky-600 px-2 py-0.5 text-white">度分秒</span>}
+        {dmsView && <span className="rounded bg-sky-700 px-2 py-0.5 text-white">度分秒</span>}
         {parenBalance > 0 && (
           <span className="rounded bg-amber-300 px-2 py-0.5 text-slate-950">() {parenBalance}</span>
         )}

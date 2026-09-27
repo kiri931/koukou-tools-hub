@@ -168,12 +168,12 @@ export default function DataManagementView(props: Props) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="dataset-import">データセットJSONをインポート</label>
+            <label className="text-base font-medium" htmlFor="dataset-import">データセットJSONをインポート</label>
             <input
               id="dataset-import"
               type="file"
               accept="application/json,.json"
-              className="block w-full text-sm"
+              className="block w-full text-base"
               onChange={async (event) => {
                 setError(null);
                 setMessage(null);
@@ -191,18 +191,18 @@ export default function DataManagementView(props: Props) {
                 }
               }}
             />
-            <p className="text-xs text-slate-500">
+            <p className="text-sm text-[var(--color-text-muted)]">
               <a
                 href="/tools/anki/sample-dataset.json"
                 download
-                className="text-blue-700 underline dark:text-blue-300"
+                className="text-[var(--color-accent)] underline underline-offset-2"
               >
                 サンプルのデータセット（JSON）
               </a>
               をダウンロードしてインポートすると、動作確認できます。
             </p>
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-slate-50 p-3 dark:bg-slate-900/30">
-              <p className="text-sm text-slate-600 dark:text-slate-300">プリセット: 情報I頻出用語（141件）</p>
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-[var(--color-background)] p-3">
+              <p className="text-base text-[var(--color-text-muted)]">プリセット: 情報I頻出用語（141件）</p>
               <Button
                 type="button"
                 variant="outline"
@@ -213,8 +213,8 @@ export default function DataManagementView(props: Props) {
                 インポート
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-slate-50 p-3 dark:bg-slate-900/30">
-              <p className="text-sm text-slate-600 dark:text-slate-300">プリセット: ITパスポート頻出用語（103件）</p>
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-[var(--color-background)] p-3">
+              <p className="text-base text-[var(--color-text-muted)]">プリセット: ITパスポート頻出用語（103件）</p>
               <Button
                 type="button"
                 variant="outline"
@@ -225,8 +225,8 @@ export default function DataManagementView(props: Props) {
                 インポート
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-slate-50 p-3 dark:bg-slate-900/30">
-              <p className="text-sm text-slate-600 dark:text-slate-300">プリセット: 基本情報技術者試験 頻出用語（100件）</p>
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-[var(--color-background)] p-3">
+              <p className="text-base text-[var(--color-text-muted)]">プリセット: 基本情報技術者試験 頻出用語（100件）</p>
               <Button
                 type="button"
                 variant="outline"
@@ -237,8 +237,8 @@ export default function DataManagementView(props: Props) {
                 インポート
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-slate-50 p-3 dark:bg-slate-900/30">
-              <p className="text-sm text-slate-600 dark:text-slate-300">プリセット: 情報セキュリティマネジメント試験 頻出用語（89件）</p>
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-[var(--color-background)] p-3">
+              <p className="text-base text-[var(--color-text-muted)]">プリセット: 情報セキュリティマネジメント試験 頻出用語（89件）</p>
               <Button
                 type="button"
                 variant="outline"
@@ -249,8 +249,8 @@ export default function DataManagementView(props: Props) {
                 インポート
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-slate-50 p-3 dark:bg-slate-900/30">
-              <p className="text-sm text-slate-600 dark:text-slate-300">プリセット: 計算技術検定 頻出用語・公式（50件）</p>
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-[var(--color-background)] p-3">
+              <p className="text-base text-[var(--color-text-muted)]">プリセット: 計算技術検定 頻出用語・公式（50件）</p>
               <Button
                 type="button"
                 variant="outline"
@@ -266,7 +266,7 @@ export default function DataManagementView(props: Props) {
           <div className="grid gap-3 md:grid-cols-2">
             <div className="space-y-2 rounded-lg border p-4">
               <p className="font-medium">バックアップをエクスポート</p>
-              <p className="text-sm text-slate-500">全データ（学習履歴・設定含む）をJSONで保存します。</p>
+              <p className="text-base text-[var(--color-text-muted)]">全データ（学習履歴・設定含む）をJSONで保存します。</p>
               <Button
                 variant="outline"
                 disabled={busy === 'backup-export'}
@@ -290,11 +290,11 @@ export default function DataManagementView(props: Props) {
 
             <div className="space-y-2 rounded-lg border p-4">
               <p className="font-medium">バックアップをインポート</p>
-              <p className="text-sm text-slate-500">既存DBを置き換えて復元します。</p>
+              <p className="text-base text-[var(--color-text-muted)]">既存DBを置き換えて復元します。</p>
               <input
                 type="file"
                 accept="application/json,.json"
-                className="block w-full text-sm"
+                className="block w-full text-base"
                 onChange={async (event) => {
                   setError(null);
                   setMessage(null);
@@ -318,8 +318,8 @@ export default function DataManagementView(props: Props) {
             </div>
           </div>
 
-          {message && <p className="text-sm text-green-600">{message}</p>}
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {message && <p className="text-base text-[var(--color-success)]">{message}</p>}
+          {error && <p className="text-base text-[var(--color-danger)]">{error}</p>}
         </CardContent>
       </Card>
 
@@ -329,7 +329,7 @@ export default function DataManagementView(props: Props) {
           <CardDescription>カード管理・データセット削除を行えます。</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {datasets.length === 0 && <p className="text-sm text-slate-500">データセットはありません。</p>}
+          {datasets.length === 0 && <p className="text-base text-[var(--color-text-muted)]">データセットはありません。</p>}
           {datasets.map((dataset) => {
             const isExpanded = expandedDatasetId === dataset.datasetId;
             return (
@@ -337,7 +337,7 @@ export default function DataManagementView(props: Props) {
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div className="space-y-1">
                     <p className="font-medium">{dataset.title}</p>
-                    <div className="flex flex-wrap gap-2 text-xs">
+                    <div className="flex flex-wrap gap-2 text-sm">
                       <Badge variant="outline">{dataset.cardCount} cards</Badge>
                       <Badge variant="outline">{dataset.datasetId}</Badge>
                     </div>
@@ -372,7 +372,7 @@ export default function DataManagementView(props: Props) {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
+                      className="border-[var(--color-danger)] text-[var(--color-danger)] hover:bg-[var(--kj-danger-soft)]"
                       onClick={async () => {
                         if (!window.confirm(`「${dataset.title}」を削除しますか？`)) return;
                         setError(null);
@@ -402,24 +402,24 @@ export default function DataManagementView(props: Props) {
                 {isExpanded && (
                   <div className="mt-4 space-y-4 border-t pt-4">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-sm font-medium">カード一覧 ({datasetCards.length})</p>
+                      <p className="text-base font-medium">カード一覧 ({datasetCards.length})</p>
                       <div className="flex gap-2">
                         <Button variant="outline" onClick={() => void loadCards(dataset.datasetId)}>
                           再読み込み
                         </Button>
-                        <Button className="bg-green-600 text-white hover:bg-green-700" onClick={startAdd}>
+                        <Button onClick={startAdd}>
                           + カードを追加
                         </Button>
                       </div>
                     </div>
 
                     {datasetCards.length === 0 ? (
-                      <p className="text-sm text-slate-500">カードはありません。</p>
+                      <p className="text-base text-[var(--color-text-muted)]">カードはありません。</p>
                     ) : (
                       <div className="overflow-x-auto rounded-lg border">
-                        <table className="w-full text-sm">
+                        <table className="w-full text-base">
                           <thead>
-                            <tr className="border-b bg-slate-50 text-left dark:bg-slate-900/40">
+                            <tr className="border-b bg-[var(--color-background)] text-left">
                               <th className="px-3 py-2">質問</th>
                               <th className="px-3 py-2">正答例</th>
                               <th className="px-3 py-2">操作</th>
@@ -436,7 +436,7 @@ export default function DataManagementView(props: Props) {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
+                                      className="border-[var(--color-danger)] text-[var(--color-danger)] hover:bg-[var(--kj-danger-soft)]"
                                       onClick={async () => {
                                         if (!window.confirm('このカードを削除しますか？')) return;
                                         setError(null);
@@ -469,7 +469,7 @@ export default function DataManagementView(props: Props) {
                     )}
 
                     {editingCard && expandedDataset && (
-                      <div className="space-y-4 rounded-lg border bg-slate-50 p-4 dark:bg-slate-900/30">
+                      <div className="space-y-4 rounded-lg border bg-[var(--color-background)] p-4">
                         <div className="flex items-center justify-between gap-2">
                           <p className="font-medium">{editingCard.isNew ? 'カードを追加' : 'カードを編集'}</p>
                           <Badge variant="outline">{expandedDataset.title}</Badge>
@@ -480,7 +480,7 @@ export default function DataManagementView(props: Props) {
                             <Label htmlFor="card-question">質問（必須）</Label>
                             <textarea
                               id="card-question"
-                              className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                              className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
                               value={editingCard.question ?? ''}
                               onChange={(event) => setEditingCard((prev) => (prev ? { ...prev, question: event.target.value } : prev))}
                             />
@@ -509,7 +509,7 @@ export default function DataManagementView(props: Props) {
                             <Label htmlFor="card-explanation">解説</Label>
                             <textarea
                               id="card-explanation"
-                              className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                              className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
                               value={editingCard.explanation ?? ''}
                               onChange={(event) => setEditingCard((prev) => (prev ? { ...prev, explanation: event.target.value } : prev))}
                             />
@@ -517,7 +517,7 @@ export default function DataManagementView(props: Props) {
                         </div>
 
                         <div className="flex flex-wrap gap-2">
-                          <Button onClick={saveEditingCard} disabled={busy === 'save-card'} className="bg-green-600 text-white hover:bg-green-700">
+                          <Button onClick={saveEditingCard} disabled={busy === 'save-card'}>
                             保存
                           </Button>
                           <Button variant="outline" onClick={resetEditor}>キャンセル</Button>

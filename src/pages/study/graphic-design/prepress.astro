@@ -1,19 +1,24 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/Header";
-import GdBackLink from "../../../components/GdBackLink.astro";
+import PageHead from "../../../components/PageHead.astro";
 import GdLesson from "../../../features/gd-kentei/components/GdLesson";
-import { prepressLesson } from "../../../features/gd-kentei/data/lessons/prepress";
+import { prepressLesson as lesson } from "../../../features/gd-kentei/data/lessons/prepress";
+import { getField } from "../../../features/gd-kentei/lib/fields";
 import "../../../styles/global.css";
+
+// 見出し（h1）と説明はここで SSR する。GdLesson は本文だけを出す。
+// パンくずの名前（分野名）は Layout の対応表に無いので、ここで渡す。
+const field = getField(lesson.field);
 ---
 
 <Layout
   title="写真製版 - グラフィックデザイン検定 - 高校情報"
   description="グラフィックデザイン検定の「写真製版」分野の解説。網点・スクリーン線数・画像解像度・モアレ・カラーマッチング。問10・問11で問われる写真製版の用語を整理しました。"
+  width="text"
+  crumbs={[{ name: "グラフィックデザイン検定", href: "/study/graphic-design/" }, { name: field.label }]}
 >
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <Header client:load currentPath={Astro.url.pathname} />
-    <GdBackLink />
-    <GdLesson lesson={prepressLesson} client:only="react" />
-  </div>
+  <main class="kj-container kj-container--text th-page">
+    <PageHead label="学習ガイド" title={field.label} lead={lesson.scope} />
+    <GdLesson lesson={lesson} client:only="react" />
+  </main>
 </Layout>

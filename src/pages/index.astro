@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Header } from '../components/Header';
+import PageHead from '../components/PageHead.astro';
 import { LinkCard } from '../components/LinkCard';
 import { SectionHeading } from '../components/SectionHeading';
 import { sections } from '../lib/site-links';
@@ -14,91 +14,80 @@ import '../styles/global.css';
 	title="高校情報 - Webツール集"
 	description="ブラウザだけで動くWebツール集。タイピング練習・顔モザイク・PDFマージ・タイムスケジューラ・プレゼンガイドなど、授業や学習に役立つツールを無料で公開しています。"
 >
-	<div class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-		<Header client:load currentPath={Astro.url.pathname} />
+	{/* T2（一覧・入口）。このハブのルートは本番では配信しない（/ はメインサイト）が、
+	    ローカルで開いたときに同じ型で見えるようにしておく */}
+	<main class="kj-container th-page">
+		<PageHead
+			title="高校情報"
+			lead="学習向けツールと業務ツール、サポート情報をカテゴリ別にまとめています。"
+		/>
 
-		<main class="mx-auto max-w-5xl px-4 py-12 sm:py-16">
-			<section class="mb-14 text-center">
-				<h1 class="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
-					<span
-						class="bg-gradient-to-r from-indigo-500 to-sky-500 bg-clip-text text-transparent"
-						>高校情報</span
-					>
-				</h1>
-				<p class="mx-auto max-w-2xl text-base leading-[1.8] text-slate-600 dark:text-slate-400">
-					学習向けツールと業務ツール、サポート情報をカテゴリ別にまとめています。
-				</p>
-			</section>
-
-			{
-				sections.map((section) => (
-					<section class="mb-12">
-						<SectionHeading title={section.label} desc={section.desc} />
-						<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-							{section.items.map((item) => (
-								<LinkCard
-									href={item.href}
-									label={item.label}
-									desc={item.desc}
-									icon={item.icon}
-									accent={item.accent}
-								/>
-							))}
-						</div>
-					</section>
-				))
-			}
-
-			<section class="rounded-xl border border-slate-300 bg-white px-6 py-8 dark:border-slate-800 dark:bg-slate-900/50">
-				<h2 class="mb-5 text-xl font-bold text-slate-900 dark:text-slate-100">このサイトについて</h2>
-				<div class="flex flex-col gap-6 text-base leading-[1.8] text-slate-600 dark:text-slate-400">
-					<div>
-						<p>
-							このサイトはAIで作っています。<br />
-							そのため制作は早いですが、細かい部分が甘いところもあります。<br />
-							「こんなのあったらいいな」を元に、情報科の授業や学習に役立つツールを作っています。実験的な機能も含まれるため、授業でご利用の際はご確認のうえお使いください。
-						</p>
-						<p class="mt-2">モバイル版には対応していないものもあるのでご注意ください。</p>
-					</div>
-
-					<hr class="border-slate-300 dark:border-slate-800" />
-
-					<div>
-						<p>
-							このサイト内の多くの処理はブラウザ上で完結する設計にしています。<br />
-							入力内容や画像データを運営者側で保存することは基本的に行っていません。
-						</p>
-						<p class="mt-2 text-sm">
-							※サーバー契約上、アクセス元IPなどの一般的なログは自動的に記録されますが、個別に分析・利用する目的はありません。
-						</p>
-						<p class="mt-1 text-sm">
-							児童・生徒の個人情報を収集する目的で運営しているサイトではありません。
-						</p>
-					</div>
-
-					<hr class="border-slate-300 dark:border-slate-800" />
-
-					<div>
-						<p>
-							アクセス数が増え、Cloudflareの無料枠を超えた場合はバナー広告を表示する可能性があります。<br
+		{
+			sections.map((section) => (
+				<section>
+					<SectionHeading title={section.label} desc={section.desc} />
+					<div class="kj-grid">
+						{section.items.map((item) => (
+							<LinkCard
+								href={item.href}
+								label={item.label}
+								desc={item.desc}
+								icon={item.icon}
+								accent={item.accent}
 							/>
-							その際、広告配信サービスにより閲覧履歴等に基づく最適化広告が表示される場合があります。
-						</p>
+						))}
 					</div>
+				</section>
+			))
+		}
 
-					<hr class="border-slate-300 dark:border-slate-800" />
+		<section class="th-about kj-card">
+			<h2>このサイトについて</h2>
+			<p>
+				このサイトはAIで作っています。<br />
+				そのため制作は早いですが、細かい部分が甘いところもあります。<br />
+				「こんなのあったらいいな」を元に、情報科の授業や学習に役立つツールを作っています。実験的な機能も含まれるため、授業でご利用の際はご確認のうえお使いください。
+			</p>
+			<p>モバイル版には対応していないものもあるのでご注意ください。</p>
 
-					<div>
-						<p>
-							実験的に作っている部分もあるため、授業等で利用される場合はご理解の上でお願いいたします。
-						</p>
-						<p class="mt-2">
-							不具合や改善点があれば、サポートよりご連絡ください。<br />
-							作るスピードだけは速いです。
-						</p>
-					</div>
-				</div>
-			</section>
-		</main>
-	</div>
+			<hr class="about-rule" />
+
+			<p>
+				このサイト内の多くの処理はブラウザ上で完結する設計にしています。<br />
+				入力内容や画像データを運営者側で保存することは基本的に行っていません。
+			</p>
+			<p class="text-[var(--color-text-muted)]">
+				※サーバー契約上、アクセス元IPなどの一般的なログは自動的に記録されますが、個別に分析・利用する目的はありません。
+			</p>
+			<p class="text-[var(--color-text-muted)]">
+				児童・生徒の個人情報を収集する目的で運営しているサイトではありません。
+			</p>
+
+			<hr class="about-rule" />
+
+			<p>
+				アクセス数が増え、Cloudflareの無料枠を超えた場合はバナー広告を表示する可能性があります。<br />
+				その際、広告配信サービスにより閲覧履歴等に基づく最適化広告が表示される場合があります。
+			</p>
+
+			<hr class="about-rule" />
+
+			<p>
+				実験的に作っている部分もあるため、授業等で利用される場合はご理解の上でお願いいたします。
+			</p>
+			<p>
+				不具合や改善点があれば、サポートよりご連絡ください。<br />
+				作るスピードだけは速いです。
+			</p>
+		</section>
+	</main>
 </Layout>
+
+<style>
+	/* 装飾の区切り線（意味を持たない線なので --kj-divider） */
+	.about-rule {
+		margin: 8px 0;
+		border: 0;
+		border-top: 1px solid var(--kj-divider);
+	}
+</style>

@@ -1,19 +1,26 @@
 ---
-import { Header } from "../../components/Header";
+import PageHead from "../../components/PageHead.astro";
 import { SupportForm } from "../../features/support/SupportForm";
 import Layout from "../../layouts/Layout.astro";
 import "../../styles/global.css";
+
+// T4（ふつう幅のツール）の並び。ただし中身は1列のフォームなので、
+// 広い幅（1200px）だと入力欄が横に間延びする。本文と同じ幅（text）にそろえる。
+// 送信するフォーム（/api/support へ POST）なので「データは端末の外に出ません」（safe）は付けない。
 ---
 
 <Layout
   title="機能リクエスト - 高校情報"
   description="高校情報サイトへの機能追加リクエスト・改善提案を送信するフォームです。"
+  width="text"
 >
-  <div class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-    <Header client:load currentPath={Astro.url.pathname} />
-
-    <main class="mx-auto max-w-5xl px-4 py-12 sm:py-16">
+  <main class="kj-container kj-container--text th-page">
+    <PageHead
+      title="こうだったらいいのに、を教えてください"
+      lead="使っていて困ったこと、あったらいいもの、記事の間違い。どれでもかまいません。名前もメールアドレスも要りません。"
+    />
+    <section aria-label="送信フォーム" class="kj-tool-frame th-tool-body">
       <SupportForm client:only="react" />
-    </main>
-  </div>
+    </section>
+  </main>
 </Layout>

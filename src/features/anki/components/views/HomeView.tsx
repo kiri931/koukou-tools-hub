@@ -38,7 +38,7 @@ export default function HomeView(props: Props) {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
-            <Button asChild className="min-h-11 bg-green-600 text-white hover:bg-green-700">
+            <Button asChild className="min-h-11">
               <a href="/tools/anki/?import=glossary">情報I用語集（68語）で始める</a>
             </Button>
             <Button variant="outline" className="min-h-11" onClick={onMoveToData}>
@@ -76,7 +76,7 @@ export default function HomeView(props: Props) {
         </CardHeader>
         <CardContent>
           <Button
-            className="min-h-11 bg-green-600 text-white hover:bg-green-700"
+            className="min-h-11"
             onClick={async () => {
               onSelectDataset(suggestedId);
               await onStartSession(suggestedId);
@@ -100,8 +100,7 @@ export default function HomeView(props: Props) {
               <Button
                 key={dataset.datasetId}
                 variant={isSelected ? 'default' : 'outline'}
-                className={isSelected ? 'bg-green-600 text-white hover:bg-green-700' : ''}
-                onClick={() => onSelectDataset(dataset.datasetId)}
+                                onClick={() => onSelectDataset(dataset.datasetId)}
               >
                 {dataset.title}
               </Button>
@@ -113,7 +112,7 @@ export default function HomeView(props: Props) {
                 await onStartSession(selectedDatasetId);
                 onMoveToStudy();
               }}
-              className="bg-green-600 text-white hover:bg-green-700"
+             
             >
               学習開始
             </Button>
@@ -123,7 +122,7 @@ export default function HomeView(props: Props) {
 
       <div className="grid gap-4 md:grid-cols-2">
         {datasets.map((dataset) => (
-          <Card key={dataset.datasetId} className={selectedDatasetId === dataset.datasetId ? 'border-green-400' : ''}>
+          <Card key={dataset.datasetId} className={selectedDatasetId === dataset.datasetId ? 'border-2 border-[var(--color-accent)]' : ''}>
             <CardHeader>
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -149,7 +148,7 @@ export default function HomeView(props: Props) {
                     await onStartSession(dataset.datasetId);
                     onMoveToStudy();
                   }}
-                  className="bg-green-600 text-white hover:bg-green-700"
+                 
                 >
                   学習開始
                 </Button>

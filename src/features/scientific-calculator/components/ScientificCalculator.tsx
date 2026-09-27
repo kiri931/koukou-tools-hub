@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -63,15 +62,13 @@ export default function ScientificCalculator() {
 
   return (
     <TooltipProvider delayDuration={500} skipDelayDuration={100}>
-      <main className="mx-auto max-w-3xl px-4 py-8 text-slate-900 dark:text-slate-100">
-        <Card className="border-violet-200/80 bg-white/95 dark:border-violet-900/40 dark:bg-slate-900/70">
-          <CardHeader>
-            <CardTitle className="text-2xl">関数電卓</CardTitle>
-            <CardDescription className="text-base">
+      {/* <main> と h1（関数電卓）はページ側（.astro）が持つ。外枠もページの kj-tool-frame が持つので、
+          ここでカードを重ねない。 */}
+      <div className="mx-auto max-w-3xl">
+        <div className="space-y-6">
+            <p className="text-base text-[var(--color-text-muted)]">
               検定の練習に使える電卓です。押した数字はこの端末から出ません。
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+            </p>
             <fieldset>
               <legend className="text-base font-semibold">色</legend>
               <div className="mt-2 flex flex-wrap gap-2">
@@ -85,15 +82,15 @@ export default function ScientificCalculator() {
                       // 選択中は色だけでなく「✓」と太い枠でも示す
                       'min-h-11 rounded-lg border-2 px-4 py-2 text-base font-semibold transition',
                       theme === name
-                        ? 'border-violet-700 bg-violet-700 text-white dark:border-violet-300 dark:bg-violet-300 dark:text-slate-900'
-                        : 'border-slate-400 bg-white text-slate-900 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800'
+                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-[var(--color-on-accent)]'
+                        : 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[var(--color-surface-strong)]'
                     )}
                   >
                     {theme === name ? `✓ ${KEYPAD_THEMES[name].label}` : KEYPAD_THEMES[name].label}
                   </button>
                 ))}
               </div>
-              <p className="mt-1 text-base text-slate-700 dark:text-slate-300">
+              <p className="mt-1 text-base text-[var(--color-text-muted)]">
                 {KEYPAD_THEMES[theme].description}
               </p>
             </fieldset>
@@ -102,15 +99,14 @@ export default function ScientificCalculator() {
               電卓をひらく
             </Button>
 
-            <p className="text-base text-slate-700 dark:text-slate-300">
+            <p className="text-base text-[var(--color-text-muted)]">
               検定と同じ形の問題を解く練習は{' '}
-              <a className="underline" href="/tools/calc-drill/">
+              <a className="text-[var(--color-accent)] underline underline-offset-2" href="/tools/calc-drill/">
                 計算技術検定ドリル
               </a>{' '}
               にあります。同じ電卓を使います。
             </p>
-          </CardContent>
-        </Card>
+        </div>
 
         {open && (
           <FullScreenCalculator
@@ -145,7 +141,7 @@ export default function ScientificCalculator() {
           onOpenChange={(next) => setPanelMode(next ? 'consts' : 'none')}
           onPress={pressButton}
         />
-      </main>
+      </div>
     </TooltipProvider>
   );
 }

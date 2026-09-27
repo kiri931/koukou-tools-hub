@@ -5,6 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+    /* 文字は kj に任せる（Noto Sans JP 優先）。font-sans / font-mono もそちらを指す */
+    --font-sans: var(--kj-font);
+    --font-mono: var(--kj-font-mono);
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
@@ -46,80 +49,53 @@
 }
 
 :root {
+    /*
+     * 色は高校情報の共通CSS（/kj/kj.css）の変数を参照する。
+     * 2026-09-27、サイト全体で色をそろえる決定（案A）により、shadcn の既定値（無彩色の oklch）をやめ、
+     * shadcn の変数名はそのまま残して、中身を kj の変数に向けた（sekigae と同じ形）。
+     * 明暗は kj.css が html.dark / html.light と OS の設定で切り替えるので、ここに .dark の組は要らない。
+     *
+     * 名前の衝突に注意：kj も shadcn も --color-background / --color-accent / --color-border を使う。
+     * 上の @theme inline は bg-background などを var(--background) に直接展開するので、
+     * kj の --color-* と取り違えない。こちらでは --background 側だけを定義する。
+     */
     --radius: 0.625rem;
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --background: var(--color-background);
+    --foreground: var(--color-text);
+    --card: var(--color-surface);
+    --card-foreground: var(--color-text);
+    --popover: var(--color-surface);
+    --popover-foreground: var(--color-text);
+    --primary: var(--color-accent);
+    --primary-foreground: var(--color-on-accent);
+    --secondary: var(--color-surface-strong);
+    --secondary-foreground: var(--color-text);
+    --muted: var(--color-surface-strong);
+    --muted-foreground: var(--color-text-muted);
+    --accent: var(--kj-accent-soft);
+    --accent-foreground: var(--color-text);
+    --destructive: var(--color-danger);
+    --border: var(--kj-divider);        /* 装飾の区切り線 */
+    --input: var(--color-border);       /* 入力欄の枠は意味を持つので 3:1 以上の色 */
+    --ring: var(--color-accent);
+    --chart-1: var(--kj-field-programming);
+    --chart-2: var(--kj-field-data);
+    --chart-3: var(--kj-field-network);
+    --chart-4: var(--kj-field-design);
+    --chart-5: var(--color-warning);
+    --sidebar: var(--color-surface);
+    --sidebar-foreground: var(--color-text);
+    --sidebar-primary: var(--color-accent);
+    --sidebar-primary-foreground: var(--color-on-accent);
+    --sidebar-accent: var(--kj-accent-soft);
+    --sidebar-accent-foreground: var(--color-text);
+    --sidebar-border: var(--kj-divider);
+    --sidebar-ring: var(--color-accent);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
-  body {
-    @apply bg-background text-foreground;
     }
 }
 /* リンクカードのアイコン枠(LinkCard.tsx)。
@@ -135,13 +111,13 @@
   border-radius: 0.5rem;
   background: color-mix(in srgb, var(--chip) 12%, transparent);
   /* 明るい背景では素の色だと 3:1 に届かない色がある(黄など)ので暗い側へ寄せる */
-  color: color-mix(in srgb, var(--chip) 70%, #0f172a);
+  color: color-mix(in srgb, var(--chip) 70%, var(--color-text));
   transition: background-color 0.15s ease;
 }
 
 html.dark .icon-chip {
   background: color-mix(in srgb, var(--chip) 18%, transparent);
-  color: color-mix(in srgb, var(--chip) 75%, #ffffff);
+  color: color-mix(in srgb, var(--chip) 75%, var(--color-text));
 }
 
 .group:hover .icon-chip {
@@ -152,26 +128,34 @@ html.dark .group:hover .icon-chip {
   background: color-mix(in srgb, var(--chip) 28%, transparent);
 }
 
-/* フォーカスリングは操作要素すべてに既定で付ける。
-   個別に focus-visible: を書く方式だと、新しいボタンで必ず付け忘れる。
-   暗幕でまわりを隠すのではなく、対象そのものを縁取る(DADS)。 */
-@layer base {
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible,
-  summary:focus-visible,
-  [tabindex]:not([tabindex='-1']):focus-visible {
-    outline: 2px solid var(--focus-ring);
-    outline-offset: 2px;
-  }
-}
+/* フォーカス表示は kj.css の .kj-body :focus-visible（黒の太枠＋外側の黄色）に任せる。
+   以前ここにあった藍色の outline は、kj と二重になるので消した。 */
 
-:root {
-  --focus-ring: #4f46e5; /* indigo-600。白背景に対して 3:1 以上 */
-}
+/* ------------------------------------------------------------------ */
+/* ページの型（kj の T2〜T4）。部品は kj.css、ここは並べ方だけ          */
+/* ------------------------------------------------------------------ */
 
-.dark {
-  --focus-ring: #a5b4fc; /* indigo-300。暗い背景では明るい側でないと見えない */
-}
+/* パンくず → ラベル → h1 → 説明 → 本体 の縦の並び */
+.th-page { display: flex; flex-direction: column; gap: 32px; padding-top: 8px; padding-bottom: 72px; }
+.th-page-head { display: flex; flex-direction: column; gap: 12px; }
+.th-page-head .kj-lead { margin: 0; }
+.th-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* T4 の本体（kj-tool-frame）の内側の余白。中身の作りはツールごとに違うので、枠と余白だけそろえる */
+.th-tool-body { padding: 16px; }
+@media (min-width: 640px) { .th-tool-body { padding: 24px; } }
+
+/* ツールの説明（「〜について」「使い方」「よくある質問」）。本文は 16px 以上・行間 1.8 */
+.th-about { display: flex; flex-direction: column; gap: 12px; color: var(--color-text); }
+.th-about > h2 { margin: 16px 0 0; font-size: 1.375rem; }
+.th-about > h2:first-child { margin-top: 0; }
+.th-about > h3 { margin: 12px 0 0; font-size: 1.1875rem; }
+.th-about p, .th-about li, .th-about dd { margin: 0; line-height: var(--kj-leading-body); }
+.th-about ul { list-style: disc; padding-left: 1.5em; margin: 0; }
+.th-about ol { list-style: decimal; padding-left: 1.5em; margin: 0; }
+.th-about li + li { margin-top: 0.25em; }
+.th-about dl { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.th-about dt { font-weight: 700; }
+.th-about dd { margin: 0; }
+.th-about a:not([class]) { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+.th-about code { padding: 0.1em 0.4em; border-radius: 6px; background: var(--color-surface-strong); font-family: var(--kj-font-mono); font-size: 0.9em; }

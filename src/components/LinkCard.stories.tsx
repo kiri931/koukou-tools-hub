@@ -40,3 +40,19 @@ export const OtherAccent: Story = {
 export const LightAccent: Story = {
   args: { label: "JavaScript シューティング", desc: "ゲーム形式でJavaScriptを学べます。", accent: "#eab308" },
 };
+
+/** 通信するツールには「共有・送信あり」の印（kj の注意の色：面は --kj-notice-bg、枠は --color-warning） */
+export const WithBadge: Story = {
+  args: { label: "作戦盤", desc: "共有リンクを作ると盤面を送信します。", badge: "共有・送信あり" },
+};
+
+/** ツール一覧の並び（kj-grid）で3枚並べたとき */
+export const InGrid: Story = {
+  render: (args) => (
+    <div className="kj-grid">
+      <LinkCard {...args} />
+      <LinkCard {...args} label="顔モザイクツール" accent="#6366f1" />
+      <LinkCard {...args} label="作戦盤" badge="共有・送信あり" icon={undefined} />
+    </div>
+  ),
+};

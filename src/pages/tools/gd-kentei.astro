@@ -1,20 +1,32 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { Header } from "../../components/Header";
-import GdBackLink from "../../components/GdBackLink.astro";
+import PageHead from "../../components/PageHead.astro";
 import GdDrill from "../../features/gd-kentei/components/GdDrill";
 import "../../styles/global.css";
+
+// safe: まちがえた問題の記録は localStorage にだけ置き、送信はしていない
+// （GdDrill.tsx に fetch は無く、画面にも「サーバーへは送りません」と書いてある）。
 ---
 
 <Layout
   title="グラフィックデザイン検定ドリル - 高校情報"
   description="グラフィックデザイン検定の4択ドリル。企画・写真・編集レイアウト・写真製版・印刷・製本の6分野を、級で絞って1問ずつ解けます。まちがえた問題だけをやり直せます。"
 >
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <Header client:load currentPath={Astro.url.pathname} />
-    <GdBackLink />
-    <GdDrill client:only="react" />
-  </div>
+  <main class="kj-container th-page">
+    <PageHead
+      label="ツール"
+      title="グラフィックデザイン検定ドリル"
+      lead="1問ずつ答えて、その場で正誤と解説を見る練習です。問題はすべて書き下ろしたもので、過去問そのものではありません。"
+      safe={true}
+    >
+      <p class="kj-no-print" style="margin: 0">
+        <a href="/study/graphic-design/">グラフィックデザイン検定 対策へもどる</a>
+      </p>
+    </PageHead>
+    <section aria-label="ツール本体" class="kj-tool-frame th-tool-body">
+      <GdDrill client:only="react" />
+    </section>
+  </main>
   <script
     type="application/ld+json"
     set:html={JSON.stringify({

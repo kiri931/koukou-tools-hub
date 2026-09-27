@@ -4,7 +4,7 @@ import "katex/dist/katex.min.css";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -309,11 +309,23 @@ export default function EquationTransformation() {
   const feedback = resultVisible ? feedbackMessage(score, total) : "";
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8 text-slate-900 dark:text-slate-100">
+    // ページの <main>・h1・説明は pages/study/equation-transformation/index.astro が持つ（kj の T4）。
+    // ここはツール本体の枠（kj-tool-frame）の中身だけ。印刷では h1 がプリントの題になる。
+    <div>
       <style>{`
         @media print {
-          /* サイトのヘッダー・フッター（運営者情報などのリンク）は配布物に要らない */
-          header, footer, .no-print, [data-theme-toggle] { display: none !important; }
+          /* サイトのヘッダー・フッター（運営者情報などのリンク）は配布物に要らない。
+             ページの見出し（<header class="th-page-head">）は紙の題として残すので、素の header では消さない */
+          body > header, body > footer, header[data-kj-header], footer[data-site-footer],
+          .no-print, [data-theme-toggle] { display: none !important; }
+
+          /* kj の型（パンくず → ラベル → h1 → 説明 → 枠）を紙では外す。
+             以前の刷り上がり（題 → 問題）と同じ並び・同じ幅にする */
+          .th-page { gap: 0 !important; padding: 0 !important; }
+          .th-page-head { gap: 0 !important; margin: 0 0 3mm 0 !important; }
+          .th-page-head .kj-lead { display: none !important; }
+          .th-page-head .kj-page-title { font-size: 1.5rem !important; line-height: 1.4 !important; }
+          .kj-tool-frame { border: 0 !important; border-radius: 0 !important; padding: 0 !important; background: #fff !important; overflow: visible !important; }
           [data-slot="sheet-portal"], [data-slot="sheet-overlay"], [data-slot="sheet-content"] { display: none !important; }
           /* 画面用の薄い背景色は紙では要らない（インクの無駄になる） */
           body, body > div, .min-h-screen { background: #fff !important; }
@@ -377,6 +389,9 @@ export default function EquationTransformation() {
           body.print-show-answers .print-answer { display: block !important; }
           body.print-show-explain .print-explain { display: block !important; }
           .katex { color: #000 !important; }
+          /* ダーク表示のまま印刷すると、dark: の明るい文字色（slate-100 など）が白い紙に残って読めなかった
+             （2026-09-27 に移行の前後で PDF を刷って確認）。紙の上の文字は kj の印刷用の文字色にそろえる */
+          .print-root, .print-root *, .th-page-head * { color: var(--color-text) !important; }
           @page { size: A4; margin: 12mm; }
         }
       `}</style>
@@ -384,18 +399,9 @@ export default function EquationTransformation() {
       <div className="print-root">
         <PrintSheet open={printSheetOpen} onOpenChange={setPrintSheetOpen} />
 
-        {/* 印刷時だけ、用紙の先頭に出す */}
-        <p className="print-student-info hidden">
-          等式の変形テスト ／ 氏名：__________________ ／ 学年：____ 組：____ 番：____
-        </p>
-        <Card className="print-title mb-6 border-emerald-200/80 bg-white/95 dark:border-emerald-900/40 dark:bg-slate-900/70">
-          <CardHeader>
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <CardTitle className="text-2xl">等式の変形テスト</CardTitle>
-                <CardDescription>問題バンクからランダム出題（既定10問）</CardDescription>
-              </div>            </div>
-          </CardHeader>
+        {/* 印刷時だけ用紙の先頭に出す氏名欄（.print-student-info）は、題（h1）より前に出すため
+            ページ側（index.astro）に置いた。題と説明もページ側の PageHead が持つ。 */}
+        <Card className="print-title mb-6">
           <CardContent className="space-y-4">
             <div className="no-print">
               <Tabs
@@ -415,7 +421,7 @@ export default function EquationTransformation() {
             </div>
 
             {mode === "input" && (
-              <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-base dark:border-slate-800 dark:bg-slate-950/50">
+              <div className="rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-4 text-base">
                 <h2 className="mb-2 font-semibold text-slate-700 dark:text-slate-200">
                   記述式の答え方
                 </h2>
@@ -432,7 +438,7 @@ export default function EquationTransformation() {
             )}
 
             {history.length > 0 && (
-              <div className="no-print rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+              <div className="no-print rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-4">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                   <h2 className="font-semibold text-slate-700 dark:text-slate-200">
                     この端末に残っている記録
@@ -454,7 +460,7 @@ export default function EquationTransformation() {
               </div>
             )}
 
-            <div className="no-print flex flex-col gap-3 rounded-lg border border-slate-200 p-4 dark:border-slate-800 sm:flex-row sm:items-end">
+            <div className="no-print flex flex-col gap-3 rounded-lg border border-[var(--kj-divider)] p-4 sm:flex-row sm:items-end">
               <div className="w-full sm:w-44">
                 <label htmlFor="equation-count" className="mb-1 block text-base font-medium">
                   出題数（1〜{MAX_COUNT}）
@@ -479,7 +485,7 @@ export default function EquationTransformation() {
             </div>
 
             {resultVisible && (
-              <div className="no-print rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+              <div className="no-print rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-4">
                 <div className="mb-2 flex items-center gap-2">
                   <Badge variant="secondary" className="font-mono">
                     {score} / {total}
@@ -508,7 +514,7 @@ export default function EquationTransformation() {
             return (
               <Card
                 key={`${item.id}-${index}`}
-                className="print-card gap-4 border-slate-200 bg-white/95 py-4 dark:border-slate-800 dark:bg-slate-900/70"
+                className="print-card gap-4 py-4"
               >
                 <CardHeader className="gap-3 px-4 pb-0 sm:px-6">
                   <div className="flex items-center justify-between gap-2">
@@ -516,7 +522,7 @@ export default function EquationTransformation() {
                     {graded && (
                       <Badge
                         variant={isCorrect ? "default" : "destructive"}
-                        className={cn(isCorrect ? "bg-emerald-600 hover:bg-emerald-600" : "")}
+                        className={cn(isCorrect ? "bg-[var(--color-success)] text-[var(--color-on-success)] hover:bg-[var(--color-success)]" : "")}
                       >
                         {isCorrect ? "正解" : "不正解"}
                       </Badge>
@@ -542,11 +548,11 @@ export default function EquationTransformation() {
                             key={`${item.id}-${choice}-${choiceIndex}`}
                             className={cn(
                               "flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 text-base transition",
-                              "border-slate-200 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/50",
+                              "border-[var(--kj-divider)] hover:bg-[var(--color-surface-strong)]",
                               showCorrect &&
-                                "border-emerald-300 bg-emerald-50/80 dark:border-emerald-800 dark:bg-emerald-950/30",
+                                "border-[var(--color-success)] bg-[var(--kj-success-soft)] hover:bg-[var(--kj-success-soft)]",
                               showWrong &&
-                                "border-rose-300 bg-rose-50/80 dark:border-rose-800 dark:bg-rose-950/30"
+                                "border-[var(--color-danger)] bg-[var(--kj-danger-soft)] hover:bg-[var(--kj-danger-soft)]"
                             )}
                           >
                             <RadioGroupItem value={choice} disabled={graded} className="mt-1" />
@@ -572,11 +578,11 @@ export default function EquationTransformation() {
                         className={cn(
                           graded &&
                             isCorrect &&
-                            "border-emerald-400 bg-emerald-50 text-emerald-900 dark:border-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-100",
+                            "border-[var(--color-success)] bg-[var(--kj-success-soft)] text-[var(--color-text)]",
                           graded &&
                             !isCorrect &&
                             selected &&
-                            "border-rose-400 bg-rose-50 text-rose-900 dark:border-rose-700 dark:bg-rose-950/30 dark:text-rose-100"
+                            "border-[var(--color-danger)] bg-[var(--kj-danger-soft)] text-[var(--color-text)]"
                         )}
                       />
                     </div>
@@ -585,26 +591,26 @@ export default function EquationTransformation() {
                   {graded && (mode === "input" || selected) && !isCorrect && (
                     <div className="no-print mt-3 space-y-1 text-base">
                       {mode === "input" && selected && (
-                        <p className="text-rose-700 dark:text-rose-300">
+                        <p className="text-[var(--color-danger)]">
                           あなたの解答: <MathChoice text={selected} />
                         </p>
                       )}
                       {verdict?.note && (
-                        <p className="text-rose-700 dark:text-rose-300">{verdict.note}</p>
+                        <p className="text-[var(--color-danger)]">{verdict.note}</p>
                       )}
-                      <p className="text-rose-700 dark:text-rose-300">
+                      <p className="text-[var(--color-danger)]">
                         正解: <MathChoice text={item.answer} />
                       </p>
                     </div>
                   )}
 
                   {graded && isCorrect && mode === "input" && selected && (
-                    <div className="no-print mt-3 space-y-1 text-base text-emerald-700 dark:text-emerald-300">
+                    <div className="no-print mt-3 space-y-1 text-base text-[var(--color-success)]">
                       <p>
                         正解！ <MathChoice text={selected} />
                       </p>
                       {verdict?.differsFromModel && (
-                        <p className="text-slate-600 dark:text-slate-400">
+                        <p className="text-[var(--color-text-muted)]">
                           値が同じなので正解です。模範解答は <MathChoice text={item.answer} />{" "}
                           でした。見比べてみてください。
                         </p>
@@ -617,7 +623,7 @@ export default function EquationTransformation() {
                   </p>
 
                   <details
-                    className="no-print mt-4 rounded-lg border border-slate-200 bg-slate-50/80 p-3 dark:border-slate-800 dark:bg-slate-950/50"
+                    className="no-print mt-4 rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-3"
                     open={graded}
                   >
                     <summary className="cursor-pointer text-base font-medium text-slate-700 dark:text-slate-200">
@@ -653,7 +659,7 @@ export default function EquationTransformation() {
         </div>
 
         {/* 使い方とFAQは、解き終わった人だけが読めばよいので畳んでおく */}
-        <details className="no-print mb-6 rounded-lg border border-slate-300 bg-white/95 p-4 dark:border-slate-800 dark:bg-slate-900/70">
+        <details className="no-print mb-6 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
           <summary className="cursor-pointer text-lg font-semibold text-slate-900 dark:text-slate-100">
             使い方とよくある質問
           </summary>
@@ -665,7 +671,7 @@ export default function EquationTransformation() {
               <li>「出題を更新」でランダムに新しい問題へ切り替え、「印刷」でA4プリントとして配布する</li>
             </ol>
 
-            <div className="rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+            <div className="rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-4">
               <h2 className="mb-2 font-semibold text-slate-700 dark:text-slate-200">
                 この単元とのつながり
               </h2>
@@ -723,6 +729,6 @@ export default function EquationTransformation() {
         </details>
 
       </div>
-    </main>
+    </div>
   );
 }

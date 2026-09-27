@@ -27,11 +27,11 @@ export default function SelectField<T extends string>({
 }: SelectFieldProps<T>) {
   return (
     <label className="flex items-center gap-2">
-      <span className="text-base text-slate-700 dark:text-slate-300">{label}</span>
+      <span className="text-base text-[var(--color-text-muted)]">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        className="min-h-11 rounded-lg border border-slate-500 bg-white px-3 text-base font-semibold text-slate-900 dark:border-slate-400 dark:bg-slate-900 dark:text-slate-100"
+        className="min-h-11 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-base font-semibold text-[var(--color-text)]"
       >
         {options.map((option) => (
           <option key={option} value={option}>

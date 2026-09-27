@@ -36,7 +36,7 @@ export default function InputTipsMode({ choice }: InputTipsModeProps) {
 
   if (tips.length === 0) {
     return (
-      <p className="rounded-lg border border-slate-300 p-4 text-base dark:border-slate-700">
+      <p className="rounded-lg border border-[var(--color-border)] p-4 text-base">
         {choice.level}・{choice.category} で気をつける入力は、いまのところありません。
         級か分野を変えてみてください。
       </p>
@@ -45,7 +45,7 @@ export default function InputTipsMode({ choice }: InputTipsModeProps) {
 
   return (
     <div className="space-y-3">
-      <p className="text-base text-slate-600 dark:text-slate-300">
+      <p className="text-base text-[var(--color-text-muted)]">
         {choice.level}・{choice.category} で、そのまま左から打つと別の式になるものです。
       </p>
 
@@ -55,7 +55,7 @@ export default function InputTipsMode({ choice }: InputTipsModeProps) {
           return (
             <li
               key={tip.id}
-              className="rounded-lg border border-slate-400 bg-white dark:border-slate-600 dark:bg-slate-900"
+              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]"
             >
               <button
                 type="button"
@@ -69,12 +69,12 @@ export default function InputTipsMode({ choice }: InputTipsModeProps) {
               </button>
 
               {open && (
-                <div className="space-y-2 border-t border-slate-300 px-3 py-2 text-base dark:border-slate-700">
+                <div className="space-y-2 border-t border-[var(--kj-divider)] px-3 py-2 text-base">
                   <p>
                     <span className="font-bold">紙の書き方：</span>
                     <MathText>{tip.written}</MathText>
                   </p>
-                  <p className="text-rose-900 dark:text-rose-300">
+                  <p className="text-[var(--color-danger)]">
                     <span className="font-bold">そのまま打つと：</span>
                     {tip.naive}
                   </p>
@@ -87,7 +87,7 @@ export default function InputTipsMode({ choice }: InputTipsModeProps) {
                     {tip.keys.map((key, i) => (
                       <span
                         key={i}
-                        className="rounded border border-slate-500 px-1.5 py-0.5 font-mono text-base"
+                        className="rounded border border-[var(--color-border)] px-1.5 py-0.5 font-mono text-base"
                       >
                         {KEY_LABELS[key] ?? key}
                       </span>

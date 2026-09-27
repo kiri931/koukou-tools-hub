@@ -1,19 +1,22 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/Header";
-import GdBackLink from "../../../components/GdBackLink.astro";
+import PageHead from "../../../components/PageHead.astro";
 import GdLevelGuide from "../../../features/gd-kentei/components/GdLevelGuide";
 import { levelGuides } from "../../../features/gd-kentei/data/levels";
 import "../../../styles/global.css";
+
+// 見出し（h1）はここで SSR する。GdLevelGuide は本文だけを出す。
+// 想定の程度と試験の形は本文の最初の表に出るので、説明（lead）には重ねない。
+const guide = levelGuides["3"];
 ---
 
 <Layout
   title="3級で問われること - グラフィックデザイン検定 - 高校情報"
   description="グラフィックデザイン検定3級の出題の傾向。3級は用語型が62%。用語を覚えれば届きます。合格率は4年とも65〜78%。想定は高校1学年終了程度、筆記60分のみ。"
+  width="text"
 >
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <Header client:load currentPath={Astro.url.pathname} />
-    <GdBackLink />
-    <GdLevelGuide guide={levelGuides["3"]} client:only="react" />
-  </div>
+  <main class="kj-container kj-container--text th-page">
+    <PageHead label="学習ガイド" title={`${guide.label}で問われること`} />
+    <GdLevelGuide guide={guide} client:only="react" />
+  </main>
 </Layout>

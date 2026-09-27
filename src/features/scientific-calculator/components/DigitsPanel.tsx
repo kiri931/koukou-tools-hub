@@ -64,7 +64,7 @@ export default function DigitsPanel({
               </Button>
             ))}
           </div>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
+          <p className="text-base text-[var(--color-text-muted)]">
             例: Sci3 なら −233 は −2.33E2 と出ます。
           </p>
         </div>

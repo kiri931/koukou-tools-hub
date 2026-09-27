@@ -30,18 +30,18 @@ export default function WeakKeySummary({
   const top = topMisses(missCounts, 4);
 
   return (
-    <div className="mt-6 rounded-lg border border-slate-300 p-3 dark:border-slate-800">
-      <p className="text-base font-semibold text-slate-900 dark:text-slate-100">
+    <div className="mt-6 rounded-lg border border-[var(--color-border)] p-3">
+      <p className="text-base font-semibold text-[var(--color-text)]">
         つまずいたキー
       </p>
       <ul className="mt-2 flex flex-wrap gap-2">
         {top.map(({ action, count }) => (
           <li
             key={action}
-            className="flex items-center gap-1.5 rounded-md border border-slate-300 px-2 py-1 dark:border-slate-700"
+            className="flex items-center gap-1.5 rounded-md border border-[var(--color-border)] px-2 py-1"
           >
             <span className="font-mono text-base font-bold">{ACTION_LABELS[action] ?? action}</span>
-            <span className="text-base text-slate-600 dark:text-slate-300">{count} 回</span>
+            <span className="text-base text-[var(--color-text-muted)]">{count} 回</span>
           </li>
         ))}
       </ul>
@@ -59,7 +59,7 @@ export default function WeakKeySummary({
           記録を消す
         </Button>
       </div>
-      <p className="mt-2 text-base text-slate-600 dark:text-slate-300">
+      <p className="mt-2 text-base text-[var(--color-text-muted)]">
         この記録はこの端末の中だけに残ります。先生や外部に送られることはありません。
       </p>
     </div>

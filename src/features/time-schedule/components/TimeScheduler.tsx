@@ -132,7 +132,7 @@ function Clock({ tasks, totalTime, elapsedMs, isRunning }: ClockProps) {
         <line
           key={i}
           x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
-          stroke={t.major ? '#94a3b8' : '#475569'}
+          style={{ stroke: 'var(--color-text-muted)' }}
           strokeWidth={t.major ? 1.5 : 1}
         />
       ))}
@@ -154,7 +154,7 @@ function Clock({ tasks, totalTime, elapsedMs, isRunning }: ClockProps) {
         x={CX} y={CY + 20}
         textAnchor="middle"
         dominantBaseline="middle"
-        fill="#64748b"
+        fill="#94a3b8"
         fontSize="12"
         fontFamily="sans-serif"
       >
@@ -179,11 +179,11 @@ export default function TimeScheduler() {
   const elapsedSec = Math.floor((elapsedMs % 60000) / 1000);
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8 text-slate-900 dark:text-slate-100">
-      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">タイムスケジューラ</h1>
+    // ページの <main>・h1 と、幅・余白は pages/tools/time-schedule.astro が持つ（kj の T4）。
+    <div>
+      <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
         <div className="flex items-center gap-4">
-          <span className="text-sm text-slate-600 dark:text-slate-400 whitespace-nowrap">合計時間: {totalTime}分</span>
+          <span className="text-base text-[var(--color-text-muted)] whitespace-nowrap">合計時間: {totalTime}分</span>
           <div className="w-40">
             <Slider
               min={10}
@@ -214,7 +214,12 @@ export default function TimeScheduler() {
             </span>
             {currentTask && (
               <div className="mt-1">
-                <Badge style={{ backgroundColor: currentTask.color }} className="text-white border-0">
+                <Badge variant="outline" className="gap-1.5 text-base">
+                  <span
+                    aria-hidden="true"
+                    className="inline-block h-3 w-3 rounded-full"
+                    style={{ backgroundColor: currentTask.color }}
+                  />
                   {currentTask.name}
                 </Badge>
               </div>
@@ -229,7 +234,7 @@ export default function TimeScheduler() {
           {/* Timer controls */}
           <div className="flex gap-2">
             {(!isRunning || isPaused) && (
-              <Button onClick={start} size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Button onClick={start} size="sm">
                 ▶ {isPaused ? '再開' : '開始'}
               </Button>
             )}
@@ -253,7 +258,7 @@ export default function TimeScheduler() {
           </CardHeader>
           <CardContent className="space-y-2">
             {tasks.length === 0 && (
-              <p className="text-sm text-slate-600 dark:text-slate-400 py-4 text-center">
+              <p className="text-base text-[var(--color-text-muted)] py-4 text-center">
                 タスクを追加してください
               </p>
             )}
@@ -263,13 +268,13 @@ export default function TimeScheduler() {
                 key={task.id}
                 className={`flex items-center gap-2 rounded-lg border p-2 transition-colors ${
                   index === currentTaskIndex && isRunning
-                    ? 'border-indigo-500/60 bg-indigo-500/10'
+                    ? 'border-[var(--color-accent)] bg-[var(--color-surface-strong)]'
                     : 'border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50'
                 } ${
-                  dragOverId === task.id ? 'ring-2 ring-indigo-500/60 bg-slate-100 dark:bg-slate-800/80' : ''
+                  dragOverId === task.id ? 'ring-2 ring-[var(--color-accent)] bg-slate-100 dark:bg-slate-800/80' : ''
                 } ${
                   draggingId === task.id
-                    ? 'opacity-80 scale-[0.99] shadow-lg shadow-indigo-500/10 border-indigo-500/40'
+                    ? 'opacity-80 scale-[0.99] shadow-lg shadow-indigo-500/10 border-[var(--color-accent)]'
                     : ''
                 }`}
                 onDragOver={(e) => {
@@ -293,7 +298,7 @@ export default function TimeScheduler() {
                 <button
                   type="button"
                   className={`cursor-grab select-none text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 active:cursor-grabbing ${
-                    draggingId === task.id ? 'text-indigo-300' : ''
+                    draggingId === task.id ? 'text-[var(--color-accent)]' : ''
                   }`}
                   draggable={!(isRunning && !isPaused)}
                   onDragStart={(e) => {
@@ -320,6 +325,7 @@ export default function TimeScheduler() {
                     style={{ backgroundColor: task.color }}
                     onClick={() => setColorPickerOpen(colorPickerOpen === task.id ? null : task.id)}
                     title="色を変更"
+                    aria-label="色を変更"
                   />
                   {colorPickerOpen === task.id && (
                     <div className="absolute left-0 top-8 z-10 flex flex-wrap gap-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 shadow-xl w-[112px]">
@@ -329,8 +335,10 @@ export default function TimeScheduler() {
                           className="h-6 w-6 rounded-full border-2 transition-transform hover:scale-110"
                           style={{
                             backgroundColor: c,
-                            borderColor: task.color === c ? 'white' : 'transparent',
+                            borderColor: task.color === c ? 'var(--color-text)' : 'transparent',
                           }}
+                          aria-label={`色 ${c}`}
+                          aria-pressed={task.color === c}
                           onClick={() => {
                             updateTask(task.id, { color: c });
                             setColorPickerOpen(null);
@@ -345,7 +353,7 @@ export default function TimeScheduler() {
                 <Input
                   value={task.name}
                   onChange={(e) => updateTask(task.id, { name: e.target.value })}
-                  className="h-7 flex-1 border-slate-300 dark:border-slate-700 bg-transparent text-slate-800 dark:text-slate-200 text-sm focus-visible:ring-indigo-500"
+                  className="h-7 flex-1 border-slate-300 dark:border-slate-700 bg-transparent text-slate-800 dark:text-slate-200 text-sm focus-visible:ring-[var(--color-accent)]"
                   disabled={isRunning && !isPaused}
                 />
 
@@ -357,7 +365,7 @@ export default function TimeScheduler() {
                     max={480}
                     value={task.duration}
                     onChange={(e) => updateTask(task.id, { duration: Math.max(1, Number(e.target.value)) })}
-                    className="w-14 rounded-md border border-slate-300 dark:border-slate-700 bg-transparent px-1.5 py-1 text-center text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-14 rounded-md border border-slate-300 dark:border-slate-700 bg-transparent px-1.5 py-1 text-center text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]"
                     disabled={isRunning && !isPaused}
                   />
                   <span className="text-xs text-slate-600 dark:text-slate-400">分</span>
@@ -367,7 +375,7 @@ export default function TimeScheduler() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 w-7 p-0 text-slate-600 dark:text-slate-400 hover:text-red-400 flex-shrink-0"
+                  className="h-7 w-7 p-0 text-slate-600 dark:text-slate-400 hover:text-[var(--color-danger)] flex-shrink-0"
                   onClick={() => deleteTask(task.id)}
                   disabled={isRunning && !isPaused}
                   title="削除"
@@ -390,7 +398,7 @@ export default function TimeScheduler() {
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-indigo-500 transition-all"
+                    className="h-full rounded-full bg-[var(--color-accent)] transition-all"
                     style={{
                       width: `${Math.min(100, (tasks.reduce((s, t) => s + t.duration, 0) / totalTime) * 100)}%`,
                     }}
@@ -403,7 +411,7 @@ export default function TimeScheduler() {
               onClick={addTask}
               variant="outline"
               size="sm"
-              className="mt-2 w-full border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-500/50 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="mt-2 w-full border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-[var(--color-accent)] hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
               disabled={isRunning && !isPaused}
             >
               + タスク追加
@@ -411,6 +419,6 @@ export default function TimeScheduler() {
           </CardContent>
         </Card>
       </div>
-    </main>
+    </div>
   );
 }

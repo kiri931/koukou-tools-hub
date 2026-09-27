@@ -1,6 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/Header";
+import PageHead from "../../../components/PageHead.astro";
 import { EquationTransformation } from "../../../features/equation-transformation";
 import "../../../styles/global.css";
 ---
@@ -9,10 +9,20 @@ import "../../../styles/global.css";
   title="等式の変形テスト - 高校情報"
   description="等式の変形テスト。高校数学の方程式・不等式を変形するドリル形式の学習ツール。ブラウザ上で動作。"
 >
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <Header client:load currentPath={Astro.url.pathname} />
-    <EquationTransformation client:only="react" />
-  </div>
+  <main class="kj-container th-page">
+    {/* 印刷時だけ、用紙の先頭（題より前）に出す氏名欄。出す・出さないは印刷の設定（PrintSheet）が body のクラスで決める */}
+    <p class="print-student-info hidden">
+      等式の変形テスト ／ 氏名：__________________ ／ 学年：____ 組：____ 番：____
+    </p>
+    <PageHead
+      label="ツール"
+      title="等式の変形テスト"
+      lead="問題バンクからランダム出題（既定10問）"
+    />
+    <section aria-label="ツール本体" class="kj-tool-frame th-tool-body">
+      <EquationTransformation client:only="react" />
+    </section>
+  </main>
   <script
     type="application/ld+json"
     set:html={JSON.stringify({

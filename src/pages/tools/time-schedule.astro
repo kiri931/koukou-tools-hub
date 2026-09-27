@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { Header } from '../../components/Header';
+import PageHead from '../../components/PageHead.astro';
 import { TimeScheduler } from '../../features/time-schedule';
 import '../../styles/global.css';
 ---
@@ -9,46 +9,53 @@ import '../../styles/global.css';
   title="タイムスケジューラ - 高校情報"
   description="円形タイムスケジューラ。視覚的な円形クロックでタスクと時間を管理。タイマー機能付き。データはブラウザのlocalStorageに保存されます。"
 >
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <Header client:load currentPath={Astro.url.pathname} />
+  <main class="kj-container th-page">
+    <PageHead
+      label="ツール"
+      title="タイムスケジューラ"
+      lead="円形クロック上にタスク時間を割り当て、学習や作業の時間配分を視覚的に確認できるツールです。"
+      safe={true}
+    />
+    <section aria-label="ツール本体" class="kj-tool-frame th-tool-body">
       <TimeScheduler client:only="react" />
-      <section class="mx-auto mt-8 max-w-5xl px-4 pb-12 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">タイムスケジューラについて</h2>
-        <p class="mt-3">
-          円形クロック上にタスク時間を割り当て、学習や作業の時間配分を視覚的に確認できるツールです。タイマー機能を使って進捗を追跡でき、
-          設定内容はlocalStorageに保存されるため、次回アクセス時にも続きから利用できます。
-        </p>
+    </section>
+    <section class="th-about">
+      <h2>タイムスケジューラについて</h2>
+      <p>
+        円形クロック上にタスク時間を割り当て、学習や作業の時間配分を視覚的に確認できるツールです。タイマー機能を使って進捗を追跡でき、
+        設定内容はlocalStorageに保存されるため、次回アクセス時にも続きから利用できます。
+      </p>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">使い方</h2>
-        <ol class="mt-2 list-decimal space-y-1 pl-5">
-          <li>タスク名と時間を入力してスケジュールを作成します。</li>
-          <li>円形表示で全体配分を確認し、必要に応じて調整します。</li>
-          <li>タイマーを開始して、予定どおり進行しているか確認します。</li>
-        </ol>
+      <h2>使い方</h2>
+      <ol>
+        <li>タスク名と時間を入力してスケジュールを作成します。</li>
+        <li>円形表示で全体配分を確認し、必要に応じて調整します。</li>
+        <li>タイマーを開始して、予定どおり進行しているか確認します。</li>
+      </ol>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">仕様・対応環境</h2>
-        <ul class="mt-2 list-disc space-y-1 pl-5">
-          <li>処理はブラウザ内で完結し、サーバーへ入力内容は送信しません。</li>
-          <li>データはlocalStorageに保存されます。</li>
-          <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
-        </ul>
+      <h2>仕様・対応環境</h2>
+      <ul>
+        <li>処理はブラウザ内で完結し、サーバーへ入力内容は送信しません。</li>
+        <li>データはlocalStorageに保存されます。</li>
+        <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
+      </ul>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">注意事項</h2>
-        <p class="mt-2">端末やブラウザ設定を初期化すると保存データが消える場合があります。</p>
+      <h2>注意事項</h2>
+      <p>端末やブラウザ設定を初期化すると保存データが消える場合があります。</p>
 
-        <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">よくある質問</h2>
-        <dl class="mt-2 space-y-2">
-          <div>
-            <dt class="font-medium text-slate-900 dark:text-slate-100">Q. データは共有されますか？</dt>
-            <dd>A. 共有されません。保存先は利用中のブラウザ内のみです。</dd>
-          </div>
-          <div>
-            <dt class="font-medium text-slate-900 dark:text-slate-100">Q. スマホでも使えますか？</dt>
-            <dd>A. 利用できますが、操作性はPCブラウザの方が安定します。</dd>
-          </div>
-        </dl>
-      </section>
-    </div>
+      <h2>よくある質問</h2>
+      <dl>
+        <div>
+          <dt>Q. データは共有されますか？</dt>
+          <dd>A. 共有されません。保存先は利用中のブラウザ内のみです。</dd>
+        </div>
+        <div>
+          <dt>Q. スマホでも使えますか？</dt>
+          <dd>A. 利用できますが、操作性はPCブラウザの方が安定します。</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
     <script
       type="application/ld+json"
       set:html={JSON.stringify({

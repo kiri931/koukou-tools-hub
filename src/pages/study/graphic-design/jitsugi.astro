@@ -1,7 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/Header";
-import GdBackLink from "../../../components/GdBackLink.astro";
+import PageHead from "../../../components/PageHead.astro";
 import "../../../styles/global.css";
 
 // 1級実技の練習課題。配布物は public/study/graphic-design/ の下に置いた静的ファイル。
@@ -20,86 +19,85 @@ const files = [
 <Layout
 	title="1級実技の練習課題 - グラフィックデザイン検定 - 高校情報"
 	description="グラフィックデザイン検定1級の実技試験の類題。指示書・指示図・支給データ・自己採点チェックリストを一式で配布します。テーマは「日本の伝統色」。"
+	width="text"
 >
-	<div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-		<Header client:load currentPath={Astro.url.pathname} />
-		<GdBackLink />
-		<main class="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-			<p class="text-sm font-medium text-slate-600 dark:text-slate-400">グラフィックデザイン検定</p>
-			<h1
-				class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50"
-			>
-				1級実技の練習課題
-			</h1>
-			<p class="mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-300">
+	<main class="kj-container kj-container--text th-page">
+		<PageHead label="練習課題" title="1級実技の練習課題">
+			<p class="kj-lead">
 				1級の実技試験は、支給された文字・イラスト・写真を、指示書と指示図のとおりにA4へ配置する課題です。
-				ここに置いてあるのは、その形をそのまま踏襲して作った<strong
-					class="font-bold text-slate-900 dark:text-slate-50">練習用の類題</strong
-				>です。テーマは「日本の伝統色」。
-				<strong class="font-bold text-slate-900 dark:text-slate-50"
-					>過去問そのものではなく、文章・図・画像はすべて書き下ろし・自作です。</strong
-				>
+				ここに置いてあるのは、その形をそのまま踏襲して作った<strong>練習用の類題</strong>です。テーマは「日本の伝統色」。
+				<strong>過去問そのものではなく、文章・図・画像はすべて書き下ろし・自作です。</strong>
 			</p>
+		</PageHead>
 
-			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">配布物</h2>
-			<ul class="mt-4 space-y-3">
+		<section class="th-about" aria-labelledby="gd-files">
+			<h2 id="gd-files">配布物</h2>
+			<ul class="th-gd-files">
 				{
 					files.map((file) => (
-						<li class="rounded-lg border border-slate-300 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-							<a
-								href={file.href}
-								class="text-base font-bold text-sky-800 underline underline-offset-4 hover:no-underline dark:text-sky-300"
-							>
+						<li class="kj-card">
+							<a href={file.href} class="th-gd-file-link">
 								{file.label}
 							</a>
-							<p class="mt-1 text-base text-slate-700 dark:text-slate-300">{file.desc}</p>
+							<p class="kj-card__text">{file.desc}</p>
 						</li>
 					))
 				}
 			</ul>
+		</section>
 
-			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">進め方</h2>
-			<ol
-				class="mt-4 list-decimal space-y-2 pl-5 text-base leading-relaxed text-slate-800 dark:text-slate-200"
-			>
+		<section class="th-about" aria-labelledby="gd-steps">
+			<h2 id="gd-steps">進め方</h2>
+			<ol>
 				<li>指示書を15分で読む。読むだけで、まだ作らない。</li>
 				<li>90分で作る。本番と同じ時間配分です。</li>
 				<li>原寸・カラー・トンボ付きで出力する。</li>
 				<li>チェックリストで自己採点する。</li>
 			</ol>
+		</section>
 
-			<h2 class="mt-12 text-2xl font-bold text-slate-900 dark:text-slate-50">本番との違い</h2>
-			<ul
-				class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-slate-800 dark:text-slate-200"
-			>
+		<section class="th-about" aria-labelledby="gd-diff">
+			<h2 id="gd-diff">本番との違い</h2>
+			<ul>
 				<li>
 					本番の支給データは illust が jpg と eps、image が tif と jpg です。ここでは svg・png・jpg
-					にしています。<strong class="font-bold">練習の中身（配置と文字組版）は変わりません。</strong>
+					にしています。<strong>練習の中身（配置と文字組版）は変わりません。</strong>
 				</li>
 				<li>書体は本番では会場ごとに指定されます。ここでは手元の明朝体とゴシック体を1つずつ選び、作品全体で統一してください。</li>
 				<li>主催団体名は本番の団体名ではなく、練習用の名前にしてあります。</li>
 			</ul>
+		</section>
 
-			<div
-				class="mt-10 rounded-lg border border-amber-400 bg-amber-50 p-6 dark:border-amber-700 dark:bg-amber-950"
-			>
-				<h2 class="text-xl font-bold text-amber-950 dark:text-amber-100">採点について</h2>
-				<p class="mt-2 text-base leading-relaxed text-amber-950 dark:text-amber-100">
+		<section class="kj-notice" aria-labelledby="gd-grading">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; color: var(--color-warning)"><path d="M12 3 2 21h20L12 3z"></path><line x1="12" y1="10" x2="12" y2="14"></line></svg>
+			<div>
+				<h2 id="gd-grading" class="kj-notice__title th-gd-notice-title">採点について</h2>
+				<p class="th-gd-notice-text">
 					自動採点はしません。Illustrator や InDesign の成果物を画面で採点するのは無理があるためです。
 					代わりに自己採点チェックリストを付けました。
-					<strong class="font-bold">「すべてが配置されていれば合格」ではありません。</strong>
+					<strong>「すべてが配置されていれば合格」ではありません。</strong>
 					配置だけでなく、文字組版の精度や寸法の正確さも見られます。1つずつ測って確かめてください。
 				</p>
 			</div>
+		</section>
 
-			<p class="mt-10 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-				課題の形は、公益社団法人 全国工業高等学校長協会が公開している<a
-					href="https://zenkoukyo.or.jp/index_kentei/exam_result/"
-					target="_blank"
-					rel="noreferrer noopener"
-					class="mx-1 underline underline-offset-2 hover:no-underline">検定試験の実施結果</a
-				>に載っている実技試験の構成を参考にしています。指示書の文言・題材・支給データはすべて書き下ろしたもので、過去問は掲載していません。
-			</p>
-		</main>
-	</div>
+		<p class="th-gd-note">
+			課題の形は、公益社団法人 全国工業高等学校長協会が公開している<a
+				href="https://zenkoukyo.or.jp/index_kentei/exam_result/"
+				target="_blank"
+				rel="noreferrer noopener">検定試験の実施結果</a
+			>に載っている実技試験の構成を参考にしています。指示書の文言・題材・支給データはすべて書き下ろしたもので、過去問は掲載していません。
+		</p>
+	</main>
 </Layout>
+
+<style>
+	/* 配布物はカードを縦に並べる。リンクは kj のアクセント色＋下線（色だけで区別しない） */
+	.th-gd-files { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+	.th-about .th-gd-files li + li { margin-top: 0; }
+	.th-gd-file-link { color: var(--color-accent); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+	.th-gd-file-link:hover { text-decoration: none; }
+	.th-gd-notice-title { margin: 0; font-size: 1.25rem; }
+	.th-gd-notice-text { margin: 4px 0 0; line-height: var(--kj-leading-body); }
+	.th-gd-note { margin: 0; color: var(--color-text-muted); line-height: var(--kj-leading-body); }
+</style>

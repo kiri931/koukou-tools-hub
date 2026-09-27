@@ -1,57 +1,70 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Header } from '../components/Header';
+import PageHead from '../components/PageHead.astro';
 import '../styles/global.css';
 ---
 
 <Layout
   title="運営者情報 - 高校情報"
   description="高校情報の運営者情報ページ。サイトの目的、免責事項、連絡先を掲載しています。"
+  width="text"
 >
-  <div class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-    <Header client:load currentPath={Astro.url.pathname} />
-
-    <main class="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-      <section class="rounded-2xl border border-slate-300 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 sm:p-8">
-        <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">運営者情報</h1>
-        <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          本サイト「高校情報」は、高校の情報科の授業や自学習で使えるツールを提供することを目的として運営しています。
-          できるだけブラウザ内で完結する設計を採用し、授業現場でも扱いやすい形を目指しています。
-        </p>
-
-        <div class="mt-8 space-y-6 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-          <section>
-            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">サイト名・運営者</h2>
-            <p class="mt-2">サイト名：高校情報</p>
-            <p>運営者：足立左瑛佳</p>
-          </section>
-
-          <section>
-            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">サイトの目的</h2>
-            <p class="mt-2">
-              情報科の授業で利用しやすい学習ツールや、日常業務で使える補助ツールを無償で公開しています。
-              操作のしやすさと、学習内容の定着につながる実用性を重視しています。
-            </p>
-          </section>
-
-          <section>
-            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">免責事項</h2>
-            <p class="mt-2">
-              本サイトの内容は正確性・安全性の確保に努めていますが、完全性を保証するものではありません。
-              本サイトの利用により生じた損害について、運営者は責任を負いかねます。授業や業務で利用する際は、事前に内容をご確認ください。
-            </p>
-          </section>
-
-          <section>
-            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">連絡先</h2>
-            <p class="mt-2">
-              不具合報告や機能要望は、<a class="text-indigo-600 underline underline-offset-4 dark:text-indigo-300" href="/support/feature-request">お問い合わせフォーム</a>からお送りください。
-            </p>
-          </section>
-        </div>
-
-        <p class="mt-8 text-xs text-slate-500 dark:text-slate-500">最終更新日：2026年3月2日</p>
+  {/* T3（記事）。本文幅（text）で、枠で囲まずに読ませる */}
+  <main class="kj-container kj-container--text th-page">
+    <PageHead
+      title="運営者情報"
+      lead="本サイト「高校情報」は、高校の情報科の授業や自学習で使えるツールを提供することを目的として運営しています。できるだけブラウザ内で完結する設計を採用し、授業現場でも扱いやすい形を目指しています。"
+    />
+    <div class="th-about legal-body">
+      <section>
+        <h2>サイト名・運営者</h2>
+        <p>サイト名：高校情報</p>
+        <p>運営者：高校情報（koukou-jouhou.org）</p>
       </section>
-    </main>
-  </div>
+
+      <section>
+        <h2>サイトの目的</h2>
+        <p>
+          情報科の授業で利用しやすい学習ツールや、日常業務で使える補助ツールを無償で公開しています。
+          操作のしやすさと、学習内容の定着につながる実用性を重視しています。
+        </p>
+      </section>
+
+      <section>
+        <h2>免責事項</h2>
+        <p>
+          本サイトの内容は正確性・安全性の確保に努めていますが、完全性を保証するものではありません。
+          本サイトの利用により生じた損害について、運営者は責任を負いかねます。授業や業務で利用する際は、事前に内容をご確認ください。
+        </p>
+      </section>
+
+      <section>
+        <h2>連絡先</h2>
+        <p>
+          不具合報告や機能要望は、<a href="/support/feature-request/">お問い合わせフォーム</a>からお送りください。
+        </p>
+      </section>
+      <p class="legal-updated">最終更新日：2026年3月2日</p>
+    </div>
+  </main>
 </Layout>
+
+<style>
+  /* 各項（section）の間をあける。見出し・本文の色と大きさは th-about（global.css）が持つ */
+  .legal-body > :global(section) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .legal-body > :global(section + section) {
+    margin-top: 16px;
+  }
+  .legal-body :global(section > h2) {
+    margin: 0;
+    font-size: 1.375rem;
+  }
+  .legal-updated {
+    margin-top: 16px;
+    color: var(--color-text-muted);
+  }
+</style>

@@ -46,7 +46,7 @@ export default function StatisticsPanel({ open, onOpenChange }: StatisticsPanelP
 
         <div className="space-y-5 px-6 pb-6">
           <div className="space-y-2">
-            <label className="text-sm font-medium">値を追加</label>
+            <label className="text-base font-medium">値を追加</label>
             <div className="flex gap-2">
               <Input
                 value={draft}
@@ -67,12 +67,12 @@ export default function StatisticsPanel({ open, onOpenChange }: StatisticsPanelP
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">一括追加（改行/カンマ区切り）</label>
+            <label className="text-base font-medium">一括追加（改行/カンマ区切り）</label>
             <textarea
               value={bulkDraft}
               onChange={(e) => setBulkDraft(e.target.value)}
               rows={4}
-              className="border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-[3px]"
+              className="border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border px-3 py-2 text-base outline-none focus-visible:ring-[3px]"
               placeholder={'10, 20, 30\n40'}
             />
             <div className="flex gap-2">
@@ -92,20 +92,20 @@ export default function StatisticsPanel({ open, onOpenChange }: StatisticsPanelP
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 text-sm">
+          <div className="grid grid-cols-3 gap-2 text-base">
             <div className="rounded-lg border p-3">
-              <p className="text-muted-foreground text-xs">n</p>
+              <p className="text-muted-foreground text-sm">n</p>
               <p className="font-mono text-lg font-semibold">{stats.n}</p>
             </div>
             <div className="rounded-lg border p-3">
-              <p className="text-muted-foreground text-xs">平均</p>
+              <p className="text-muted-foreground text-sm">平均</p>
               <p className="font-mono text-lg font-semibold">{formatStat(stats.mean)}</p>
               <Button type="button" size="xs" variant="ghost" onClick={() => handleCopy('mean')}>
                 {copiedKey === 'mean' ? 'コピー済み' : 'コピー'}
               </Button>
             </div>
             <div className="rounded-lg border p-3">
-              <p className="text-muted-foreground text-xs">σ</p>
+              <p className="text-muted-foreground text-sm">σ</p>
               <p className="font-mono text-lg font-semibold">{formatStat(stats.stddev)}</p>
               <Button type="button" size="xs" variant="ghost" onClick={() => handleCopy('stddev')}>
                 {copiedKey === 'stddev' ? 'コピー済み' : 'コピー'}
@@ -115,18 +115,18 @@ export default function StatisticsPanel({ open, onOpenChange }: StatisticsPanelP
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium">値リスト</p>
+              <p className="text-base font-medium">値リスト</p>
               <Button type="button" size="xs" variant="ghost" onClick={clearValues}>
                 全クリア
               </Button>
             </div>
             <div className="max-h-64 space-y-2 overflow-y-auto rounded-lg border p-2">
               {values.length === 0 ? (
-                <p className="text-muted-foreground px-2 py-3 text-sm">まだ値がありません。</p>
+                <p className="text-muted-foreground px-2 py-3 text-base">まだ値がありません。</p>
               ) : (
                 values.map((value, index) => (
                   <div key={`${value}-${index}`} className="flex items-center justify-between rounded-md border px-3 py-2">
-                    <span className="font-mono text-sm">{formatStat(value)}</span>
+                    <span className="font-mono text-base">{formatStat(value)}</span>
                     <Button type="button" size="xs" variant="ghost" onClick={() => removeValueAt(index)}>
                       削除
                     </Button>

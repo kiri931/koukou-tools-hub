@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { Header } from '../../components/Header';
+import PageHead from '../../components/PageHead.astro';
 import { TypingGame } from '../../features/typing-japanese';
 import '../../styles/global.css';
 ---
@@ -9,16 +9,22 @@ import '../../styles/global.css';
   title="タイピング練習 - ツール"
   description="ひらがな・ローマ字入力のタイピング練習ゲーム。難易度・制限時間を選んで楽しく日本語タイピングを習得できます。ブラウザのみで動作。"
 >
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-    <Header client:load currentPath={Astro.url.pathname} />
-    <h1 class="sr-only">タイピング練習</h1>
-    <TypingGame client:only="react" />
-    <section class="mx-auto mt-8 max-w-3xl px-4 pb-12 text-base leading-relaxed text-slate-700 dark:text-slate-300">
-      <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">タイピング練習について</h2>
-      <p class="mt-3">
+  <main class="kj-container th-page">
+    <PageHead
+      label="ツール"
+      title="タイピング練習"
+      lead="ひらがな・ローマ字入力のタイピング練習ゲーム。"
+      safe={true}
+    />
+    <section aria-label="ツール本体" class="kj-tool-frame th-tool-body">
+      <TypingGame client:only="react" />
+    </section>
+    <section class="th-about">
+      <h2>タイピング練習について</h2>
+      <p>
         制限時間内にお題を打ち込む練習ツールです。モードが2つあります。
       </p>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
+      <ul>
         <li><strong>日本語モード</strong>: 表示されたひらがなをローマ字で打ちます。</li>
         <li>
           <strong>プログラミングモード</strong>: <code>x = 5</code> のような短いコードを打ちます。Python・JavaScript・HTML・CSS
@@ -26,22 +32,22 @@ import '../../styles/global.css';
         </li>
       </ul>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">使い方</h2>
-      <ol class="mt-2 list-decimal space-y-1 pl-5">
+      <h2>使い方</h2>
+      <ol>
         <li>モード・難易度・制限時間を選びます。</li>
         <li>表示されたお題を打ちます。打ち間違えた文字は入力に反映されません（そのまま正しい文字を打てば続けられます）。</li>
         <li>スコアや正解率を確認して次の練習に活かします。</li>
       </ol>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">練習中に使える操作</h2>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
+      <h2>練習中に使える操作</h2>
+      <ul>
         <li><strong>Backspace</strong>: 打った文字を1つ消します。</li>
         <li><strong>「この問題をとばす」</strong>: 苦手な問題を飛ばして次に進みます。飛ばした問題は成績に入りません。</li>
         <li><strong>「やめる」または Esc キー</strong>: 練習を中断して設定画面に戻ります。</li>
       </ul>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">スペースキーの表示について</h2>
-      <p class="mt-2">
+      <h2>スペースキーの表示について</h2>
+      <p>
         お題の中でスペースキーを押す場所には、
         <span
           class="mx-0.5 inline-flex items-center justify-center rounded border border-slate-500 bg-slate-100 px-1 text-slate-700 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-200"
@@ -51,37 +57,37 @@ import '../../styles/global.css';
         押す場所がはっきり分かるようにしています。自分が打ったスペースも、入力欄に同じ印で表示されます。
       </p>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">仕様・対応環境</h2>
-      <ul class="mt-2 list-disc space-y-1 pl-5">
+      <h2>仕様・対応環境</h2>
+      <ul>
         <li>ブラウザ上で完結し、入力データはサーバーに送信しません。</li>
         <li>日本語ローマ字入力の基本パターンに対応しています。</li>
         <li>半角英数字での入力が前提です。日本語入力（IME）はオフにしてください。</li>
         <li>最新版のChrome、Edge、Safari、Firefoxでの利用を推奨します。</li>
       </ul>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">注意事項</h2>
-      <p class="mt-2">授業利用時はキーボード配列や入力方式の設定を事前に統一してください。</p>
+      <h2>注意事項</h2>
+      <p>授業利用時はキーボード配列や入力方式の設定を事前に統一してください。</p>
 
-      <h2 class="mt-6 text-lg font-semibold text-slate-900 dark:text-slate-100">よくある質問</h2>
-      <dl class="mt-2 space-y-2">
+      <h2>よくある質問</h2>
+      <dl>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. スコアは保存されますか？</dt>
+          <dt>Q. スコアは保存されますか？</dt>
           <dd>A. 保存しません。結果画面を離れるとスコアは消えます。記録を残したい場合は画面を控えてください。</dd>
         </div>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. 打っても画面が反応しません。</dt>
+          <dt>Q. 打っても画面が反応しません。</dt>
           <dd>
             A. 日本語入力（IME）がオンになっていないか確認してください。オンのままだとキーが受け付けられません。
             半角英数の状態でお試しください。
           </dd>
         </div>
         <div>
-          <dt class="font-medium text-slate-900 dark:text-slate-100">Q. ローマ字入力が合わない場合は？</dt>
+          <dt>Q. ローマ字入力が合わない場合は？</dt>
           <dd>A. IME設定やキーボード配列を確認し、標準入力モードでお試しください。</dd>
         </div>
       </dl>
     </section>
-  </div>
+  </main>
   <script
     type="application/ld+json"
     set:html={JSON.stringify({

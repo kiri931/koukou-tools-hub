@@ -36,7 +36,7 @@ export default function ConstantsPanel({ open, onOpenChange, onPress }: Constant
               }}
             >
               <span className="text-base font-semibold">{constant.label}</span>
-              <span className="font-mono text-sm text-slate-600 dark:text-slate-300">
+              <span className="font-mono text-sm text-[var(--color-text-muted)]">
                 {constant.value} {constant.unit}
               </span>
             </Button>
