@@ -1,5 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="t">
   <title id="t">網点の大きさで濃淡を表すしくみと、色ごとにスクリーン角度をずらす理由</title>
+  <!-- 色とコントラスト比（背景は図の地: ライト #ffffff / ダーク #0f172a）
+    版ごとの角度を示す線は意味を持つので 3:1 以上にする。色相（C=水色 / M=赤紫 / Y=黄）はなるべく残す。
+       C sky-500  #0ea5e9: 白 2.77:1（不足）→ light-dark(#0369a1, #0ea5e9) ライト 5.93:1 / ダーク 6.44:1（元のまま）
+       M rose-500 #f43f5e: 白 3.67:1 → light-dark(#be123c, #f43f5e) ライト 6.29:1 / ダーク 4.86:1（元のまま）
+       Y amber-500 #f59e0b: 白 2.15:1（不足）→ var(--color-warning) ライト #b45309 5.02:1 / ダーク #fbbf24 10.69:1
+    ライトの Y は、白地で 3:1 を満たす黄が無いため黄土色になる。
+  -->
   <g fill="none" stroke="currentColor" stroke-width="1.5">
     <rect x="20" y="52" width="76" height="76"/>
     <rect x="110" y="52" width="76" height="76"/>
@@ -38,12 +45,12 @@
     <text x="330" y="30" font-size="14" font-weight="bold">4色は角度をずらして重ねる</text>
   </g>
   <g stroke-width="2" fill="none">
-    <g stroke="#0ea5e9"><g transform="rotate(15 400 95)"><path d="M360 60 H440 M360 76 H440 M360 92 H440 M360 108 H440 M360 124 H440"/></g></g>
-    <g stroke="#f43f5e"><g transform="rotate(75 400 95)"><path d="M360 60 H440 M360 76 H440 M360 92 H440 M360 108 H440 M360 124 H440"/></g></g>
+    <g stroke="#0369a1" style="stroke:light-dark(#0369a1, #0ea5e9)"><g transform="rotate(15 400 95)"><path d="M360 60 H440 M360 76 H440 M360 92 H440 M360 108 H440 M360 124 H440"/></g></g>
+    <g stroke="#be123c" style="stroke:light-dark(#be123c, #f43f5e)"><g transform="rotate(75 400 95)"><path d="M360 60 H440 M360 76 H440 M360 92 H440 M360 108 H440 M360 124 H440"/></g></g>
   </g>
   <rect x="352" y="52" width="96" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>
   <g stroke-width="2" fill="none">
-    <g stroke="#f59e0b"><path d="M480 60 H560 M480 76 H560 M480 92 H560 M480 108 H560 M480 124 H560"/></g>
+    <g stroke="#b45309" style="stroke:var(--color-warning)"><path d="M480 60 H560 M480 76 H560 M480 92 H560 M480 108 H560 M480 124 H560"/></g>
     <g stroke="currentColor"><g transform="rotate(45 520 95)"><path d="M480 60 H560 M480 76 H560 M480 92 H560 M480 108 H560 M480 124 H560"/></g></g>
   </g>
   <rect x="472" y="52" width="96" height="86" fill="none" stroke="currentColor" stroke-width="1.5"/>

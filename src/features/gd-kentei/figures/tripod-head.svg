@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="t">
   <title id="t">三脚の上部にある雲台。カメラを載せて向きを決める部分</title>
+  <!-- 色とコントラスト比（背景は図の地: ライト #ffffff / ダーク #0f172a）
+    雲台が回る向きの矢印は意味を持つ線なので 3:1 以上にする。
+       amber-500 #f59e0b: 白 2.15:1（不足）/ #0f172a 8.31:1
+    →  var(--color-warning): ライト #b45309 白 5.02:1 / ダーク #fbbf24 #0f172a 10.69:1
+    雲台の水色の塗り（sky-500 30%）は枠線が currentColor なので装飾として据え置き。
+  -->
   <text x="20" y="24" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">三脚の上でカメラの向きを決める部分が「雲台」</text>
 
   <g transform="translate(180,44)">
@@ -19,11 +25,11 @@
     <path d="M12 196 H28 M82 200 H98 M152 196 H168" stroke="currentColor" stroke-width="3"/>
     <text x="0" y="216" font-family="sans-serif" font-size="12" fill="currentColor">脚（3本）</text>
 
-    <g stroke="#f59e0b" stroke-width="2" fill="none">
+    <g stroke="#b45309" style="stroke:var(--color-warning)" stroke-width="2" fill="none">
       <path d="M40 34 A34 22 0 0 0 40 62"/>
-      <path d="M40 62 l-2 -8 l8 3 z" fill="#f59e0b" stroke="none"/>
+      <path d="M40 62 l-2 -8 l8 3 z" fill="#b45309" style="fill:var(--color-warning)" stroke="none"/>
       <path d="M150 34 A34 22 0 0 1 150 62"/>
-      <path d="M150 62 l2 -8 l-8 3 z" fill="#f59e0b" stroke="none"/>
+      <path d="M150 62 l2 -8 l-8 3 z" fill="#b45309" style="fill:var(--color-warning)" stroke="none"/>
     </g>
   </g>
 

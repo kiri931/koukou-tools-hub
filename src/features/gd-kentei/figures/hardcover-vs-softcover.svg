@@ -1,5 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 280" role="img" aria-labelledby="t">
   <title id="t">上製本と並製本の断面。チリが出るのは上製本だけ</title>
+  <!-- 色とコントラスト比（背景は図の地: ライト #ffffff / ダーク #0f172a）
+    「チリ」の文字（4.5:1 以上）と、チリの幅を示す印・並製本の表紙の線（3:1 以上）。
+       チリ rose-500 #f43f5e: 白 3.67:1（文字として不足）/ #0f172a 4.86:1
+    →  var(--color-danger): ライト #b91c1c 白 6.47:1 / ダーク #f87171 #0f172a 6.45:1
+       緑の線（表紙）emerald-500 #10b981: 白 2.54:1（不足）/ #0f172a 7.04:1
+    →  var(--color-success): ライト #047857 白 5.48:1 / ダーク #34d399 #0f172a 9.29:1
+    紫の線（表紙）violet-500 #8b5cf6 は 白 4.23:1 / #0f172a 4.22:1 で基準内なので据え置き。
+    背の薄い塗り（紫・緑 25%）は枠線が currentColor なので装飾として据え置き。
+  -->
   <g font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">
     <text x="20" y="26">上製本（ハードカバー）</text>
     <text x="350" y="26">並製本（ソフトカバー）</text>
@@ -14,11 +23,11 @@
     </g>
     <path d="M10 0 H210 M10 160 H210" stroke="#8b5cf6" stroke-width="5"/>
     <path d="M204 0 V160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
-    <g stroke="#f43f5e" stroke-width="1.5" fill="none">
+    <g stroke="#b91c1c" style="stroke:var(--color-danger)" stroke-width="1.5" fill="none">
       <path d="M204 8 H210" marker-end="none"/>
       <path d="M204 152 H210"/>
     </g>
-    <text x="216" y="12" font-family="sans-serif" font-size="12" fill="#f43f5e" font-weight="bold">チリ</text>
+    <text x="216" y="12" font-family="sans-serif" font-size="12" fill="#b91c1c" style="fill:var(--color-danger)" font-weight="bold">チリ</text>
     <text x="216" y="30" font-family="sans-serif" font-size="12" fill="currentColor">表紙が中身より</text>
     <text x="216" y="46" font-family="sans-serif" font-size="12" fill="currentColor">はみ出す（約3mm）</text>
     <text x="6" y="182" font-family="sans-serif" font-size="12" fill="currentColor">紫の線＝表紙／点線＝中身の端</text>
@@ -32,7 +41,7 @@
     <g stroke="currentColor" stroke-width="1" opacity="0.7">
       <path d="M22 30 H192 M22 44 H192 M22 58 H192 M22 72 H192 M22 86 H192 M22 100 H192 M22 114 H192 M22 128 H192"/>
     </g>
-    <path d="M10 8 H192 M10 152 H192" stroke="#10b981" stroke-width="5"/>
+    <path d="M10 8 H192 M10 152 H192" stroke="#047857" style="stroke:var(--color-success)" stroke-width="5"/>
     <path d="M192 8 V152" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
     <text x="196" y="12" font-family="sans-serif" font-size="12" fill="currentColor" font-weight="bold">チリなし</text>
     <text x="196" y="30" font-family="sans-serif" font-size="12" fill="currentColor">表紙と中身が</text>

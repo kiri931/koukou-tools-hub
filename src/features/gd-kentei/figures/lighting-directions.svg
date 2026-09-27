@@ -1,15 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" role="img" aria-labelledby="t">
   <title id="t">順光・側光・斜光・逆光の4つの光の向きと、被写体にできる陰影の違い</title>
+  <!-- 色とコントラスト比（背景は図の地: ライト #ffffff / ダーク #0f172a）
+    光の向きの矢印は意味を持つ線なので 3:1 以上にする。
+       amber-500 #f59e0b: 白 2.15:1（不足）/ #0f172a 8.31:1
+    →  var(--color-warning): ライト #b45309 白 5.02:1 / ダーク #fbbf24 #0f172a 10.69:1
+    属性の #b45309 は var() が効かない環境向けの予備。
+  -->
   <text x="20" y="24" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">光をどの向きから当てるかで、立体の見え方が変わる</text>
 
   <g transform="translate(150,44)">
     <circle cx="90" cy="90" r="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
     <text x="90" y="140" text-anchor="middle" font-family="sans-serif" font-size="12" fill="currentColor">被写体</text>
-    <g stroke="#f59e0b" stroke-width="2" fill="none">
-      <path d="M90 172 V132"/><path d="M90 132 l-5 8 h10 z" fill="#f59e0b" stroke="none"/>
-      <path d="M8 90 H48"/><path d="M48 90 l-8 -5 v10 z" fill="#f59e0b" stroke="none"/>
-      <path d="M22 22 L54 54"/><path d="M54 54 l-9 -2 l2 9 z" fill="#f59e0b" stroke="none"/>
-      <path d="M90 8 V48"/><path d="M90 48 l-5 -8 h10 z" fill="#f59e0b" stroke="none"/>
+    <g stroke="#b45309" style="stroke:var(--color-warning)" stroke-width="2" fill="none">
+      <path d="M90 172 V132"/><path d="M90 132 l-5 8 h10 z" fill="#b45309" style="fill:var(--color-warning)" stroke="none"/>
+      <path d="M8 90 H48"/><path d="M48 90 l-8 -5 v10 z" fill="#b45309" style="fill:var(--color-warning)" stroke="none"/>
+      <path d="M22 22 L54 54"/><path d="M54 54 l-9 -2 l2 9 z" fill="#b45309" style="fill:var(--color-warning)" stroke="none"/>
+      <path d="M90 8 V48"/><path d="M90 48 l-5 -8 h10 z" fill="#b45309" style="fill:var(--color-warning)" stroke="none"/>
     </g>
     <text x="90" y="188" text-anchor="middle" font-family="sans-serif" font-size="12" fill="currentColor" font-weight="bold">順光（正面から）</text>
     <text x="0" y="86" text-anchor="middle" font-family="sans-serif" font-size="12" fill="currentColor" font-weight="bold">側光</text>

@@ -1,10 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="t">
   <title id="t">紙の目（縦目と横目）と、本の背に対する目の向きの良し悪し</title>
+  <!-- 色とコントラスト比（背景は図の地: ライト #ffffff / ダーク #0f172a）
+    紙の目の向きを表す線は意味を持つので 3:1 以上にする。
+       縦目 sky-500 #0ea5e9: 白 2.77:1（不足）→ light-dark(#0369a1, #0ea5e9) ライト 5.93:1 / ダーク 6.44:1（元のまま）
+       横目 amber-500 #f59e0b: 白 2.15:1（不足）→ var(--color-warning) ライト #b45309 5.02:1 / ダーク #fbbf24 10.69:1
+       ○ emerald-500 #10b981: 白 2.54:1（不足）→ var(--color-success) ライト #047857 5.48:1 / ダーク #34d399 9.29:1
+       × rose-500 #f43f5e: 白 3.67:1 → var(--color-danger) ライト #b91c1c 6.47:1 / ダーク #f87171 6.45:1
+  -->
   <text x="20" y="24" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">紙の目＝すいたときにできる繊維の向き</text>
 
   <g transform="translate(30,40)">
     <rect x="0" y="0" width="120" height="160" fill="none" stroke="currentColor" stroke-width="1.5"/>
-    <g stroke="#0ea5e9" stroke-width="1.5">
+    <g stroke="#0369a1" style="stroke:light-dark(#0369a1, #0ea5e9)" stroke-width="1.5">
       <path d="M14 8 V152 M32 8 V152 M50 8 V152 M68 8 V152 M86 8 V152 M104 8 V152"/>
     </g>
     <text x="0" y="180" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">縦目（T目）</text>
@@ -12,7 +19,7 @@
   </g>
   <g transform="translate(190,40)">
     <rect x="0" y="0" width="120" height="160" fill="none" stroke="currentColor" stroke-width="1.5"/>
-    <g stroke="#f59e0b" stroke-width="1.5">
+    <g stroke="#b45309" style="stroke:var(--color-warning)" stroke-width="1.5">
       <path d="M8 16 H112 M8 36 H112 M8 56 H112 M8 76 H112 M8 96 H112 M8 116 H112 M8 136 H112"/>
     </g>
     <text x="0" y="180" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">横目（Y目）</text>
@@ -26,7 +33,7 @@
       <text x="0" y="12" font-family="sans-serif" font-size="18" fill="currentColor">○</text>
       <path d="M26 4 V64" stroke="currentColor" stroke-width="4"/>
       <rect x="26" y="4" width="90" height="60" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <g stroke="#10b981" stroke-width="1.5"><path d="M38 10 V58 M52 10 V58 M66 10 V58 M80 10 V58 M94 10 V58 M108 10 V58"/></g>
+      <g stroke="#047857" style="stroke:var(--color-success)" stroke-width="1.5"><path d="M38 10 V58 M52 10 V58 M66 10 V58 M80 10 V58 M94 10 V58 M108 10 V58"/></g>
       <text x="126" y="26" font-family="sans-serif" font-size="12" fill="currentColor">背と目が平行</text>
       <text x="126" y="44" font-family="sans-serif" font-size="12" fill="currentColor">よく開く</text>
     </g>
@@ -35,7 +42,7 @@
       <text x="0" y="12" font-family="sans-serif" font-size="18" fill="currentColor">×</text>
       <path d="M26 4 V64" stroke="currentColor" stroke-width="4"/>
       <rect x="26" y="4" width="90" height="60" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <g stroke="#f43f5e" stroke-width="1.5"><path d="M32 14 H112 M32 26 H112 M32 38 H112 M32 50 H112"/></g>
+      <g stroke="#b91c1c" style="stroke:var(--color-danger)" stroke-width="1.5"><path d="M32 14 H112 M32 26 H112 M32 38 H112 M32 50 H112"/></g>
       <text x="126" y="26" font-family="sans-serif" font-size="12" fill="currentColor">背と目が直角</text>
       <text x="126" y="44" font-family="sans-serif" font-size="12" fill="currentColor">開きが悪く、波打つ</text>
     </g>

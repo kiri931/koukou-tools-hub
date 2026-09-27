@@ -1,12 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="t">
   <title id="t">トンボと裁ちしろ。塗り足しがある場合とない場合の違い</title>
+  <!-- 色とコントラスト比（背景は図の地: ライト #ffffff / ダーク #0f172a）
+    写真の面（塗り足しの範囲そのもの）と、白く残る帯・その説明文。
+       写真の面 sky-500 30%: 白の上 1.36:1 / #0f172a の上 1.68:1（範囲が見えない）
+    →  #0284c7（sky-600、不透明）: 白 4.10:1 / #0f172a 4.36:1。上に重なる仕上がり線（currentColor）とは
+       ライト #0f172a 4.36:1 / ダーク #f8fafc 3.91:1。1色でライト・ダークとも 3:1 以上になる。
+       帯と文字 rose-500 #f43f5e: 白 3.67:1（文字として不足）/ #0f172a 4.86:1
+    →  var(--color-danger): ライト #b91c1c 白 6.47:1 / ダーク #f87171 #0f172a 6.45:1
+  -->
   <g font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">
     <text x="20" y="24">塗り足しあり（正しい）</text>
     <text x="350" y="24">塗り足しなし（白い筋が出る）</text>
   </g>
 
   <g transform="translate(40,44)">
-    <rect x="0" y="0" width="200" height="150" fill="#0ea5e9" fill-opacity="0.3" stroke="none"/>
+    <rect x="0" y="0" width="200" height="150" fill="#0284c7" stroke="none"/>
     <rect x="12" y="12" width="176" height="126" fill="none" stroke="currentColor" stroke-width="1.5"/>
     <g stroke="currentColor" stroke-width="1.2">
       <path d="M0 -6 V4 M-6 0 H4 M200 -6 V4 M196 0 H206 M0 146 V156 M-6 150 H4 M200 146 V156 M196 150 H206"/>
@@ -20,17 +28,17 @@
   </g>
 
   <g transform="translate(370,44)">
-    <rect x="12" y="12" width="176" height="126" fill="#0ea5e9" fill-opacity="0.3" stroke="none"/>
+    <rect x="12" y="12" width="176" height="126" fill="#0284c7" stroke="none"/>
     <rect x="12" y="12" width="176" height="126" fill="none" stroke="currentColor" stroke-width="1.5"/>
-    <path d="M4 8 L20 8" stroke="#f43f5e" stroke-width="0"/>
+    <path d="M4 8 L20 8" stroke="#b91c1c" style="stroke:var(--color-danger)" stroke-width="0"/>
     <g stroke="currentColor" stroke-width="1.2">
       <path d="M0 -6 V4 M-6 0 H4 M200 -6 V4 M196 0 H206 M0 146 V156 M-6 150 H4 M200 146 V156 M196 150 H206"/>
       <path d="M12 -8 V0 M188 -8 V0 M12 150 V158 M188 150 V158"/>
       <path d="M-8 12 H0 M-8 138 H0 M200 12 H208 M200 138 H208"/>
     </g>
-    <path d="M6 6 L206 6" stroke="#f43f5e" stroke-width="6" stroke-dasharray="0"/>
-    <path d="M6 144 L206 144" stroke="#f43f5e" stroke-width="6"/>
-    <text x="0" y="184" font-family="sans-serif" font-size="12" fill="#f43f5e" font-weight="bold">断裁がずれると、この帯が白く残る</text>
+    <path d="M6 6 L206 6" stroke="#b91c1c" style="stroke:var(--color-danger)" stroke-width="6" stroke-dasharray="0"/>
+    <path d="M6 144 L206 144" stroke="#b91c1c" style="stroke:var(--color-danger)" stroke-width="6"/>
+    <text x="0" y="184" font-family="sans-serif" font-size="12" fill="#b91c1c" style="fill:var(--color-danger)" font-weight="bold">断裁がずれると、この帯が白く残る</text>
     <text x="0" y="204" font-family="sans-serif" font-size="12" fill="currentColor">写真が仕上がり線でぴったり止まっている</text>
     <text x="0" y="226" font-family="sans-serif" font-size="12" fill="currentColor">ため、逃げがない</text>
   </g>

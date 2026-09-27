@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" role="img" aria-labelledby="t">
   <title id="t">横組みと縦組みの見開きで、ページ番号の偶数と奇数がどちらに来るか</title>
+  <!-- 色とコントラスト比（背景は図の地: ライト #ffffff / ダーク #0f172a）
+    「青い矢印＝文字の流れる向き」は意味を持つ線なので 3:1 以上にする（青のまま）。
+       sky-500 #0ea5e9: 白 2.77:1（不足）/ #0f172a 6.44:1
+    →  light-dark(#0369a1, #0ea5e9): ライト sky-700 白 5.93:1 / ダークは元の色のまま 6.44:1
+    行を表す灰の線 #64748b は 白 4.76:1 / #0f172a 3.75:1 で基準内なので据え置き。
+  -->
   <text x="20" y="24" font-family="sans-serif" font-size="14" fill="currentColor" font-weight="bold">見開きのページ番号は、組み方向で左右が入れ替わる</text>
 
   <g transform="translate(30,44)">
@@ -10,8 +16,8 @@
     <g stroke="#64748b" stroke-width="1.2">
       <path d="M14 34 H106 M14 50 H106 M14 66 H106 M14 82 H106 M134 34 H226 M134 50 H226 M134 66 H226 M134 82 H226"/>
     </g>
-    <path d="M14 104 H96" stroke="#0ea5e9" stroke-width="2"/>
-    <path d="M96 104 l-6 -4 v8 z" fill="#0ea5e9"/>
+    <path d="M14 104 H96" stroke="#0369a1" style="stroke:light-dark(#0369a1, #0ea5e9)" stroke-width="2"/>
+    <path d="M96 104 l-6 -4 v8 z" fill="#0369a1" style="fill:light-dark(#0369a1, #0ea5e9)"/>
     <text x="52" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">12</text>
     <text x="188" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">13</text>
     <text x="0" y="176" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">左が偶数、右が奇数</text>
@@ -26,8 +32,8 @@
     <g stroke="#64748b" stroke-width="1.2">
       <path d="M20 26 V96 M40 26 V96 M60 26 V96 M80 26 V96 M140 26 V96 M160 26 V96 M180 26 V96 M200 26 V96"/>
     </g>
-    <path d="M214 110 H120" stroke="#0ea5e9" stroke-width="2"/>
-    <path d="M120 110 l6 -4 v8 z" fill="#0ea5e9"/>
+    <path d="M214 110 H120" stroke="#0369a1" style="stroke:light-dark(#0369a1, #0ea5e9)" stroke-width="2"/>
+    <path d="M120 110 l6 -4 v8 z" fill="#0369a1" style="fill:light-dark(#0369a1, #0ea5e9)"/>
     <text x="52" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">13</text>
     <text x="188" y="146" text-anchor="middle" font-family="sans-serif" font-size="16" fill="currentColor" font-weight="bold">12</text>
     <text x="0" y="176" font-family="sans-serif" font-size="13" fill="currentColor" font-weight="bold">左が奇数、右が偶数</text>
