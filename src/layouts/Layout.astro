@@ -7,6 +7,9 @@ interface Props {
 	canonical?: string;
 	ogImage?: string;
 	noindex?: boolean;
+	/** false にすると AdSense のコードを出さない。操作画面(機能リクエストのフォームなど)で使う。
+	 *  作業の最中に自動広告が差し込まれると害の方が大きく、AdSense 審査でも「中身の無いページ」に数えられる */
+	ads?: boolean;
 	/**
 	 * 共通ヘッダーの種類（site-bar.js）。ふつうは full（T1〜T4・T6）。
 	 * 画面いっぱいを使うツール（T5）だけ slim。slim はフッターを出さない。
@@ -24,6 +27,7 @@ const {
 	canonical,
 	ogImage,
 	noindex,
+	ads = true,
 	siteBar = 'full',
 	width = 'wide',
 	crumbs,
@@ -125,7 +129,7 @@ const breadcrumbJsonLd =
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<GoogleAnalytics />
-		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8375913886731430" crossorigin="anonymous"></script>
+		{ads ? <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8375913886731430" crossorigin="anonymous"></script> : null}
 		{description ? <meta name="description" content={description} /> : null}
 		<link rel="canonical" href={canonicalUrl} />
 		<meta property="og:type" content="website" />

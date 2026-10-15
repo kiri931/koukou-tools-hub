@@ -7,12 +7,16 @@ import "../../styles/global.css";
 // T4（ふつう幅のツール）の並び。ただし中身は1列のフォームなので、
 // 広い幅（1200px）だと入力欄が横に間延びする。本文と同じ幅（text）にそろえる。
 // 送信するフォーム（/api/support へ POST）なので「データは端末の外に出ません」（safe）は付けない。
+// 入力するだけの操作画面なので noindex にし、AdSense も出さない（2026-10-15、AdSense 審査対策）。
+// サイトマップからは koukou-jouhou/astro.config.mjs の noindexPrefixes で外している。
 ---
 
 <Layout
   title="機能リクエスト - 高校情報"
   description="高校情報サイトへの機能追加リクエスト・改善提案を送信するフォームです。"
   width="text"
+  noindex={true}
+  ads={false}
 >
   <main class="kj-container kj-container--text th-page">
     <PageHead
