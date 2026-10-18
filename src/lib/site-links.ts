@@ -218,13 +218,6 @@ export const sections: SiteLinkSection[] = [
 		desc: 'PDFを読む・つくる・まとめる',
 		items: [
 			{
-				href: '/pdf-viewer/',
-				label: 'PDF参照モード',
-				desc: 'ITパスポート等の試験問題をPDFと照合して学習できます。',
-				accent: '#3b82f6',
-				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M9 15h6" /><path d="M9 11h6" /></svg>',
-			},
-			{
 				href: '/tools/pdf-merge/',
 				label: 'PDFマージ',
 				desc: '複数のPDFファイルを並べ替えて1つに結合できます。',
@@ -268,9 +261,16 @@ export const sections: SiteLinkSection[] = [
 			{
 				href: '/guides/it-passport-study-method/',
 				label: 'ITパスポート学習法',
-				desc: '過去問PDFの活用、復習の進め方、合格までの学習手順を整理します。',
+				desc: '3分野の覚え方と過去問の解き直し。情報Iで学んだことがITパスポートのどこに当たるかの対応表つき。',
 				accent: '#3b82f6',
 				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" /><path d="M8 6h8" /><path d="M8 10h8" /></svg>',
+			},
+			{
+				href: '/guides/fe-security/',
+				label: '基本情報のセキュリティ（ハッシュ・暗号・WAF）',
+				desc: 'SHA-256をその場で計算して性質を確かめ、FW・IPS・WAFの守備範囲を問題で仕分けます。',
+				accent: '#0ea5e9',
+				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><rect x="9" y="11" width="6" height="5" rx="1" /><path d="M10 11V9a2 2 0 0 1 4 0v2" /></svg>',
 			},
 			{
 				href: '/guides/calc-drill-exam-guide/',
@@ -351,7 +351,6 @@ const teacherTools = new Set([
 ]);
 
 const bothTools = new Set([
-	'/pdf-viewer/',
 	'/tools/pdf-merge/',
 	'/glossary/',
 	'/support/feature-request/',
