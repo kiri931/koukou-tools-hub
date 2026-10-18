@@ -124,7 +124,7 @@ export const sections: SiteLinkSection[] = [
 			{
 				href: '/dncl-tracer/',
 				label: 'プログラムのなぞり書き',
-				desc: '共通テスト「情報I」のプログラムの書き方を、1行ずつ動かして変数の変化を確かめられます。',
+				desc: '共通テスト「情報I」のDNCLと基本情報の擬似言語を、1行ずつ動かして変数の変化と関数の呼び出しを確かめられます。',
 				accent: '#6366f1',
 				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 8 2 12 6 16" /><polyline points="18 8 22 12 18 16" /><line x1="14" y1="4" x2="10" y2="20" /></svg>',
 			},
@@ -271,6 +271,13 @@ export const sections: SiteLinkSection[] = [
 				desc: 'SHA-256をその場で計算して性質を確かめ、FW・IPS・WAFの守備範囲を問題で仕分けます。',
 				accent: '#0ea5e9',
 				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><rect x="9" y="11" width="6" height="5" rx="1" /><path d="M10 11V9a2 2 0 0 1 4 0v2" /></svg>',
+			},
+			{
+				href: '/guides/fe-algorithm/',
+				label: '基本情報 科目Bのアルゴリズム（擬似言語の読み方）',
+				desc: '擬似言語をトレース表で読む手順と頻出の型を、練習問題と1行ずつの実行で身につけます。',
+				accent: '#8b5cf6',
+				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="M9 9v12" /><path d="M13 13h4" /><path d="M13 17h4" /></svg>',
 			},
 			{
 				href: '/guides/calc-drill-exam-guide/',
