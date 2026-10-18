@@ -280,6 +280,13 @@ export const sections: SiteLinkSection[] = [
 				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="M9 9v12" /><path d="M13 13h4" /><path d="M13 17h4" /></svg>',
 			},
 			{
+				href: '/fe-lab/',
+				label: '基本情報ハンズオンラボ（シラバス23単元）',
+				desc: '基本情報技術者試験のシラバス（Ver.9.2）の中分類23個を、図解・要点・計算や模擬操作のハンズオン・3問チェックで1単元ずつ学びます。',
+				accent: '#4f46e5',
+				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6" /><path d="M10 3v6L4.5 18.5A1.5 1.5 0 0 0 5.8 21h12.4a1.5 1.5 0 0 0 1.3-2.5L14 9V3" /><path d="M7.5 15h9" /></svg>',
+			},
+			{
 				href: '/guides/calc-drill-exam-guide/',
 				label: '計算技術検定とは?',
 				desc: '検定の概要、出題形式、電卓操作の練習ポイントをまとめています。',
