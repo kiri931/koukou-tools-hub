@@ -77,6 +77,29 @@ function priorityOf(tags, answers, syllabus) {
   return 'A';
 }
 
+// 元の用語集のカードの誤りを直す（2026-10-19、読み物テキストを書いたときの事実確認で見つかったもの）。
+// null はカードごと外す
+const CARD_FIXES = {
+  // PDF の文字起こしで、シラバスの「保管期間」と見出しの「マネジメント系」がつながってできた偽の語
+  t3347: null,
+  // いまの JIS Q 27000 は 2019年版。2014年版を答えにしていた
+  t0549: { answers: ['JIS Q 27000', 'JIS Q 27000:2019'] },
+  // 総務省の題名は「安心安全」。旧シラバスの表記「安全安心」も正解に残す
+  t1844: { answers: ['スマートフォン安心安全強化戦略', 'スマートフォン安全安心強化戦略'] },
+  // IPA は定義を出しておらず（FE 平成26年度春期 午前 問43 の誤りの選択肢に出ただけ）、資料によって端末側・サーバ側と説明が割れる
+  t1722: {
+    question: 'シンクライアントの仕組みに関わる語の一つで、基本情報の過去問の選択肢に出たことがある「シンクライアント○○○○○」は何?',
+    explanation: 'IPA は定義を示していない。端末に入れるソフトとする資料も、サーバ側の仕組みとする資料もある。シンクライアントに関わる語として押さえれば足りる。',
+  },
+};
+function applyFixes(cards) {
+  return cards.flatMap((c) => {
+    if (!(c.id in CARD_FIXES)) return [c];
+    const f = CARD_FIXES[c.id];
+    return f === null ? [] : [{ ...c, ...f }];
+  });
+}
+
 // 元の用語集では、ITパスポートのシラバスに載っている語（機密性・ISMS・ランサムウェアなど）の一部が
 // 基本情報のファイルにしか入っていなかった（2026-10-19 実測: 408枚）。基本情報のカードのうち、
 // ITパスポートのシラバスに語が出てくるものを、ITパスポートの用語集にも入れる。
@@ -87,6 +110,8 @@ const ipFlat = flat(ipRaw);
 const ipExamples = termExamples(ipRaw);
 const ipData = JSON.parse(readFileSync(ipPath, 'utf8'));
 const feData = JSON.parse(readFileSync(fePath, 'utf8'));
+ipData.cards = applyFixes(ipData.cards);
+feData.cards = applyFixes(feData.cards);
 const ipIds = new Set(ipData.cards.map((c) => c.id));
 const addedToIp = feData.cards
   .filter((c) => !ipIds.has(c.id) && inSyllabus(ipFlat, c.answers))
