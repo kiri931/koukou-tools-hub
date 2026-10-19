@@ -1,12 +1,14 @@
 // ITパスポート・基本情報の用語集（kiriserver の ~/anki-glossary/ で作ったもの）を、
 // 覚える君の「試験の用語集」で使う形に整える。
 //
-//   node scripts/build-exam-glossary.mjs <it-passport-full.json> <fe-full.json> <ITパスポートシラバス.txt> <基本情報シラバス.txt>
+//   node scripts/build-exam-glossary.mjs <it-passport-full.json> <fe-full.json> <ITパスポートシラバス.txt> <基本情報シラバス.txt> [<it-text のフォルダ>]
 //   （シラバスは IPA の PDF を pdftotext で文字にしたもの。現行版: IP Ver.6.5・FE Ver.9.2）
 //
 // 出力:
 //   public/tools/exam-glossary/it-passport.json, fe.json   … 全カード（優先度タグ付き）
 //   src/features/anki/lib/examGlossaryCounts.json          … 中分類×優先度の枚数（画面に枚数を先に出すため）
+//   public/tools/exam-glossary/it-text/<単元>-<章>-{ip,fe}.json … 読み物テキスト（../it-text）の章ごとの問題集
+//   src/features/anki/lib/textDecks.json                   … その合言葉の対応表（/tools/anki/?import=<合言葉>）
 //
 // 優先度は「どの資料に載っていた語か」で決める。過去問の出題回数は使っていない
 // （公開問題はほぼ画像PDFで、全カードの出題回数を数える材料がないため）。
@@ -15,12 +17,12 @@
 //   C … 現行シラバスから消えた語（タグ「旧シラバス」で、いまのシラバスの本文にも出てこない語）
 //       タグ「旧シラバス」でも、いまのシラバスの本文に語が出てくるものは B にする
 //       （2026-10-19 実測: IP 84枚中55枚・FE 391枚中120枚が、いまのシラバスにも載っていた。DDoS攻撃・DLP・AES など）
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const [ipPath, fePath, ipSyllabusPath, feSyllabusPath] = process.argv.slice(2);
+const [ipPath, fePath, ipSyllabusPath, feSyllabusPath, itTextDir = join(root, '../it-text')] = process.argv.slice(2);
 if (!ipPath || !fePath || !ipSyllabusPath || !feSyllabusPath) {
   console.error('使い方: node scripts/build-exam-glossary.mjs <it-passport-full.json> <fe-full.json> <IPシラバス.txt> <FEシラバス.txt>');
   process.exit(2);
@@ -193,3 +195,70 @@ writeFileSync(
   join(root, 'src/features/anki/lib/examGlossaryCounts.json'),
   `${JSON.stringify(counts, null, 1)}\n`,
 );
+
+// ---------- 読み物テキストの章ごとの問題集 ----------
+// it-text の build が書き出す data/card-map.json（id → 単元・章・節）を正本にする。
+// カードの topic はテキストの節の名前にする（ヒントの「カテゴリ」と、4択の誤答を同じ節から選ぶため）。
+// 1章につき2つ: -ip（ITパスポートの範囲だけ）と -fe（基本情報まで全部）
+const cardMapPath = join(itTextDir, 'data/card-map.json');
+const decks = {};
+if (existsSync(cardMapPath)) {
+  const cardMap = JSON.parse(readFileSync(cardMapPath, 'utf8'));
+  const entries = Array.isArray(cardMap) ? cardMap : Object.entries(cardMap).map(([id, v]) => ({ id, ...v }));
+  const byId = new Map();
+  for (const exam of exams) for (const c of exam.data.cards) if (!byId.has(c.id)) byId.set(c.id, c);
+  const groups = new Map();
+  for (const e of entries) {
+    const key = `${e.unit}-${e.chapter}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(e);
+  }
+  for (const [key, list] of groups) {
+    const { unit, chapter } = list[0];
+    const chapters = JSON.parse(readFileSync(join(itTextDir, 'data/chapters', `${unit}.json`), 'utf8'));
+    const ch = chapters.chapters.find((c) => c.slug === chapter);
+    const units = JSON.parse(readFileSync(join(itTextDir, 'data/units.json'), 'utf8'));
+    const u = units.find((x) => x.slug === unit);
+    const terms = JSON.parse(readFileSync(join(itTextDir, 'data/terms', `${unit}.json`), 'utf8'));
+    const examOf = new Map(terms.map((t) => [t.id, t.exam]));
+    const sectionTitle = new Map(ch.sections.map((x) => [x.slug, x.title]));
+    for (const range of ['ip', 'fe']) {
+      const cards = [];
+      for (const e of list) {
+        const c = byId.get(e.id);
+        if (!c) { errors.push(`it-text の ${key}: カード ${e.id} が用語集に無い`); continue; }
+        if (range === 'ip' && examOf.get(e.id) === 'FE') continue;
+        cards.push({
+          id: c.id,
+          topic: sectionTitle.get(e.section) ?? e.section,
+          question: c.question,
+          answers: c.answers,
+          explanation: c.explanation,
+          tags: [examOf.get(e.id) === 'FE' ? '基本情報' : 'ITパスポート', ...(c.tags ?? []).filter((t) => t === FLAG_UNSURE)],
+        });
+      }
+      const deckKey = `it-text-${key}-${range}`;
+      const label = `${u.title} 第${ch.no}章 ${ch.title}（${range === 'ip' ? 'ITパスポートの範囲' : '基本情報まで'}）`;
+      const outRel = `/tools/exam-glossary/it-text/${key}-${range}.json`;
+      const outPath = join(root, 'public', outRel);
+      mkdirSync(dirname(outPath), { recursive: true });
+      writeFileSync(outPath, JSON.stringify({
+        schema: 'dataset-json-v1',
+        datasetId: deckKey,
+        title: `読んで分かる ${label}`,
+        description: `読み物テキスト「読んで分かる ITパスポート・基本情報」の${u.title} 第${ch.no}章の用語。カテゴリはテキストの節の名前。`,
+        tags: ['it-text', range === 'ip' ? 'it-passport' : 'fe'],
+        cards,
+      }));
+      decks[deckKey] = { url: outRel, label: `読んで分かる ${label}`, count: cards.length };
+    }
+  }
+  console.log(`読み物テキストの章の問題集: ${Object.keys(decks).length}個`);
+} else {
+  console.log(`読み物テキストの card-map が無いので、章の問題集は作らない（${cardMapPath}）`);
+}
+if (errors.length > 0) {
+  console.error(errors.join('\n'));
+  process.exit(1);
+}
+writeFileSync(join(root, 'src/features/anki/lib/textDecks.json'), `${JSON.stringify(decks, null, 1)}\n`);

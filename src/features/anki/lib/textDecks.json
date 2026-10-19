@@ -1,0 +1,52 @@
+{
+ "it-text-security-threats-ip": {
+  "url": "/tools/exam-glossary/it-text/security-threats-ip.json",
+  "label": "読んで分かる セキュリティ 第1章 脅威と攻撃（ITパスポートの範囲）",
+  "count": 105
+ },
+ "it-text-security-threats-fe": {
+  "url": "/tools/exam-glossary/it-text/security-threats-fe.json",
+  "label": "読んで分かる セキュリティ 第1章 脅威と攻撃（基本情報まで）",
+  "count": 152
+ },
+ "it-text-security-crypto-ip": {
+  "url": "/tools/exam-glossary/it-text/security-crypto-ip.json",
+  "label": "読んで分かる セキュリティ 第2章 暗号と認証（ITパスポートの範囲）",
+  "count": 76
+ },
+ "it-text-security-crypto-fe": {
+  "url": "/tools/exam-glossary/it-text/security-crypto-fe.json",
+  "label": "読んで分かる セキュリティ 第2章 暗号と認証（基本情報まで）",
+  "count": 116
+ },
+ "it-text-security-management-ip": {
+  "url": "/tools/exam-glossary/it-text/security-management-ip.json",
+  "label": "読んで分かる セキュリティ 第3章 管理と評価（ITパスポートの範囲）",
+  "count": 62
+ },
+ "it-text-security-management-fe": {
+  "url": "/tools/exam-glossary/it-text/security-management-fe.json",
+  "label": "読んで分かる セキュリティ 第3章 管理と評価（基本情報まで）",
+  "count": 194
+ },
+ "it-text-security-measures-ip": {
+  "url": "/tools/exam-glossary/it-text/security-measures-ip.json",
+  "label": "読んで分かる セキュリティ 第4章 対策（ITパスポートの範囲）",
+  "count": 69
+ },
+ "it-text-security-measures-fe": {
+  "url": "/tools/exam-glossary/it-text/security-measures-fe.json",
+  "label": "読んで分かる セキュリティ 第4章 対策（基本情報まで）",
+  "count": 114
+ },
+ "it-text-security-implementation-ip": {
+  "url": "/tools/exam-glossary/it-text/security-implementation-ip.json",
+  "label": "読んで分かる セキュリティ 第5章 実装技術（ITパスポートの範囲）",
+  "count": 16
+ },
+ "it-text-security-implementation-fe": {
+  "url": "/tools/exam-glossary/it-text/security-implementation-fe.json",
+  "label": "読んで分かる セキュリティ 第5章 実装技術（基本情報まで）",
+  "count": 67
+ }
+}
