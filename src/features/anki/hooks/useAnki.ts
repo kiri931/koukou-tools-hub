@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDB } from './useDB';
 import { useStudySession } from './useStudySession';
 import { useDeckLink } from './useDeckLink';
-import type { AppSettings, Card, DashboardStats, DatasetSummary } from '../types';
+import type { AppSettings, Card, DashboardStats, Dataset, DatasetSummary } from '../types';
 import { DEFAULT_SETTINGS } from '../types';
 
 export function useAnki() {
@@ -89,6 +89,12 @@ export function useAnki() {
     await refreshAll();
   };
 
+  // 試験の用語集を分野・優先度で切り出して入れるとき用。取り込み直しで進み具合を消さない
+  const syncDataset = async (dataset: Dataset) => {
+    await db.syncDataset(dataset);
+    await refreshAll();
+  };
+
   const deleteDataset = async (datasetId: string) => {
     await db.deleteDataset(datasetId);
     if (study.session.datasetId === datasetId) {
@@ -146,6 +152,7 @@ export function useAnki() {
     revealHint: study.revealHint,
     resetSession: study.resetSession,
     importDataset,
+    syncDataset,
     deleteDataset,
     getCardsForDataset,
     addOrUpdateCard,

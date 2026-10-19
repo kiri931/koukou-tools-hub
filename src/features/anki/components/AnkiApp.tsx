@@ -181,6 +181,7 @@ export default function AnkiApp() {
             <DataManagementView
               datasets={anki.datasets}
               onImportDataset={anki.importDataset}
+              onSyncDataset={anki.syncDataset}
               onImportBackup={anki.importBackup}
               onExportBackup={async () => {
                 const backup = await anki.exportBackup();
