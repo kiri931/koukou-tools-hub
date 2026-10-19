@@ -32,10 +32,31 @@ function applyPrintClasses(options: PrintOptions) {
 
 export default function PrintSheet({ open, onOpenChange }: PrintSheetProps) {
   const [options, setOptions] = useState<PrintOptions>(DEFAULT_PRINT_OPTIONS);
+  const [printRequested, setPrintRequested] = useState(false);
 
   useEffect(() => {
     applyPrintClasses(options);
   }, [options]);
+
+  // シートが閉じきってから印刷する。以前は閉じ始めて 150ms 後に印刷していて、
+  // 閉じるアニメーションの途中で印刷画面に入ると、印刷画面を閉じたあとにシートが
+  // 「閉じた扱いのまま画面に残る」ことがあった。この状態では×も効かない（2026-10-19 に報告）
+  useEffect(() => {
+    if (open || !printRequested) return;
+    const startedAt = performance.now();
+    let frame = 0;
+    const printWhenClosed = () => {
+      const stillShown = document.querySelector('[data-slot="sheet-content"]');
+      if (stillShown && performance.now() - startedAt < 1000) {
+        frame = window.requestAnimationFrame(printWhenClosed);
+        return;
+      }
+      setPrintRequested(false);
+      window.print();
+    };
+    frame = window.requestAnimationFrame(printWhenClosed);
+    return () => window.cancelAnimationFrame(frame);
+  }, [open, printRequested]);
 
   const setOption = (key: keyof PrintOptions, checked: boolean) => {
     setOptions((prev) => ({ ...prev, [key]: checked }));
@@ -43,10 +64,8 @@ export default function PrintSheet({ open, onOpenChange }: PrintSheetProps) {
 
   const handlePrint = () => {
     applyPrintClasses(options);
+    setPrintRequested(true);
     onOpenChange(false);
-    window.setTimeout(() => {
-      window.print();
-    }, 150);
   };
 
   return (

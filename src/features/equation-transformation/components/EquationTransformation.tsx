@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import type { CSSProperties } from "react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
@@ -235,6 +236,13 @@ function judgeInputAnswer(given: string, answer: string): InputVerdict {
   }
 }
 
+/**
+ * 記述式の印刷で、A4 片面 1 枚に収める問題数の上限。これを超えると 2 枚目へ続ける。
+ * 20 問では 2 行になる問題で答えの線がマスからはみ出し、途中式を書く余白も 2mm しか
+ * 残らなかった（2026-10-19 に PDF へ刷って実測）。12 問なら 1 マス約 37mm になる
+ */
+const ONE_SHEET_MAX = 12;
+
 export default function EquationTransformation() {
   type QuizMode = "choice" | "input";
   const [questionCountInput, setQuestionCountInput] = useState(String(DEFAULT_COUNT));
@@ -392,6 +400,58 @@ export default function EquationTransformation() {
           /* ダーク表示のまま印刷すると、dark: の明るい文字色（slate-100 など）が白い紙に残って読めなかった
              （2026-09-27 に移行の前後で PDF を刷って確認）。紙の上の文字は kj の印刷用の文字色にそろえる */
           .print-root, .print-root *, .th-page-head * { color: var(--color-text) !important; }
+          /* 記述式は、問題を 2 列に並べ、各マスの下に答えを書く線を引く。
+             入力欄（math-field）は紙では使えないので消す。 */
+          .print-root .equation-sheet[data-mode="input"] {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: minmax(36mm, auto);
+            gap: 2mm;
+          }
+          /* ONE_SHEET_MAX 問までは A4 片面 1 枚に収める。高さを mm で決め打ちすると、見出しの高さが
+             変わったときに最後の段が 2 枚目へ落ちた（2026-10-19 に 10 問で実測）。そこで本文を用紙の
+             高さ（297mm − 余白 24mm）に固定し、残りを問題のマスで等分する（--rows）。
+             解説まで刷るときは収まらないので、この固定はかけずに複数枚にする */
+          body:not(.print-show-explain) .th-page:has(.equation-sheet[data-fit="one"]) {
+            display: flex !important; flex-direction: column; height: 271mm; overflow: hidden;
+          }
+          body:not(.print-show-explain) .th-page:has(.equation-sheet[data-fit="one"]) .kj-tool-frame,
+          /* astro-island は display: contents なので、その中の React の根（div）が枠の flex に直接並ぶ。
+             枠の子を * で選ぶと、island の隣にある <style>・<script> まで紙に出た */
+          body:not(.print-show-explain) .th-page:has(.equation-sheet[data-fit="one"]) .kj-tool-frame astro-island > div,
+          body:not(.print-show-explain) .print-root:has(.equation-sheet[data-fit="one"]) {
+            flex: 1; min-height: 0; display: flex !important; flex-direction: column;
+          }
+          body:not(.print-show-explain) .print-root .equation-sheet[data-fit="one"] {
+            flex: 1; min-height: 0;
+            grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
+          }
+          .print-root .equation-sheet[data-mode="input"] > .print-card {
+            margin: 0 !important;
+            min-height: 0;
+            overflow: hidden;
+          }
+          .print-root .equation-sheet[data-mode="input"] > .print-card { padding: 1.5mm 2.5mm !important; gap: 0.5mm !important; }
+          .equation-sheet[data-mode="input"] .print-card [data-slot="card-header"] {
+            display: flex !important; align-items: baseline; gap: 2mm !important; font-size: 10.5pt; line-height: 1.45;
+          }
+          .equation-sheet[data-mode="input"] .print-card [data-slot="card-title"] { font-size: 10.5pt !important; flex: none; }
+          .equation-sheet[data-mode="input"] .print-card [data-slot="card-content"] {
+            flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
+          }
+          .equation-sheet[data-mode="input"] math-field { display: none !important; }
+          .equation-sheet[data-mode="input"] .print-write {
+            display: flex !important; align-items: flex-end; gap: 2mm; font-size: 10.5pt;
+          }
+          .equation-sheet[data-mode="input"] .print-write > span:last-child {
+            flex: 1; border-bottom: 1px solid #475569; min-height: 6.5mm;
+            display: flex; align-items: flex-end; padding: 0 2mm 0.5mm;
+          }
+          .equation-sheet[data-mode="input"] .print-write-answer { display: none; }
+          body.print-show-answers .equation-sheet[data-mode="input"] .print-write-answer { display: block; }
+          body.print-show-answers .equation-sheet[data-mode="input"] .print-answer { display: none !important; }
+          .print-input-guide { display: block !important; margin: 0 0 2mm 0; font-size: 10.5pt; }
+          .print-input-guide { display: block !important; margin: 0 0 2mm 0; font-size: 10.5pt; }
           @page { size: A4; margin: 12mm; }
         }
       `}</style>
@@ -421,7 +481,13 @@ export default function EquationTransformation() {
             </div>
 
             {mode === "input" && (
-              <div className="rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-4 text-base">
+              <p className="print-input-guide hidden">
+                求める文字から「x=」のように、答えを下の線の上に書きなさい。
+              </p>
+            )}
+
+            {mode === "input" && (
+              <div className="no-print rounded-lg border border-[var(--kj-divider)] bg-[var(--color-background)] p-4 text-base">
                 <h2 className="mb-2 font-semibold text-slate-700 dark:text-slate-200">
                   記述式の答え方
                 </h2>
@@ -500,7 +566,13 @@ export default function EquationTransformation() {
           </CardContent>
         </Card>
 
-        <section className="space-y-4">
+        <section
+          className="equation-sheet space-y-4"
+          data-mode={mode}
+          data-fit={mode === "input" && items.length <= ONE_SHEET_MAX ? "one" : undefined}
+          // 少ない問題数でマスが用紙いっぱいに伸びないよう、行は最低 4 段で割る（1 マス約 60mm）
+          style={{ "--rows": Math.max(4, Math.ceil(items.length / 2)) } as CSSProperties}
+        >
           {items.map((item, index) => {
             const selected = answers[item.id];
             const verdict =
@@ -616,6 +688,18 @@ export default function EquationTransformation() {
                         </p>
                       )}
                     </div>
+                  )}
+
+                  {mode === "input" && (
+                    <p className="print-write hidden" aria-hidden="true">
+                      <span>答</span>
+                      {/* 解答つきで刷るときは、答えを線の上に書き込む。マスの高さを増やさずに済む */}
+                      <span>
+                        <span className="print-write-answer">
+                          <MathChoice text={item.answer} />
+                        </span>
+                      </span>
+                    </p>
                   )}
 
                   <p className="print-answer hidden mt-3 text-base text-slate-700">
