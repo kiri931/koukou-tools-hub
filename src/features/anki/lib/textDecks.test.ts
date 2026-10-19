@@ -43,13 +43,21 @@ describe('読み物テキストの章ごとの問題集', () => {
     }
   });
 
+  // 章の語が4枚未満の問題集（2026-10-19 時点では system-development-maintenance-ip の3枚だけ）は
+  // 4択にできないので、章の語を全部使った択数（3枚なら3択）になればよい
   it('どのカードでも4択が作れる（カテゴリ＝節が小さくても、同じ章の別の節から補える）', () => {
     const bad: string[] = [];
     for (const deck of Object.values(decks)) {
       const ds = load(deck.url);
       const pool = ds.cards.map((card) => ({ card, cardState: null }));
-      for (const c of ds.cards) if (buildChoices(c, pool).choices.length < 4) bad.push(`${ds.datasetId}/${c.answers[0]}`);
+      const want = Math.min(4, ds.cards.length);
+      for (const c of ds.cards) if (buildChoices(c, pool).choices.length < want) bad.push(`${ds.datasetId}/${c.answers[0]}`);
     }
     expect(bad).toEqual([]);
+  });
+
+  it('どの問題集も、選択肢が作れるだけの枚数（3枚以上）がある', () => {
+    const small = Object.entries(decks).filter(([, d]) => d.count < 3).map(([k]) => k);
+    expect(small).toEqual([]);
   });
 });

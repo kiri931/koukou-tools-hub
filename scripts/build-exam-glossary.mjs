@@ -80,7 +80,8 @@ function priorityOf(tags, answers, syllabus) {
 }
 
 // 元の用語集のカードの誤りを直す（2026-10-19、読み物テキストを書いたときの事実確認で見つかったもの）。
-// null はカードごと外す
+// null はカードごと外す。いまは11枚: 外す6枚（t3347・t4865・t4765・t2148・t4471・t3767）、
+// 答えや文を直す5枚（t0549・t1844・t1722・t4273・t5162）。ほかに IP から外す3枚は下の NOT_IP
 const CARD_FIXES = {
   // PDF の文字起こしで、シラバスの「保管期間」と見出しの「マネジメント系」がつながってできた偽の語
   t3347: null,
@@ -93,7 +94,33 @@ const CARD_FIXES = {
     question: 'シンクライアントの仕組みに関わる語の一つで、基本情報の過去問の選択肢に出たことがある「シンクライアント○○○○○」は何?',
     explanation: 'IPA は定義を示していない。端末に入れるソフトとする資料も、サーバ側の仕組みとする資料もある。シンクライアントに関わる語として押さえれば足りる。',
   },
+  // ---- 2026-10-19 追加: 偽の語5枚を外す・誤記2枚を直す ----
+  // 元データの欠落で1文字だけ残った断片。用語ではない
+  t4865: null,
+  // シラバスの項目名の断片（「終了」だけ）。何の終了かが分からず、用語として問えない
+  t4765: null,
+  // 過去問の誤答選択肢にだけ出た造語。定義の確立した用語ではない
+  t2148: null,
+  // 一般語の「活動」。元の文脈が特定できず、試験の用語ではない
+  t4471: null,
+  // シラバスの見出しの断片（「基本的な考え方」）。用語ではない
+  t3767: null,
+  // 正しくは「暗合的強度」（偶然的強度とも）。「暗号的強度」は誤記
+  t4273: { answers: ['暗合的強度'] },
+  // JIS X 0161 の語は「適応保守」。「適用保守」は誤記なので答えから外す
+  t5162: { answers: ['適応保守'] },
 };
+
+// ITパスポートの用語集に入れないカード（2026-10-19）。基本情報の用語集には残す。
+// IP シラバスとの照合で、同じ綴りの別の語に当たって IP に入っていたもの
+const NOT_IP = new Set([
+  // 中身はファクシミリの Modified READ。IP シラバスの MR は Mixed Reality（複合現実）
+  't0651',
+  // IP シラバスに無い（FE 用のアセンブラ言語）。元の IP 用語集にだけ入っていたので、基本情報の用語集へ移す
+  't0160',
+  // 中身は磁気ディスクのシリンダ。IP シラバスのシリンダは油圧・空気圧シリンダ（アクチュエータ）
+  't1719',
+]);
 function applyFixes(cards) {
   return cards.flatMap((c) => {
     if (!(c.id in CARD_FIXES)) return [c];
@@ -114,9 +141,15 @@ const ipData = JSON.parse(readFileSync(ipPath, 'utf8'));
 const feData = JSON.parse(readFileSync(fePath, 'utf8'));
 ipData.cards = applyFixes(ipData.cards);
 feData.cards = applyFixes(feData.cards);
+// NOT_IP のうち元の IP 用語集にだけあったもの（t0160 CASL）は、基本情報の用語集へ移す
+const feIdsBefore = new Set(feData.cards.map((c) => c.id));
+const movedToFe = ipData.cards.filter((c) => NOT_IP.has(c.id) && !feIdsBefore.has(c.id));
+feData.cards = [...feData.cards, ...movedToFe];
+ipData.cards = ipData.cards.filter((c) => !NOT_IP.has(c.id));
+console.log(`ITパスポートから外して基本情報へ移す: ${movedToFe.map((c) => c.id).join('・') || 'なし'}`);
 const ipIds = new Set(ipData.cards.map((c) => c.id));
 const addedToIp = feData.cards
-  .filter((c) => !ipIds.has(c.id) && inSyllabus(ipFlat, c.answers))
+  .filter((c) => !ipIds.has(c.id) && !NOT_IP.has(c.id) && inSyllabus(ipFlat, c.answers))
   .map((c) => ({
     ...c,
     tags: [FLAG_FROM_IP_SYLLABUS, ...(c.tags ?? []).filter((t) => t === FLAG_UNSURE)],
