@@ -15,6 +15,7 @@ import type {
   TopConfusionRow,
 } from '../types';
 import { DEFAULT_SETTINGS } from '../types';
+import { buildTodayQueue, isNewCard, normalizeNewCardsPerDay, type NewCardBudget } from '../lib/newCardLimit';
 
 type StoredCard = Card & { datasetId: string; dbKey: string };
 type StoredCardState = CardState & { id: string };
@@ -35,6 +36,8 @@ type DBApi = {
   upsertCard: (datasetId: string, card: Card) => Promise<void>;
   deleteCard: (datasetId: string, cardId: string) => Promise<void>;
   buildDueQueue: (datasetId: string) => Promise<StudyQueueItem[]>;
+  /** 新しいカードの今日の枠（上限・今日出したぶん・残り・まだ見ていない枚数） */
+  getNewCardBudget: (datasetId: string) => Promise<NewCardBudget>;
   upsertCardState: (state: CardState) => Promise<void>;
   appendReview: (review: Review) => Promise<void>;
   detectConfusion: (params: { datasetId: string; cardId: string; inputText: string }) => Promise<void>;
@@ -184,6 +187,34 @@ function toCard(row: StoredCard): Card {
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
+}
+
+/** 保存された設定を、足りない項目は既定値で埋め、上限の枚数をそろえて返す */
+function completeSettings(value: Partial<AppSettings> | undefined): AppSettings {
+  const merged = { ...DEFAULT_SETTINGS, ...(value ?? {}) };
+  return { ...merged, newCardsPerDay: normalizeNewCardsPerDay(merged.newCardsPerDay) };
+}
+
+/**
+ * 1つの問題集の「今日の出題」を、カード・進み具合・答えた記録・設定から作る。
+ * 新しいカードの上限は、答えた記録（reviews）から今日はじめて答えた枚数を数えて引く。
+ */
+async function readTodayQueue(db: IDBDatabase, datasetId: string) {
+  const tx = db.transaction(['cards', 'cardState', 'reviews', 'settings'], 'readonly');
+  const cards = await getAllByIndex<StoredCard>(tx.objectStore('cards'), 'datasetId', datasetId);
+  const states = await getAllByIndex<StoredCardState>(tx.objectStore('cardState'), 'datasetId', datasetId);
+  const reviews = await getAllByIndex<Review>(tx.objectStore('reviews'), 'datasetId', datasetId);
+  const record = await promisifyRequest(tx.objectStore('settings').get(SETTINGS_KEY)) as SettingsRecord | undefined;
+  await txDone(tx);
+  const built = buildTodayQueue({
+    cards: cards.map(toCard),
+    states,
+    reviews,
+    now: Date.now(),
+    newCardsPerDay: completeSettings(record?.value).newCardsPerDay,
+  });
+  const cardIds = new Set(cards.map((card) => card.id));
+  return { ...built, states: states.filter((state) => cardIds.has(state.cardId)) };
 }
 
 export function useDB(): DBApi {
@@ -450,26 +481,12 @@ export function useDB(): DBApi {
 
     buildDueQueue: async (datasetId) => {
       const db = await getDb();
-      const tx = db.transaction(['cards', 'cardState'], 'readonly');
-      const cards = await getAllByIndex<StoredCard>(tx.objectStore('cards'), 'datasetId', datasetId);
-      const states = await getAllByIndex<StoredCardState>(tx.objectStore('cardState'), 'datasetId', datasetId);
-      await txDone(tx);
+      return (await readTodayQueue(db, datasetId)).queue;
+    },
 
-      const stateMap = new Map(states.map((state) => [state.cardId, state]));
-      const now = Date.now();
-
-      return cards
-        .map<StudyQueueItem>((card) => ({
-          card: toCard(card),
-          cardState: stateMap.get(card.id) ?? null,
-        }))
-        .filter((item) => !item.cardState || item.cardState.dueAt <= now)
-        .sort((a, b) => {
-          if (!a.cardState && !b.cardState) return a.card.question.localeCompare(b.card.question, 'ja');
-          if (!a.cardState) return -1;
-          if (!b.cardState) return 1;
-          return a.cardState.dueAt - b.cardState.dueAt;
-        });
+    getNewCardBudget: async (datasetId) => {
+      const db = await getDb();
+      return (await readTodayQueue(db, datasetId)).budget;
     },
 
     upsertCardState: async (state) => {
@@ -521,40 +538,37 @@ export function useDB(): DBApi {
       await txDone(tx);
     },
 
+    // 新しいカードは1日の上限（問題集ごと）までしか数えない。
+    // 数えないと、試験用語集を入れた日に「復習するのは 2287問」と出てしまう
     countDue: async (datasetId) => {
       const db = await getDb();
-      const tx = db.transaction(['datasets', 'cards', 'cardState'], 'readonly');
+      const listTx = db.transaction('datasets', 'readonly');
       const datasets = datasetId
-        ? [await promisifyRequest(tx.objectStore('datasets').get(datasetId)) as DatasetSummary | undefined].filter(Boolean) as DatasetSummary[]
-        : (await promisifyRequest(tx.objectStore('datasets').getAll()) as DatasetSummary[]);
+        ? [await promisifyRequest(listTx.objectStore('datasets').get(datasetId)) as DatasetSummary | undefined].filter(Boolean) as DatasetSummary[]
+        : (await promisifyRequest(listTx.objectStore('datasets').getAll()) as DatasetSummary[]);
+      await txDone(listTx);
 
-      const cardsStore = tx.objectStore('cards');
-      const statesStore = tx.objectStore('cardState');
-      const now = Date.now();
       const endOfToday = new Date();
       endOfToday.setHours(23, 59, 59, 999);
       const todayEndTs = endOfToday.getTime();
       let overdue = 0;
       let today = 0;
+      let newCards = 0;
 
       for (const ds of datasets) {
-        const cards = await getAllByIndex<StoredCard>(cardsStore, 'datasetId', ds.datasetId);
-        const states = await getAllByIndex<StoredCardState>(statesStore, 'datasetId', ds.datasetId);
-        const stateMap = new Map(states.map((s) => [s.cardId, s]));
-        for (const card of cards) {
-          const state = stateMap.get(card.id);
-          if (!state) {
-            overdue += 1;
-            today += 1;
-            continue;
-          }
-          if (state.dueAt <= now) overdue += 1;
+        const { queue, budget, states } = await readTodayQueue(db, ds.datasetId);
+        const newToday = Math.min(budget.remaining, budget.unseen);
+        newCards += newToday;
+        // queue は「期日の来た復習＋上限内の新しいカード」そのもの
+        overdue += queue.length;
+        today += newToday;
+        for (const state of states) {
+          if (isNewCard(state)) continue;
           if (state.dueAt <= todayEndTs) today += 1;
         }
       }
 
-      await txDone(tx);
-      return { overdue, today };
+      return { overdue, today, newCards };
     },
 
     computeAvgRetrievability: async (datasetId) => {
@@ -643,7 +657,7 @@ export function useDB(): DBApi {
       const tx = db.transaction('settings', 'readonly');
       const record = await promisifyRequest(tx.objectStore('settings').get(SETTINGS_KEY)) as SettingsRecord | undefined;
       await txDone(tx);
-      return record?.value ?? DEFAULT_SETTINGS;
+      return completeSettings(record?.value);
     },
 
     setSettings: async (settings) => {
@@ -651,11 +665,10 @@ export function useDB(): DBApi {
       const tx = db.transaction('settings', 'readwrite');
       const store = tx.objectStore('settings');
       const current = await promisifyRequest(store.get(SETTINGS_KEY)) as SettingsRecord | undefined;
-      const next: AppSettings = {
-        ...DEFAULT_SETTINGS,
+      const next: AppSettings = completeSettings({
         ...(current?.value ?? {}),
         ...settings,
-      };
+      });
       store.put({ id: SETTINGS_KEY, value: next } satisfies SettingsRecord);
       await txDone(tx);
       return next;

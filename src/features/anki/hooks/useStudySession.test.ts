@@ -7,6 +7,7 @@ import { useStudySession } from './useStudySession';
 import { DEFAULT_SETTINGS } from '../types';
 import type { AnswerCheckResult, Card, CardState, Grade, Review, StudyQueueItem } from '../types';
 import glossary from '../lib/__fixtures__/glossary.json';
+import { isNewLimitReached, makeBudget, type NewCardBudget } from '../lib/newCardLimit';
 
 const cards = glossary.cards as Card[];
 
@@ -234,5 +235,61 @@ describe('セッションの通し', () => {
     const { hook } = await start([]);
     expect(hook.result.current.session.status).toBe('done');
     expect(hook.result.current.session.total).toBe(0);
+  });
+});
+
+describe('新しいカードの1日の上限（画面に出す残り枚数）', () => {
+  async function startWithBudget(queue: StudyQueueItem[], budget: NewCardBudget) {
+    const { deps, reviews } = makeDeps(queue);
+    const withBudget = { ...deps, getNewCardBudget: vi.fn(async () => budget) };
+    const hook = renderHook(() => useStudySession(withBudget, DEFAULT_SETTINGS));
+    await act(async () => {
+      await hook.result.current.startSession('koukou-jouhou-glossary');
+    });
+    return { hook, reviews };
+  }
+
+  async function answerAndGrade(hook: Awaited<ReturnType<typeof startWithBudget>>['hook']) {
+    const answer = hook.result.current.session.current!.card.answers[0];
+    await act(async () => {
+      await hook.result.current.submitAnswer(answer);
+    });
+    await act(async () => {
+      await hook.result.current.submitGrade(3);
+    });
+  }
+
+  it('始めたときの残り枚数をそのまま持つ', async () => {
+    const { hook } = await startWithBudget(newQueue(20), makeBudget(20, 0, 2287));
+    expect(hook.result.current.session.newBudget).toEqual({ limit: 20, introducedToday: 0, remaining: 20, unseen: 2287 });
+  });
+
+  it('新しいカードを1枚答えると、残りが1枚減る', async () => {
+    const { hook } = await startWithBudget(newQueue(20), makeBudget(20, 0, 2287));
+    await answerAndGrade(hook);
+    expect(hook.result.current.session.newBudget?.remaining).toBe(19);
+    expect(hook.result.current.session.newBudget?.introducedToday).toBe(1);
+    expect(hook.result.current.session.newBudget?.unseen).toBe(2286);
+  });
+
+  it('復習のカードを答えても、新しいカードの残りは減らない', async () => {
+    const queue = [{ card: cards[0], cardState: { ...state(2), cardId: cards[0].id } }, ...newQueue(3).slice(1)];
+    const { hook } = await startWithBudget(queue, makeBudget(20, 0, 50));
+    await answerAndGrade(hook);
+    expect(hook.result.current.session.newBudget?.remaining).toBe(20);
+  });
+
+  it('上限ぶんを答え終わると完了になり、「今日はここまで」と分かる', async () => {
+    const { hook, reviews } = await startWithBudget(newQueue(3), makeBudget(3, 0, 100));
+    for (let i = 0; i < 3; i += 1) await answerAndGrade(hook);
+    expect(hook.result.current.session.status).toBe('done');
+    expect(reviews).toHaveLength(3);
+    expect(isNewLimitReached(hook.result.current.session.newBudget!)).toBe(true);
+  });
+
+  it('枠を返さない依存（古い呼び出し方）でも学習はできる', async () => {
+    const { hook } = await start(newQueue(2));
+    expect(hook.result.current.session.status).toBe('question');
+    expect(hook.result.current.session.newBudget).toBeNull();
   });
 });

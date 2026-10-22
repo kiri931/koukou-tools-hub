@@ -4,6 +4,7 @@ import { resolveQuestion } from '../lib/questionMode';
 import { maskQuestion } from '../lib/maskQuestion';
 import { hasMoreHints } from '../lib/hints';
 import { capGrade } from '../lib/gradeCap';
+import { isNewCard, type NewCardBudget } from '../lib/newCardLimit';
 import type { AnswerCheckResult, AppSettings, Card, CardState, Grade, Review, StudySessionState } from '../types';
 
 type StudyDeps = {
@@ -13,6 +14,8 @@ type StudyDeps = {
   detectConfusion: (params: { datasetId: string; cardId: string; inputText: string }) => Promise<void>;
   upsertCardState: (state: CardState) => Promise<void>;
   appendReview: (review: Review) => Promise<void>;
+  /** 新しいカードの今日の枠（上限・今日出したぶん・残り）。画面に「残り N 枚」を出すのに使う */
+  getNewCardBudget?: (datasetId: string) => Promise<NewCardBudget>;
 };
 
 const initialState: StudySessionState = {
@@ -36,6 +39,7 @@ const initialState: StudySessionState = {
   responseMs: null,
   submittedAt: null,
   error: null,
+  newBudget: null,
 };
 
 /**
@@ -102,6 +106,10 @@ export function useStudySession(deps: StudyDeps, settings: AppSettings, onPersis
 
     try {
       const queue = await deps.buildDueQueue(datasetId);
+      // 残り枚数が取れなくても学習は続けられる。表示が出ないだけにする
+      const newBudget = deps.getNewCardBudget
+        ? await deps.getNewCardBudget(datasetId).catch(() => null)
+        : null;
       // 選択肢を作るための候補。取れなくても学習は続けられるので、失敗は握りつぶす
       const choicePool = await deps
         .getCardsByDataset(datasetId)
@@ -115,6 +123,7 @@ export function useStudySession(deps: StudyDeps, settings: AppSettings, onPersis
           queue,
           total: 0,
           error: null,
+          newBudget,
         });
         return;
       }
@@ -129,6 +138,7 @@ export function useStudySession(deps: StudyDeps, settings: AppSettings, onPersis
             queue,
             choicePool,
             total: queue.length,
+            newBudget,
           },
           0
         )
@@ -226,8 +236,20 @@ export function useStudySession(deps: StudyDeps, settings: AppSettings, onPersis
             cardState: nextState,
           };
         }
+        // 新しいカードを答えたら、今日の残りを1枚減らす（保存は reviews に残った記録で数え直せる）
+        const wasNew = isNewCard(prev.queue[prev.index]?.cardState);
+        const newBudget =
+          wasNew && prev.newBudget
+            ? {
+                ...prev.newBudget,
+                introducedToday: prev.newBudget.introducedToday + 1,
+                remaining: Math.max(0, prev.newBudget.remaining - 1),
+                unseen: Math.max(0, prev.newBudget.unseen - 1),
+              }
+            : prev.newBudget;
         return toQuestionState({
           ...prev,
+          newBudget,
           queue: updatedQueue,
           correctCount: prev.correctCount + (prev.isCorrect ? 1 : 0),
           incorrectCount: prev.incorrectCount + (prev.isCorrect ? 0 : 1),

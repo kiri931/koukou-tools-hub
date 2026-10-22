@@ -151,6 +151,7 @@ export default function AnkiApp() {
             <HomeView
               datasets={anki.datasets}
               dueByDataset={anki.dueByDataset}
+              newBudgetByDataset={anki.newBudgetByDataset}
               selectedDatasetId={anki.selectedDatasetId}
               onSelectDataset={anki.setSelectedDatasetId}
               onStartSession={anki.startSession}

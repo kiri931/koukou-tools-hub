@@ -2,11 +2,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { DatasetSummary } from '../../types';
+import { isNewLimitReached, type NewCardBudget } from '../../lib/newCardLimit';
+import { NewCardCounter } from '../NewCardStatus';
 import FsrsExplainer from '../FsrsExplainer';
 
 type Props = {
   datasets: DatasetSummary[];
   dueByDataset: Record<string, number>;
+  /** 問題集ごとの新しいカードの今日の枠。無ければ表示しない */
+  newBudgetByDataset?: Record<string, NewCardBudget>;
   selectedDatasetId: string | null;
   onSelectDataset: (datasetId: string) => void;
   onStartSession: (datasetId: string) => Promise<void> | void;
@@ -20,7 +24,7 @@ function estimateMinutes(count: number): number {
 }
 
 export default function HomeView(props: Props) {
-  const { datasets, dueByDataset, selectedDatasetId, onSelectDataset, onStartSession, onMoveToStudy, onMoveToData } =
+  const { datasets, dueByDataset, newBudgetByDataset = {}, selectedDatasetId, onSelectDataset, onStartSession, onMoveToStudy, onMoveToData } =
     props;
 
   // はじめて開いた人が最初に見る画面。
@@ -51,6 +55,10 @@ export default function HomeView(props: Props) {
     );
   }
 
+  const limitReachedSomewhere = datasets.some((dataset) => {
+    const budget = newBudgetByDataset[dataset.datasetId];
+    return budget ? isNewLimitReached(budget) : false;
+  });
   const totalDue = datasets.reduce((sum, dataset) => sum + (dueByDataset[dataset.datasetId] ?? 0), 0);
   // 「選択中」が無いときは、期限切れがいちばん多い問題集から始める
   const suggestedId =
@@ -71,7 +79,9 @@ export default function HomeView(props: Props) {
           <CardDescription>
             {totalDue > 0
               ? `復習するのは ${totalDue}問（およそ${estimateMinutes(totalDue)}分）です。`
-              : '今日ぶんの復習は終わっています。新しく覚えるぶんを進められます。'}
+              : limitReachedSomewhere
+                ? '今日ぶんは終わりました。新しいカードは1日の上限まで出したので、続きは明日です。'
+                : '今日ぶんの復習は終わっています。新しく覚えるぶんを進められます。'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -134,6 +144,7 @@ export default function HomeView(props: Props) {
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
+              <NewCardCounter budget={newBudgetByDataset[dataset.datasetId]} />
               <div className="flex flex-wrap gap-2">
                 <Badge variant="outline">全{dataset.cardCount}問</Badge>
                 {(dataset.tags ?? []).slice(0, 3).map((tag) => (

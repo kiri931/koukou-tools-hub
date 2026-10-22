@@ -4,20 +4,36 @@ import { useStudySession } from './useStudySession';
 import { useDeckLink } from './useDeckLink';
 import type { AppSettings, Card, DashboardStats, Dataset, DatasetSummary } from '../types';
 import { DEFAULT_SETTINGS } from '../types';
+import type { NewCardBudget } from '../lib/newCardLimit';
 
 export function useAnki() {
   const db = useDB();
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [settings, setSettingsState] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [dashboard, setDashboard] = useState<DashboardStats>({
-    due: { overdue: 0, today: 0 },
+    due: { overdue: 0, today: 0, newCards: 0 },
     avgRetrievability: null,
     topConfusions: [],
   });
   const [dueByDataset, setDueByDataset] = useState<Record<string, number>>({});
+  // 問題集ごとの「新しいカード 残り N 枚（今日）」
+  const [newBudgetByDataset, setNewBudgetByDataset] = useState<Record<string, NewCardBudget>>({});
   const [selectedDatasetId, setSelectedDatasetId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const loadPerDataset = async (list: DatasetSummary[]) =>
+    Promise.all([
+      Promise.all(
+        list.map(async (dataset) => {
+          const counts = await db.countDue(dataset.datasetId);
+          return [dataset.datasetId, counts.overdue] as const;
+        }),
+      ),
+      Promise.all(
+        list.map(async (dataset) => [dataset.datasetId, await db.getNewCardBudget(dataset.datasetId)] as const),
+      ),
+    ]);
 
   const refreshAll = async () => {
     if (!db.ready) return;
@@ -31,17 +47,13 @@ export function useAnki() {
         db.listTopConfusions(undefined, 10),
       ]);
 
-      const dueEntries = await Promise.all(
-        list.map(async (dataset) => {
-          const counts = await db.countDue(dataset.datasetId);
-          return [dataset.datasetId, counts.overdue] as const;
-        }),
-      );
+      const [dueEntries, budgetEntries] = await loadPerDataset(list);
 
       setDatasets(list);
       setSettingsState(currentSettings);
       setDashboard({ due, avgRetrievability, topConfusions });
       setDueByDataset(Object.fromEntries(dueEntries));
+      setNewBudgetByDataset(Object.fromEntries(budgetEntries));
       setSelectedDatasetId((prev) => (prev && list.some((d) => d.datasetId === prev) ? prev : list[0]?.datasetId ?? null));
       setError(null);
     } catch (err) {
@@ -61,13 +73,9 @@ export function useAnki() {
       ]);
       setDashboard({ due, avgRetrievability, topConfusions });
 
-      const dueEntries = await Promise.all(
-        datasets.map(async (dataset) => {
-          const counts = await db.countDue(dataset.datasetId);
-          return [dataset.datasetId, counts.overdue] as const;
-        }),
-      );
+      const [dueEntries, budgetEntries] = await loadPerDataset(datasets);
       setDueByDataset(Object.fromEntries(dueEntries));
+      setNewBudgetByDataset(Object.fromEntries(budgetEntries));
     } catch {
       // silent; main flow should continue
     }
@@ -141,6 +149,7 @@ export function useAnki() {
     error,
     datasets,
     dueByDataset,
+    newBudgetByDataset,
     dashboard,
     settings,
     selectedDatasetId,
