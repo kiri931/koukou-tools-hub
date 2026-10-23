@@ -280,6 +280,13 @@ export const sections: SiteLinkSection[] = [
 				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="M9 9v12" /><path d="M13 13h4" /><path d="M13 17h4" /></svg>',
 			},
 			{
+				href: '/it-text/',
+				label: '読んで分かる ITパスポート・基本情報（23単元・78章）',
+				desc: 'ITパスポートと基本情報技術者試験の範囲を、パン屋を舞台にした読み物で1章ずつ学びます。基本情報で増える所には印が付き、章ごとの問題集は覚える君に取り込めます。',
+				accent: '#0891b2',
+				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>',
+			},
+			{
 				href: '/fe-lab/',
 				label: '基本情報ハンズオンラボ（シラバス23単元）',
 				desc: '基本情報技術者試験のシラバス（Ver.9.2）の中分類23個を、図解・要点・計算や模擬操作のハンズオン・3問チェックで1単元ずつ学びます。',
