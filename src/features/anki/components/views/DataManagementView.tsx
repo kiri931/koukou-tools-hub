@@ -4,13 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { Card as AnkiCard, DatasetSummary } from '../../types';
+import type { Card as AnkiCard, Dataset, DatasetSummary } from '../../types';
+import ExamGlossaryPicker from './ExamGlossaryPicker';
 
 type EditingCard = (Partial<AnkiCard> & { isNew: boolean }) | null;
 
 type Props = {
   datasets: DatasetSummary[];
   onImportDataset: (text: string) => Promise<void>;
+  onSyncDataset: (dataset: Dataset) => Promise<void>;
   onImportBackup: (text: string) => Promise<void>;
   onExportBackup: () => Promise<void>;
   onDeleteDataset: (datasetId: string) => Promise<void>;
@@ -35,6 +37,7 @@ export default function DataManagementView(props: Props) {
   const {
     datasets,
     onImportDataset,
+    onSyncDataset,
     onImportBackup,
     onExportBackup,
     onDeleteDataset,
@@ -167,6 +170,8 @@ export default function DataManagementView(props: Props) {
           <CardDescription>データセットJSONのインポート、バックアップのエクスポート/インポートを行います。</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <ExamGlossaryPicker onSyncDataset={onSyncDataset} />
+
           <div className="space-y-2">
             <label className="text-base font-medium" htmlFor="dataset-import">データセットJSONをインポート</label>
             <input

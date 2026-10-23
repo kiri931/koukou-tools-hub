@@ -1,0 +1,782 @@
+{
+ "it-text-basic-theory-numbers-ip": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-numbers-ip.json",
+  "label": "読んで分かる 基礎理論 第1章 数の表し方と論理演算（ITパスポートの範囲）",
+  "count": 11
+ },
+ "it-text-basic-theory-numbers-fe": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-numbers-fe.json",
+  "label": "読んで分かる 基礎理論 第1章 数の表し方と論理演算（基本情報まで）",
+  "count": 43
+ },
+ "it-text-basic-theory-statistics-ip": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-statistics-ip.json",
+  "label": "読んで分かる 基礎理論 第2章 確率と統計（ITパスポートの範囲）",
+  "count": 35
+ },
+ "it-text-basic-theory-statistics-fe": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-statistics-fe.json",
+  "label": "読んで分かる 基礎理論 第2章 確率と統計（基本情報まで）",
+  "count": 59
+ },
+ "it-text-basic-theory-numerical-ip": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-numerical-ip.json",
+  "label": "読んで分かる 基礎理論 第3章 数値計算とグラフ・待ち行列（ITパスポートの範囲）",
+  "count": 25
+ },
+ "it-text-basic-theory-numerical-fe": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-numerical-fe.json",
+  "label": "読んで分かる 基礎理論 第3章 数値計算とグラフ・待ち行列（基本情報まで）",
+  "count": 52
+ },
+ "it-text-basic-theory-information-ip": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-information-ip.json",
+  "label": "読んで分かる 基礎理論 第4章 情報・符号と言語の理論（ITパスポートの範囲）",
+  "count": 15
+ },
+ "it-text-basic-theory-information-fe": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-information-fe.json",
+  "label": "読んで分かる 基礎理論 第4章 情報・符号と言語の理論（基本情報まで）",
+  "count": 40
+ },
+ "it-text-basic-theory-ai-ip": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-ai-ip.json",
+  "label": "読んで分かる 基礎理論 第5章 AI（人工知能）の技術（ITパスポートの範囲）",
+  "count": 25
+ },
+ "it-text-basic-theory-ai-fe": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-ai-fe.json",
+  "label": "読んで分かる 基礎理論 第5章 AI（人工知能）の技術（基本情報まで）",
+  "count": 47
+ },
+ "it-text-basic-theory-signal-control-ip": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-signal-control-ip.json",
+  "label": "読んで分かる 基礎理論 第6章 通信・計測・制御の理論（ITパスポートの範囲）",
+  "count": 14
+ },
+ "it-text-basic-theory-signal-control-fe": {
+  "url": "/tools/exam-glossary/it-text/basic-theory-signal-control-fe.json",
+  "label": "読んで分かる 基礎理論 第6章 通信・計測・制御の理論（基本情報まで）",
+  "count": 50
+ },
+ "it-text-algorithm-data-algorithm-ip": {
+  "url": "/tools/exam-glossary/it-text/algorithm-data-algorithm-ip.json",
+  "label": "読んで分かる アルゴリズムとプログラミング 第1章 データ構造とアルゴリズム（ITパスポートの範囲）",
+  "count": 17
+ },
+ "it-text-algorithm-data-algorithm-fe": {
+  "url": "/tools/exam-glossary/it-text/algorithm-data-algorithm-fe.json",
+  "label": "読んで分かる アルゴリズムとプログラミング 第1章 データ構造とアルゴリズム（基本情報まで）",
+  "count": 79
+ },
+ "it-text-algorithm-programming-ip": {
+  "url": "/tools/exam-glossary/it-text/algorithm-programming-ip.json",
+  "label": "読んで分かる アルゴリズムとプログラミング 第2章 プログラミング（ITパスポートの範囲）",
+  "count": 32
+ },
+ "it-text-algorithm-programming-fe": {
+  "url": "/tools/exam-glossary/it-text/algorithm-programming-fe.json",
+  "label": "読んで分かる アルゴリズムとプログラミング 第2章 プログラミング（基本情報まで）",
+  "count": 57
+ },
+ "it-text-algorithm-languages-ip": {
+  "url": "/tools/exam-glossary/it-text/algorithm-languages-ip.json",
+  "label": "読んで分かる アルゴリズムとプログラミング 第3章 プログラム言語とその他の言語（ITパスポートの範囲）",
+  "count": 15
+ },
+ "it-text-algorithm-languages-fe": {
+  "url": "/tools/exam-glossary/it-text/algorithm-languages-fe.json",
+  "label": "読んで分かる アルゴリズムとプログラミング 第3章 プログラム言語とその他の言語（基本情報まで）",
+  "count": 56
+ },
+ "it-text-computer-components-processor-ip": {
+  "url": "/tools/exam-glossary/it-text/computer-components-processor-ip.json",
+  "label": "読んで分かる コンピュータ構成要素 第1章 コンピュータとプロセッサの構造（ITパスポートの範囲）",
+  "count": 26
+ },
+ "it-text-computer-components-processor-fe": {
+  "url": "/tools/exam-glossary/it-text/computer-components-processor-fe.json",
+  "label": "読んで分かる コンピュータ構成要素 第1章 コンピュータとプロセッサの構造（基本情報まで）",
+  "count": 63
+ },
+ "it-text-computer-components-execution-ip": {
+  "url": "/tools/exam-glossary/it-text/computer-components-execution-ip.json",
+  "label": "読んで分かる コンピュータ構成要素 第2章 命令の実行と高速化（ITパスポートの範囲）",
+  "count": 11
+ },
+ "it-text-computer-components-execution-fe": {
+  "url": "/tools/exam-glossary/it-text/computer-components-execution-fe.json",
+  "label": "読んで分かる コンピュータ構成要素 第2章 命令の実行と高速化（基本情報まで）",
+  "count": 55
+ },
+ "it-text-computer-components-memory-ip": {
+  "url": "/tools/exam-glossary/it-text/computer-components-memory-ip.json",
+  "label": "読んで分かる コンピュータ構成要素 第3章 メモリと記録媒体（ITパスポートの範囲）",
+  "count": 31
+ },
+ "it-text-computer-components-memory-fe": {
+  "url": "/tools/exam-glossary/it-text/computer-components-memory-fe.json",
+  "label": "読んで分かる コンピュータ構成要素 第3章 メモリと記録媒体（基本情報まで）",
+  "count": 61
+ },
+ "it-text-computer-components-bus-interface-ip": {
+  "url": "/tools/exam-glossary/it-text/computer-components-bus-interface-ip.json",
+  "label": "読んで分かる コンピュータ構成要素 第4章 バスと入出力インタフェース（ITパスポートの範囲）",
+  "count": 21
+ },
+ "it-text-computer-components-bus-interface-fe": {
+  "url": "/tools/exam-glossary/it-text/computer-components-bus-interface-fe.json",
+  "label": "読んで分かる コンピュータ構成要素 第4章 バスと入出力インタフェース（基本情報まで）",
+  "count": 49
+ },
+ "it-text-computer-components-io-devices-ip": {
+  "url": "/tools/exam-glossary/it-text/computer-components-io-devices-ip.json",
+  "label": "読んで分かる コンピュータ構成要素 第5章 入出力装置（ITパスポートの範囲）",
+  "count": 18
+ },
+ "it-text-computer-components-io-devices-fe": {
+  "url": "/tools/exam-glossary/it-text/computer-components-io-devices-fe.json",
+  "label": "読んで分かる コンピュータ構成要素 第5章 入出力装置（基本情報まで）",
+  "count": 59
+ },
+ "it-text-system-components-configuration-ip": {
+  "url": "/tools/exam-glossary/it-text/system-components-configuration-ip.json",
+  "label": "読んで分かる システム構成要素 第1章 システムの構成（ITパスポートの範囲）",
+  "count": 33
+ },
+ "it-text-system-components-configuration-fe": {
+  "url": "/tools/exam-glossary/it-text/system-components-configuration-fe.json",
+  "label": "読んで分かる システム構成要素 第1章 システムの構成（基本情報まで）",
+  "count": 74
+ },
+ "it-text-system-components-reliability-ip": {
+  "url": "/tools/exam-glossary/it-text/system-components-reliability-ip.json",
+  "label": "読んで分かる システム構成要素 第2章 信頼性と評価（ITパスポートの範囲）",
+  "count": 19
+ },
+ "it-text-system-components-reliability-fe": {
+  "url": "/tools/exam-glossary/it-text/system-components-reliability-fe.json",
+  "label": "読んで分かる システム構成要素 第2章 信頼性と評価（基本情報まで）",
+  "count": 60
+ },
+ "it-text-software-os-ip": {
+  "url": "/tools/exam-glossary/it-text/software-os-ip.json",
+  "label": "読んで分かる ソフトウェア 第1章 OSの種類と構成（ITパスポートの範囲）",
+  "count": 17
+ },
+ "it-text-software-os-fe": {
+  "url": "/tools/exam-glossary/it-text/software-os-fe.json",
+  "label": "読んで分かる ソフトウェア 第1章 OSの種類と構成（基本情報まで）",
+  "count": 59
+ },
+ "it-text-software-resources-ip": {
+  "url": "/tools/exam-glossary/it-text/software-resources-ip.json",
+  "label": "読んで分かる ソフトウェア 第2章 ジョブ・タスク・記憶の管理（ITパスポートの範囲）",
+  "count": 5
+ },
+ "it-text-software-resources-fe": {
+  "url": "/tools/exam-glossary/it-text/software-resources-fe.json",
+  "label": "読んで分かる ソフトウェア 第2章 ジョブ・タスク・記憶の管理（基本情報まで）",
+  "count": 51
+ },
+ "it-text-software-middleware-tools-ip": {
+  "url": "/tools/exam-glossary/it-text/software-middleware-tools-ip.json",
+  "label": "読んで分かる ソフトウェア 第3章 ミドルウェアと開発ツール（ITパスポートの範囲）",
+  "count": 7
+ },
+ "it-text-software-middleware-tools-fe": {
+  "url": "/tools/exam-glossary/it-text/software-middleware-tools-fe.json",
+  "label": "読んで分かる ソフトウェア 第3章 ミドルウェアと開発ツール（基本情報まで）",
+  "count": 67
+ },
+ "it-text-software-files-ip": {
+  "url": "/tools/exam-glossary/it-text/software-files-ip.json",
+  "label": "読んで分かる ソフトウェア 第4章 ファイルシステム（ITパスポートの範囲）",
+  "count": 12
+ },
+ "it-text-software-files-fe": {
+  "url": "/tools/exam-glossary/it-text/software-files-fe.json",
+  "label": "読んで分かる ソフトウェア 第4章 ファイルシステム（基本情報まで）",
+  "count": 36
+ },
+ "it-text-software-packages-oss-ip": {
+  "url": "/tools/exam-glossary/it-text/software-packages-oss-ip.json",
+  "label": "読んで分かる ソフトウェア 第5章 オフィスツールとOSS（ITパスポートの範囲）",
+  "count": 31
+ },
+ "it-text-software-packages-oss-fe": {
+  "url": "/tools/exam-glossary/it-text/software-packages-oss-fe.json",
+  "label": "読んで分かる ソフトウェア 第5章 オフィスツールとOSS（基本情報まで）",
+  "count": 51
+ },
+ "it-text-hardware-computers-ip": {
+  "url": "/tools/exam-glossary/it-text/hardware-computers-ip.json",
+  "label": "読んで分かる ハードウェア 第1章 コンピュータと入出力装置（ITパスポートの範囲）",
+  "count": 45
+ },
+ "it-text-hardware-computers-fe": {
+  "url": "/tools/exam-glossary/it-text/hardware-computers-fe.json",
+  "label": "読んで分かる ハードウェア 第1章 コンピュータと入出力装置（基本情報まで）",
+  "count": 61
+ },
+ "it-text-hardware-circuits-ip": {
+  "url": "/tools/exam-glossary/it-text/hardware-circuits-ip.json",
+  "label": "読んで分かる ハードウェア 第2章 電子回路と制御（ITパスポートの範囲）",
+  "count": 7
+ },
+ "it-text-hardware-circuits-fe": {
+  "url": "/tools/exam-glossary/it-text/hardware-circuits-fe.json",
+  "label": "読んで分かる ハードウェア 第2章 電子回路と制御（基本情報まで）",
+  "count": 45
+ },
+ "it-text-user-interface-ui-tech-ip": {
+  "url": "/tools/exam-glossary/it-text/user-interface-ui-tech-ip.json",
+  "label": "読んで分かる ユーザーインタフェース 第1章 ユーザーインタフェース技術（ITパスポートの範囲）",
+  "count": 36
+ },
+ "it-text-user-interface-ui-tech-fe": {
+  "url": "/tools/exam-glossary/it-text/user-interface-ui-tech-fe.json",
+  "label": "読んで分かる ユーザーインタフェース 第1章 ユーザーインタフェース技術（基本情報まで）",
+  "count": 62
+ },
+ "it-text-user-interface-ux-ui-design-ip": {
+  "url": "/tools/exam-glossary/it-text/user-interface-ux-ui-design-ip.json",
+  "label": "読んで分かる ユーザーインタフェース 第2章 UX/UIデザイン（ITパスポートの範囲）",
+  "count": 19
+ },
+ "it-text-user-interface-ux-ui-design-fe": {
+  "url": "/tools/exam-glossary/it-text/user-interface-ux-ui-design-fe.json",
+  "label": "読んで分かる ユーザーインタフェース 第2章 UX/UIデザイン（基本情報まで）",
+  "count": 61
+ },
+ "it-text-media-technology-ip": {
+  "url": "/tools/exam-glossary/it-text/media-technology-ip.json",
+  "label": "読んで分かる 情報メディア 第1章 マルチメディア技術（ITパスポートの範囲）",
+  "count": 49
+ },
+ "it-text-media-technology-fe": {
+  "url": "/tools/exam-glossary/it-text/media-technology-fe.json",
+  "label": "読んで分かる 情報メディア 第1章 マルチメディア技術（基本情報まで）",
+  "count": 62
+ },
+ "it-text-media-application-ip": {
+  "url": "/tools/exam-glossary/it-text/media-application-ip.json",
+  "label": "読んで分かる 情報メディア 第2章 マルチメディア応用（ITパスポートの範囲）",
+  "count": 31
+ },
+ "it-text-media-application-fe": {
+  "url": "/tools/exam-glossary/it-text/media-application-fe.json",
+  "label": "読んで分かる 情報メディア 第2章 マルチメディア応用（基本情報まで）",
+  "count": 58
+ },
+ "it-text-database-models-ip": {
+  "url": "/tools/exam-glossary/it-text/database-models-ip.json",
+  "label": "読んで分かる データベース 第1章 データベースの方式と設計（ITパスポートの範囲）",
+  "count": 24
+ },
+ "it-text-database-models-fe": {
+  "url": "/tools/exam-glossary/it-text/database-models-fe.json",
+  "label": "読んで分かる データベース 第1章 データベースの方式と設計（基本情報まで）",
+  "count": 85
+ },
+ "it-text-database-operation-ip": {
+  "url": "/tools/exam-glossary/it-text/database-operation-ip.json",
+  "label": "読んで分かる データベース 第2章 データ操作（ITパスポートの範囲）",
+  "count": 8
+ },
+ "it-text-database-operation-fe": {
+  "url": "/tools/exam-glossary/it-text/database-operation-fe.json",
+  "label": "読んで分かる データベース 第2章 データ操作（基本情報まで）",
+  "count": 56
+ },
+ "it-text-database-transaction-ip": {
+  "url": "/tools/exam-glossary/it-text/database-transaction-ip.json",
+  "label": "読んで分かる データベース 第3章 トランザクション処理と応用（ITパスポートの範囲）",
+  "count": 17
+ },
+ "it-text-database-transaction-fe": {
+  "url": "/tools/exam-glossary/it-text/database-transaction-fe.json",
+  "label": "読んで分かる データベース 第3章 トランザクション処理と応用（基本情報まで）",
+  "count": 70
+ },
+ "it-text-network-basics-ip": {
+  "url": "/tools/exam-glossary/it-text/network-basics-ip.json",
+  "label": "読んで分かる ネットワーク 第1章 ネットワーク方式（ITパスポートの範囲）",
+  "count": 49
+ },
+ "it-text-network-basics-fe": {
+  "url": "/tools/exam-glossary/it-text/network-basics-fe.json",
+  "label": "読んで分かる ネットワーク 第1章 ネットワーク方式（基本情報まで）",
+  "count": 84
+ },
+ "it-text-network-data-comm-ip": {
+  "url": "/tools/exam-glossary/it-text/network-data-comm-ip.json",
+  "label": "読んで分かる ネットワーク 第2章 データ通信と制御（ITパスポートの範囲）",
+  "count": 20
+ },
+ "it-text-network-data-comm-fe": {
+  "url": "/tools/exam-glossary/it-text/network-data-comm-fe.json",
+  "label": "読んで分かる ネットワーク 第2章 データ通信と制御（基本情報まで）",
+  "count": 66
+ },
+ "it-text-network-protocols-ip": {
+  "url": "/tools/exam-glossary/it-text/network-protocols-ip.json",
+  "label": "読んで分かる ネットワーク 第3章 通信プロトコルとネットワーク管理（ITパスポートの範囲）",
+  "count": 18
+ },
+ "it-text-network-protocols-fe": {
+  "url": "/tools/exam-glossary/it-text/network-protocols-fe.json",
+  "label": "読んで分かる ネットワーク 第3章 通信プロトコルとネットワーク管理（基本情報まで）",
+  "count": 74
+ },
+ "it-text-network-applications-ip": {
+  "url": "/tools/exam-glossary/it-text/network-applications-ip.json",
+  "label": "読んで分かる ネットワーク 第4章 ネットワーク応用（ITパスポートの範囲）",
+  "count": 59
+ },
+ "it-text-network-applications-fe": {
+  "url": "/tools/exam-glossary/it-text/network-applications-fe.json",
+  "label": "読んで分かる ネットワーク 第4章 ネットワーク応用（基本情報まで）",
+  "count": 90
+ },
+ "it-text-security-threats-ip": {
+  "url": "/tools/exam-glossary/it-text/security-threats-ip.json",
+  "label": "読んで分かる セキュリティ 第1章 脅威と攻撃（ITパスポートの範囲）",
+  "count": 105
+ },
+ "it-text-security-threats-fe": {
+  "url": "/tools/exam-glossary/it-text/security-threats-fe.json",
+  "label": "読んで分かる セキュリティ 第1章 脅威と攻撃（基本情報まで）",
+  "count": 152
+ },
+ "it-text-security-crypto-ip": {
+  "url": "/tools/exam-glossary/it-text/security-crypto-ip.json",
+  "label": "読んで分かる セキュリティ 第2章 暗号と認証（ITパスポートの範囲）",
+  "count": 76
+ },
+ "it-text-security-crypto-fe": {
+  "url": "/tools/exam-glossary/it-text/security-crypto-fe.json",
+  "label": "読んで分かる セキュリティ 第2章 暗号と認証（基本情報まで）",
+  "count": 116
+ },
+ "it-text-security-management-ip": {
+  "url": "/tools/exam-glossary/it-text/security-management-ip.json",
+  "label": "読んで分かる セキュリティ 第3章 管理と評価（ITパスポートの範囲）",
+  "count": 62
+ },
+ "it-text-security-management-fe": {
+  "url": "/tools/exam-glossary/it-text/security-management-fe.json",
+  "label": "読んで分かる セキュリティ 第3章 管理と評価（基本情報まで）",
+  "count": 194
+ },
+ "it-text-security-measures-ip": {
+  "url": "/tools/exam-glossary/it-text/security-measures-ip.json",
+  "label": "読んで分かる セキュリティ 第4章 対策（ITパスポートの範囲）",
+  "count": 69
+ },
+ "it-text-security-measures-fe": {
+  "url": "/tools/exam-glossary/it-text/security-measures-fe.json",
+  "label": "読んで分かる セキュリティ 第4章 対策（基本情報まで）",
+  "count": 114
+ },
+ "it-text-security-implementation-ip": {
+  "url": "/tools/exam-glossary/it-text/security-implementation-ip.json",
+  "label": "読んで分かる セキュリティ 第5章 実装技術（ITパスポートの範囲）",
+  "count": 16
+ },
+ "it-text-security-implementation-fe": {
+  "url": "/tools/exam-glossary/it-text/security-implementation-fe.json",
+  "label": "読んで分かる セキュリティ 第5章 実装技術（基本情報まで）",
+  "count": 67
+ },
+ "it-text-system-development-requirements-ip": {
+  "url": "/tools/exam-glossary/it-text/system-development-requirements-ip.json",
+  "label": "読んで分かる システム開発技術 第1章 要件定義（ITパスポートの範囲）",
+  "count": 24
+ },
+ "it-text-system-development-requirements-fe": {
+  "url": "/tools/exam-glossary/it-text/system-development-requirements-fe.json",
+  "label": "読んで分かる システム開発技術 第1章 要件定義（基本情報まで）",
+  "count": 73
+ },
+ "it-text-system-development-design-ip": {
+  "url": "/tools/exam-glossary/it-text/system-development-design-ip.json",
+  "label": "読んで分かる システム開発技術 第2章 システムとソフトウェアの設計（ITパスポートの範囲）",
+  "count": 27
+ },
+ "it-text-system-development-design-fe": {
+  "url": "/tools/exam-glossary/it-text/system-development-design-fe.json",
+  "label": "読んで分かる システム開発技術 第2章 システムとソフトウェアの設計（基本情報まで）",
+  "count": 75
+ },
+ "it-text-system-development-design-methods-ip": {
+  "url": "/tools/exam-glossary/it-text/system-development-design-methods-ip.json",
+  "label": "読んで分かる システム開発技術 第3章 設計の手法（ITパスポートの範囲）",
+  "count": 8
+ },
+ "it-text-system-development-design-methods-fe": {
+  "url": "/tools/exam-glossary/it-text/system-development-design-methods-fe.json",
+  "label": "読んで分かる システム開発技術 第3章 設計の手法（基本情報まで）",
+  "count": 85
+ },
+ "it-text-system-development-implementation-ip": {
+  "url": "/tools/exam-glossary/it-text/system-development-implementation-ip.json",
+  "label": "読んで分かる システム開発技術 第4章 実装・構築（ITパスポートの範囲）",
+  "count": 14
+ },
+ "it-text-system-development-implementation-fe": {
+  "url": "/tools/exam-glossary/it-text/system-development-implementation-fe.json",
+  "label": "読んで分かる システム開発技術 第4章 実装・構築（基本情報まで）",
+  "count": 68
+ },
+ "it-text-system-development-testing-ip": {
+  "url": "/tools/exam-glossary/it-text/system-development-testing-ip.json",
+  "label": "読んで分かる システム開発技術 第5章 統合・テストと導入（ITパスポートの範囲）",
+  "count": 17
+ },
+ "it-text-system-development-testing-fe": {
+  "url": "/tools/exam-glossary/it-text/system-development-testing-fe.json",
+  "label": "読んで分かる システム開発技術 第5章 統合・テストと導入（基本情報まで）",
+  "count": 74
+ },
+ "it-text-system-development-maintenance-ip": {
+  "url": "/tools/exam-glossary/it-text/system-development-maintenance-ip.json",
+  "label": "読んで分かる システム開発技術 第6章 保守・廃棄（ITパスポートの範囲）",
+  "count": 3
+ },
+ "it-text-system-development-maintenance-fe": {
+  "url": "/tools/exam-glossary/it-text/system-development-maintenance-fe.json",
+  "label": "読んで分かる システム開発技術 第6章 保守・廃棄（基本情報まで）",
+  "count": 48
+ },
+ "it-text-dev-management-methods-ip": {
+  "url": "/tools/exam-glossary/it-text/dev-management-methods-ip.json",
+  "label": "読んで分かる ソフトウェア開発管理技術 第1章 開発の進め方（ITパスポートの範囲）",
+  "count": 25
+ },
+ "it-text-dev-management-methods-fe": {
+  "url": "/tools/exam-glossary/it-text/dev-management-methods-fe.json",
+  "label": "読んで分かる ソフトウェア開発管理技術 第1章 開発の進め方（基本情報まで）",
+  "count": 64
+ },
+ "it-text-dev-management-management-ip": {
+  "url": "/tools/exam-glossary/it-text/dev-management-management-ip.json",
+  "label": "読んで分かる ソフトウェア開発管理技術 第2章 開発の管理（ITパスポートの範囲）",
+  "count": 17
+ },
+ "it-text-dev-management-management-fe": {
+  "url": "/tools/exam-glossary/it-text/dev-management-management-fe.json",
+  "label": "読んで分かる ソフトウェア開発管理技術 第2章 開発の管理（基本情報まで）",
+  "count": 68
+ },
+ "it-text-project-management-basics-ip": {
+  "url": "/tools/exam-glossary/it-text/project-management-basics-ip.json",
+  "label": "読んで分かる プロジェクトマネジメント 第1章 プロジェクトの考え方と統合（ITパスポートの範囲）",
+  "count": 16
+ },
+ "it-text-project-management-basics-fe": {
+  "url": "/tools/exam-glossary/it-text/project-management-basics-fe.json",
+  "label": "読んで分かる プロジェクトマネジメント 第1章 プロジェクトの考え方と統合（基本情報まで）",
+  "count": 83
+ },
+ "it-text-project-management-scope-time-ip": {
+  "url": "/tools/exam-glossary/it-text/project-management-scope-time-ip.json",
+  "label": "読んで分かる プロジェクトマネジメント 第2章 スコープ・資源・時間（ITパスポートの範囲）",
+  "count": 16
+ },
+ "it-text-project-management-scope-time-fe": {
+  "url": "/tools/exam-glossary/it-text/project-management-scope-time-fe.json",
+  "label": "読んで分かる プロジェクトマネジメント 第2章 スコープ・資源・時間（基本情報まで）",
+  "count": 69
+ },
+ "it-text-project-management-cost-risk-ip": {
+  "url": "/tools/exam-glossary/it-text/project-management-cost-risk-ip.json",
+  "label": "読んで分かる プロジェクトマネジメント 第3章 コスト・リスク・品質・調達・コミュニケーション（ITパスポートの範囲）",
+  "count": 14
+ },
+ "it-text-project-management-cost-risk-fe": {
+  "url": "/tools/exam-glossary/it-text/project-management-cost-risk-fe.json",
+  "label": "読んで分かる プロジェクトマネジメント 第3章 コスト・リスク・品質・調達・コミュニケーション（基本情報まで）",
+  "count": 62
+ },
+ "it-text-service-management-basics-ip": {
+  "url": "/tools/exam-glossary/it-text/service-management-basics-ip.json",
+  "label": "読んで分かる サービスマネジメント 第1章 サービスマネジメントの考え方（ITパスポートの範囲）",
+  "count": 22
+ },
+ "it-text-service-management-basics-fe": {
+  "url": "/tools/exam-glossary/it-text/service-management-basics-fe.json",
+  "label": "読んで分かる サービスマネジメント 第1章 サービスマネジメントの考え方（基本情報まで）",
+  "count": 53
+ },
+ "it-text-service-management-planning-ip": {
+  "url": "/tools/exam-glossary/it-text/service-management-planning-ip.json",
+  "label": "読んで分かる サービスマネジメント 第2章 サービスの計画と管理（ITパスポートの範囲）",
+  "count": 8
+ },
+ "it-text-service-management-planning-fe": {
+  "url": "/tools/exam-glossary/it-text/service-management-planning-fe.json",
+  "label": "読んで分かる サービスマネジメント 第2章 サービスの計画と管理（基本情報まで）",
+  "count": 50
+ },
+ "it-text-service-management-change-incident-ip": {
+  "url": "/tools/exam-glossary/it-text/service-management-change-incident-ip.json",
+  "label": "読んで分かる サービスマネジメント 第3章 変更とインシデントの管理（ITパスポートの範囲）",
+  "count": 26
+ },
+ "it-text-service-management-change-incident-fe": {
+  "url": "/tools/exam-glossary/it-text/service-management-change-incident-fe.json",
+  "label": "読んで分かる サービスマネジメント 第3章 変更とインシデントの管理（基本情報まで）",
+  "count": 82
+ },
+ "it-text-service-management-operation-ip": {
+  "url": "/tools/exam-glossary/it-text/service-management-operation-ip.json",
+  "label": "読んで分かる サービスマネジメント 第4章 サービスの運用とファシリティ（ITパスポートの範囲）",
+  "count": 15
+ },
+ "it-text-service-management-operation-fe": {
+  "url": "/tools/exam-glossary/it-text/service-management-operation-fe.json",
+  "label": "読んで分かる サービスマネジメント 第4章 サービスの運用とファシリティ（基本情報まで）",
+  "count": 83
+ },
+ "it-text-system-audit-audit-ip": {
+  "url": "/tools/exam-glossary/it-text/system-audit-audit-ip.json",
+  "label": "読んで分かる システム監査 第1章 システム監査（ITパスポートの範囲）",
+  "count": 29
+ },
+ "it-text-system-audit-audit-fe": {
+  "url": "/tools/exam-glossary/it-text/system-audit-audit-fe.json",
+  "label": "読んで分かる システム監査 第1章 システム監査（基本情報まで）",
+  "count": 66
+ },
+ "it-text-system-audit-internal-control-ip": {
+  "url": "/tools/exam-glossary/it-text/system-audit-internal-control-ip.json",
+  "label": "読んで分かる システム監査 第2章 内部統制とITガバナンス（ITパスポートの範囲）",
+  "count": 16
+ },
+ "it-text-system-audit-internal-control-fe": {
+  "url": "/tools/exam-glossary/it-text/system-audit-internal-control-fe.json",
+  "label": "読んで分かる システム監査 第2章 内部統制とITガバナンス（基本情報まで）",
+  "count": 35
+ },
+ "it-text-system-strategy-strategy-ip": {
+  "url": "/tools/exam-glossary/it-text/system-strategy-strategy-ip.json",
+  "label": "読んで分かる システム戦略 第1章 情報システム戦略（ITパスポートの範囲）",
+  "count": 19
+ },
+ "it-text-system-strategy-strategy-fe": {
+  "url": "/tools/exam-glossary/it-text/system-strategy-strategy-fe.json",
+  "label": "読んで分かる システム戦略 第1章 情報システム戦略（基本情報まで）",
+  "count": 60
+ },
+ "it-text-system-strategy-process-solution-ip": {
+  "url": "/tools/exam-glossary/it-text/system-strategy-process-solution-ip.json",
+  "label": "読んで分かる システム戦略 第2章 業務改善・ソリューション・システム活用（ITパスポートの範囲）",
+  "count": 47
+ },
+ "it-text-system-strategy-process-solution-fe": {
+  "url": "/tools/exam-glossary/it-text/system-strategy-process-solution-fe.json",
+  "label": "読んで分かる システム戦略 第2章 業務改善・ソリューション・システム活用（基本情報まで）",
+  "count": 74
+ },
+ "it-text-system-planning-system-planning-ip": {
+  "url": "/tools/exam-glossary/it-text/system-planning-system-planning-ip.json",
+  "label": "読んで分かる システム企画 第1章 システム企画（ITパスポートの範囲）",
+  "count": 27
+ },
+ "it-text-system-planning-system-planning-fe": {
+  "url": "/tools/exam-glossary/it-text/system-planning-system-planning-fe.json",
+  "label": "読んで分かる システム企画 第1章 システム企画（基本情報まで）",
+  "count": 68
+ },
+ "it-text-business-strategy-corporate-strategy-ip": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-corporate-strategy-ip.json",
+  "label": "読んで分かる 経営戦略マネジメント 第1章 経営戦略と全社戦略（ITパスポートの範囲）",
+  "count": 39
+ },
+ "it-text-business-strategy-corporate-strategy-fe": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-corporate-strategy-fe.json",
+  "label": "読んで分かる 経営戦略マネジメント 第1章 経営戦略と全社戦略（基本情報まで）",
+  "count": 52
+ },
+ "it-text-business-strategy-competitive-strategy-ip": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-competitive-strategy-ip.json",
+  "label": "読んで分かる 経営戦略マネジメント 第2章 競争戦略と事業戦略（ITパスポートの範囲）",
+  "count": 34
+ },
+ "it-text-business-strategy-competitive-strategy-fe": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-competitive-strategy-fe.json",
+  "label": "読んで分かる 経営戦略マネジメント 第2章 競争戦略と事業戦略（基本情報まで）",
+  "count": 53
+ },
+ "it-text-business-strategy-marketing-ip": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-marketing-ip.json",
+  "label": "読んで分かる 経営戦略マネジメント 第3章 マーケティングの考え方（ITパスポートの範囲）",
+  "count": 24
+ },
+ "it-text-business-strategy-marketing-fe": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-marketing-fe.json",
+  "label": "読んで分かる 経営戦略マネジメント 第3章 マーケティングの考え方（基本情報まで）",
+  "count": 52
+ },
+ "it-text-business-strategy-marketing-strategy-ip": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-marketing-strategy-ip.json",
+  "label": "読んで分かる 経営戦略マネジメント 第4章 マーケティング戦略と手法（ITパスポートの範囲）",
+  "count": 51
+ },
+ "it-text-business-strategy-marketing-strategy-fe": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-marketing-strategy-fe.json",
+  "label": "読んで分かる 経営戦略マネジメント 第4章 マーケティング戦略と手法（基本情報まで）",
+  "count": 73
+ },
+ "it-text-business-strategy-management-ip": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-management-ip.json",
+  "label": "読んで分かる 経営戦略マネジメント 第5章 目標の設定と経営管理システム（ITパスポートの範囲）",
+  "count": 38
+ },
+ "it-text-business-strategy-management-fe": {
+  "url": "/tools/exam-glossary/it-text/business-strategy-management-fe.json",
+  "label": "読んで分かる 経営戦略マネジメント 第5章 目標の設定と経営管理システム（基本情報まで）",
+  "count": 49
+ },
+ "it-text-technology-strategy-tech-strategy-ip": {
+  "url": "/tools/exam-glossary/it-text/technology-strategy-tech-strategy-ip.json",
+  "label": "読んで分かる 技術戦略マネジメント 第1章 技術開発戦略と技術開発計画（ITパスポートの範囲）",
+  "count": 38
+ },
+ "it-text-technology-strategy-tech-strategy-fe": {
+  "url": "/tools/exam-glossary/it-text/technology-strategy-tech-strategy-fe.json",
+  "label": "読んで分かる 技術戦略マネジメント 第1章 技術開発戦略と技術開発計画（基本情報まで）",
+  "count": 62
+ },
+ "it-text-business-industry-business-systems-ip": {
+  "url": "/tools/exam-glossary/it-text/business-industry-business-systems-ip.json",
+  "label": "読んで分かる ビジネスインダストリ 第1章 ビジネスシステムとAI（ITパスポートの範囲）",
+  "count": 82
+ },
+ "it-text-business-industry-business-systems-fe": {
+  "url": "/tools/exam-glossary/it-text/business-industry-business-systems-fe.json",
+  "label": "読んで分かる ビジネスインダストリ 第1章 ビジネスシステムとAI（基本情報まで）",
+  "count": 102
+ },
+ "it-text-business-industry-e-business-ip": {
+  "url": "/tools/exam-glossary/it-text/business-industry-e-business-ip.json",
+  "label": "読んで分かる ビジネスインダストリ 第2章 e-ビジネス（ITパスポートの範囲）",
+  "count": 43
+ },
+ "it-text-business-industry-e-business-fe": {
+  "url": "/tools/exam-glossary/it-text/business-industry-e-business-fe.json",
+  "label": "読んで分かる ビジネスインダストリ 第2章 e-ビジネス（基本情報まで）",
+  "count": 65
+ },
+ "it-text-business-industry-production-devices-ip": {
+  "url": "/tools/exam-glossary/it-text/business-industry-production-devices-ip.json",
+  "label": "読んで分かる ビジネスインダストリ 第3章 生産のシステムと機器（ITパスポートの範囲）",
+  "count": 46
+ },
+ "it-text-business-industry-production-devices-fe": {
+  "url": "/tools/exam-glossary/it-text/business-industry-production-devices-fe.json",
+  "label": "読んで分かる ビジネスインダストリ 第3章 生産のシステムと機器（基本情報まで）",
+  "count": 77
+ },
+ "it-text-corporate-activity-society-ip": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-society-ip.json",
+  "label": "読んで分かる 企業活動 第1章 企業活動と社会の変化（ITパスポートの範囲）",
+  "count": 52
+ },
+ "it-text-corporate-activity-society-fe": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-society-fe.json",
+  "label": "読んで分かる 企業活動 第1章 企業活動と社会の変化（基本情報まで）",
+  "count": 69
+ },
+ "it-text-corporate-activity-organization-ip": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-organization-ip.json",
+  "label": "読んで分かる 企業活動 第2章 組織と人材（ITパスポートの範囲）",
+  "count": 49
+ },
+ "it-text-corporate-activity-organization-fe": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-organization-fe.json",
+  "label": "読んで分かる 企業活動 第2章 組織と人材（基本情報まで）",
+  "count": 70
+ },
+ "it-text-corporate-activity-or-ie-ip": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-or-ie-ip.json",
+  "label": "読んで分かる 企業活動 第3章 OR・IEと業務分析（ITパスポートの範囲）",
+  "count": 31
+ },
+ "it-text-corporate-activity-or-ie-fe": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-or-ie-fe.json",
+  "label": "読んで分かる 企業活動 第3章 OR・IEと業務分析（基本情報まで）",
+  "count": 64
+ },
+ "it-text-corporate-activity-data-ip": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-data-ip.json",
+  "label": "読んで分かる 企業活動 第4章 データ利活用（ITパスポートの範囲）",
+  "count": 68
+ },
+ "it-text-corporate-activity-data-fe": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-data-fe.json",
+  "label": "読んで分かる 企業活動 第4章 データ利活用（基本情報まで）",
+  "count": 77
+ },
+ "it-text-corporate-activity-accounting-ip": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-accounting-ip.json",
+  "label": "読んで分かる 企業活動 第5章 会計と財務（ITパスポートの範囲）",
+  "count": 66
+ },
+ "it-text-corporate-activity-accounting-fe": {
+  "url": "/tools/exam-glossary/it-text/corporate-activity-accounting-fe.json",
+  "label": "読んで分かる 企業活動 第5章 会計と財務（基本情報まで）",
+  "count": 106
+ },
+ "it-text-legal-ip-rights-ip": {
+  "url": "/tools/exam-glossary/it-text/legal-ip-rights-ip.json",
+  "label": "読んで分かる 法務 第1章 知的財産権（ITパスポートの範囲）",
+  "count": 20
+ },
+ "it-text-legal-ip-rights-fe": {
+  "url": "/tools/exam-glossary/it-text/legal-ip-rights-fe.json",
+  "label": "読んで分かる 法務 第1章 知的財産権（基本情報まで）",
+  "count": 56
+ },
+ "it-text-legal-security-law-ip": {
+  "url": "/tools/exam-glossary/it-text/legal-security-law-ip.json",
+  "label": "読んで分かる 法務 第2章 セキュリティ関連法規（ITパスポートの範囲）",
+  "count": 38
+ },
+ "it-text-legal-security-law-fe": {
+  "url": "/tools/exam-glossary/it-text/legal-security-law-fe.json",
+  "label": "読んで分かる 法務 第2章 セキュリティ関連法規（基本情報まで）",
+  "count": 57
+ },
+ "it-text-legal-labor-trade-ip": {
+  "url": "/tools/exam-glossary/it-text/legal-labor-trade-ip.json",
+  "label": "読んで分かる 法務 第3章 労働と取引の法規（ITパスポートの範囲）",
+  "count": 51
+ },
+ "it-text-legal-labor-trade-fe": {
+  "url": "/tools/exam-glossary/it-text/legal-labor-trade-fe.json",
+  "label": "読んで分かる 法務 第3章 労働と取引の法規（基本情報まで）",
+  "count": 82
+ },
+ "it-text-legal-other-laws-ip": {
+  "url": "/tools/exam-glossary/it-text/legal-other-laws-ip.json",
+  "label": "読んで分かる 法務 第4章 その他の法律と倫理（ITパスポートの範囲）",
+  "count": 38
+ },
+ "it-text-legal-other-laws-fe": {
+  "url": "/tools/exam-glossary/it-text/legal-other-laws-fe.json",
+  "label": "読んで分かる 法務 第4章 その他の法律と倫理（基本情報まで）",
+  "count": 85
+ },
+ "it-text-legal-standards-ip": {
+  "url": "/tools/exam-glossary/it-text/legal-standards-ip.json",
+  "label": "読んで分かる 法務 第5章 標準化（ITパスポートの範囲）",
+  "count": 17
+ },
+ "it-text-legal-standards-fe": {
+  "url": "/tools/exam-glossary/it-text/legal-standards-fe.json",
+  "label": "読んで分かる 法務 第5章 標準化（基本情報まで）",
+  "count": 40
+ }
+}

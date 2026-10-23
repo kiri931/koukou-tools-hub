@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { buildHints, hasMoreHints } from '../../lib/hints';
 import { gradeCapReason, maxGrade } from '../../lib/gradeCap';
 import type { DatasetSummary, Grade, StudySessionState } from '../../types';
+import { NewCardCounter, NewCardLimitNotice } from '../NewCardStatus';
 
 type Props = {
   datasets: DatasetSummary[];
@@ -176,6 +177,7 @@ export default function StudyView(props: Props) {
         <Card>
           <CardHeader className="space-y-3">
             <ProgressBar session={session} />
+            <NewCardCounter budget={session.newBudget} />
             <div className="flex items-center justify-between gap-3">
               <div>
                 <CardTitle>{currentDataset?.title ?? '学習中'}</CardTitle>
@@ -263,6 +265,7 @@ export default function StudyView(props: Props) {
         <Card>
           <CardHeader className="space-y-3">
             <ProgressBar session={session} />
+            <NewCardCounter budget={session.newBudget} />
             <div className="flex items-center justify-between gap-3">
               <CardTitle>採点</CardTitle>
               <Badge className={session.isCorrect ? 'bg-[var(--color-success)] text-[var(--color-on-success)]' : 'bg-[var(--color-danger)] text-[var(--color-on-danger)]'}>
@@ -327,6 +330,7 @@ export default function StudyView(props: Props) {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-base text-[var(--color-text-muted)]">今回の対象件数: {session.total} 件</p>
+            <NewCardLimitNotice budget={session.newBudget} />
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-lg border p-3">
                 <p className="text-sm text-[var(--color-text-muted)]">正解</p>

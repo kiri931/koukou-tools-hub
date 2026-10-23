@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Dataset } from '../types';
+import textDecks from '../lib/textDecks.json';
 
 // URL から問題集を読み込む仕組み。
 //
@@ -12,14 +13,17 @@ import type { Dataset } from '../types';
 // 外部サイトのJSONを読み込ませる踏み台にできてしまう。
 // ここでは合言葉→固定URLの対応表だけを持ち、表に無い値は黙って無視する。
 
-const DECKS = {
+// 読み物テキスト（/it-text/）の章ごとの問題集は scripts/build-exam-glossary.mjs が textDecks.json に書き出す。
+// 合言葉は it-text-<単元>-<章>-ip（ITパスポートの範囲）/ -fe（基本情報まで）
+const DECKS: Record<string, { url: string; label: string }> = {
 	glossary: {
 		url: '/glossary/anki-dataset.json',
 		label: '情報I用語集',
 	},
-} as const;
+	...textDecks,
+};
 
-export type DeckKey = keyof typeof DECKS;
+export type DeckKey = string;
 
 export type DeckLinkState =
 	| { status: 'idle' }
@@ -30,7 +34,7 @@ export type DeckLinkState =
 function readDeckKey(): DeckKey | null {
 	if (typeof window === 'undefined') return null;
 	const key = new URLSearchParams(window.location.search).get('import');
-	return key && key in DECKS ? (key as DeckKey) : null;
+	return key && Object.hasOwn(DECKS, key) ? key : null;
 }
 
 /**

@@ -151,6 +151,7 @@ export default function AnkiApp() {
             <HomeView
               datasets={anki.datasets}
               dueByDataset={anki.dueByDataset}
+              newBudgetByDataset={anki.newBudgetByDataset}
               selectedDatasetId={anki.selectedDatasetId}
               onSelectDataset={anki.setSelectedDatasetId}
               onStartSession={anki.startSession}
@@ -181,6 +182,7 @@ export default function AnkiApp() {
             <DataManagementView
               datasets={anki.datasets}
               onImportDataset={anki.importDataset}
+              onSyncDataset={anki.syncDataset}
               onImportBackup={anki.importBackup}
               onExportBackup={async () => {
                 const backup = await anki.exportBackup();

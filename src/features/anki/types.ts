@@ -1,3 +1,5 @@
+import type { NewCardBudget } from './lib/newCardLimit';
+
 export type Grade = 1 | 2 | 3 | 4; // Unknown / Hard / Good / Easy
 export type TabId = 'home' | 'study' | 'dashboard' | 'data' | 'settings';
 
@@ -51,6 +53,8 @@ export interface Confusion {
 export interface AppSettings {
   targetRetentionRate: number;
   examDate: string | null;
+  /** 新しいカード（まだ一度も答えていないカード）を1問題集あたり1日に出す枚数。0なら復習だけ */
+  newCardsPerDay: number;
 }
 
 export interface DatasetSummary {
@@ -64,8 +68,11 @@ export interface DatasetSummary {
 }
 
 export interface DueCount {
+  /** いま出せる枚数（期日の来た復習＋今日の上限内の新しいカード） */
   overdue: number;
   today: number;
+  /** overdue のうち、新しいカード（上限で切ったあと） */
+  newCards: number;
 }
 
 export interface StudyQueueItem {
@@ -135,9 +142,12 @@ export interface StudySessionState {
   responseMs: number | null;
   submittedAt: number | null;
   error: string | null;
+  /** 新しいカードの今日の枠。取れないとき（古い呼び出し方）は null */
+  newBudget: NewCardBudget | null;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
   targetRetentionRate: 0.9,
   examDate: null,
+  newCardsPerDay: 20,
 };
