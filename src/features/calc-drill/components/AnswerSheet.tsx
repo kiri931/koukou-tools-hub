@@ -5,6 +5,7 @@ import { roundingLabel } from '../types';
 import type { DrillChoice } from '../types';
 import { PASSING_SCORE } from '../lib/grading';
 import type { SheetRow } from '../hooks/useAnswerSheet';
+import KeySteps from './KeySteps';
 
 
 interface AnswerSheetProps {
@@ -93,7 +94,7 @@ export default function AnswerSheet({
 
                 <div className="min-w-0 flex-1">
                   {(showHint || row.problem.angleMode === 'RAD') && (
-                    <p className="text-sm font-bold">
+                    <p className="text-base font-bold">
                       {showHint ? `（${hint}）` : ''}
                       {row.problem.angleMode === 'RAD' ? '〔RAD〕' : ''}
                     </p>
@@ -125,6 +126,7 @@ export default function AnswerSheet({
                       </span>
                     )}
                   </div>
+                  <KeySteps problem={row.problem} paper />
                 </div>
               </li>
             );

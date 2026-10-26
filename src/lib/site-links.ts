@@ -68,7 +68,7 @@ export const sections: SiteLinkSection[] = [
 			{
 				href: '/tools/calc-drill/',
 				label: '計算技術検定ドリル',
-				desc: 'ガイド練習・自分で解く・解答用紙（本番10分）の3つで、計算技術検定3級・4級を練習できます。',
+				desc: '計算技術検定3級を中心に、手もとの電卓で解いて答え合わせ。問題ごとに押す順を確かめられ、解答用紙（本番10分）もあります。',
 				accent: '#f59e0b',
 				icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="2" /><path d="M8 6.5h8" /><path d="M8 11.5h2" /><path d="M12 11.5h2" /><path d="M16 11.5h0.01" /><path d="M8 15.5h2" /><path d="M12 15.5h2" /><path d="M16 15.5h0.01" /><path d="M8 19h8" /></svg>',
 			},

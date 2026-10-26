@@ -9,6 +9,7 @@ import ProblemBar from './ProblemBar';
 import { useAnswerSheet } from '../hooks/useAnswerSheet';
 import { useKeyGuide } from '../hooks/useKeyGuide';
 import { useProblemSession } from '../hooks/useProblemSession';
+import { normalizeTypedAnswer } from '../lib/drillOptions';
 import type { DrillChoice } from '../types';
 
 interface PracticeModeProps {
@@ -17,16 +18,33 @@ interface PracticeModeProps {
   choice: DrillChoice;
   assist: boolean;
   onToggleAssist: () => void;
+  /**
+   * 画面の電卓を出すか。既定は出さない（検定本番は自分の電卓で解くため）。
+   * 出さないときは、答えを入力欄に直接打って答え合わせする。
+   */
+  showCalc: boolean;
+  onToggleCalc: () => void;
 }
 
 /**
- * 「自分で解く」と「解答用紙」。どちらも電卓を自分で打ち、ガイドは任意。
+ * 「自分で解く」と「解答用紙」。どちらも手順は自分で決め、ガイドは任意。
+ *
+ * 画面の電卓はオプション。既定では隠し、生徒は手もとの電卓で計算して
+ * 答えを入力欄に打つ。「このサイトの電卓で打つ」で出したときだけ、
+ * 電卓・入力補助・「答えとして書く」が出る。
  *
  * ガイド練習（DrillDisplay 側）は押すキーを1つずつ強制するが、
  * ここは本番と同じく自分で手順を決める。入力補助を入れたときだけ、
  * 次に押すキーを光らせる。
  */
-export default function PracticeMode({ kind, choice, assist, onToggleAssist }: PracticeModeProps) {
+export default function PracticeMode({
+  kind,
+  choice,
+  assist,
+  onToggleAssist,
+  showCalc,
+  onToggleCalc,
+}: PracticeModeProps) {
   const { state, displayBeforeCursor, displayAfterCursor, parenBalance, pressButton, applyPreset } =
     useCalculator();
 
@@ -34,13 +52,13 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
   const sheet = useAnswerSheet(choice, kind === 'sheet');
 
   const problem = kind === 'solo' ? session.problem : (sheet.rows[sheet.activeIndex]?.problem ?? null);
-  const guide = useKeyGuide(problem, assist, state.expression.length);
+  const guide = useKeyGuide(problem, showCalc && assist, state.expression.length);
 
   // 補助を入れている間は、表示形式もその問題の丸め方に合わせる。
   // 本番の四則計算は (1)〜(7) が小数第2位、(8)〜(10) が有効数字3けたで、
   // そのたびに FSE と DIGS を押し直すのは練習の本筋ではない。
   useEffect(() => {
-    if (!assist || !problem?.rounding) return;
+    if (!showCalc || !assist || !problem?.rounding) return;
     const r = problem.rounding;
     applyPreset(
       r.kind === 'decimals'
@@ -49,7 +67,7 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
     );
     // applyPreset は毎回作り直されるので、依存に入れると無限に走る
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assist, problem?.id]);
+  }, [showCalc, assist, problem?.id]);
 
   // 問題に [RAD] の指定があれば、角度モードもそろえておく
   useEffect(() => {
@@ -95,12 +113,32 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
     />
   );
 
+  const calcBar = (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button
+        type="button"
+        variant={showCalc ? 'default' : 'outline'}
+        className="min-h-11 text-base"
+        onClick={onToggleCalc}
+        aria-pressed={showCalc}
+      >
+        {/* 出ている／隠れているは色だけでなく文言でも示す */}
+        {showCalc ? '画面の電卓を隠す' : 'このサイトの電卓で打つ'}
+      </Button>
+      <span className="text-base text-[var(--color-text-muted)]">
+        {showCalc
+          ? '画面の電卓で計算して答え合わせします'
+          : '手もとの電卓で計算し、答えを入力欄に打ちます'}
+      </span>
+    </div>
+  );
+
   const assistBar = (
     <div className="flex flex-wrap items-center gap-2">
       <Button
         type="button"
-        size="sm"
         variant={assist ? 'default' : 'outline'}
+        className="min-h-11 text-base"
         onClick={onToggleAssist}
         aria-pressed={assist}
       >
@@ -148,31 +186,43 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
     </div>
   );
 
+  const sheetView = (
+    <AnswerSheet
+      choice={choice}
+      rows={sheet.rows}
+      activeIndex={sheet.activeIndex}
+      graded={sheet.graded}
+      remaining={sheet.remaining}
+      correctCount={sheet.correctCount}
+      score={sheet.score}
+      onSelect={sheet.setActiveIndex}
+      onWrite={sheet.write}
+      onGrade={sheet.grade}
+      onRestart={sheet.restart}
+    />
+  );
+
+  if (kind === 'sheet' && !showCalc) {
+    return (
+      <div className="space-y-2">
+        {calcBar}
+        {sheetView}
+      </div>
+    );
+  }
+
   if (kind === 'sheet') {
     return (
       <div className="space-y-2">
+        {calcBar}
         {assistBar}
         <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
-          <div className="lg:w-[54%]">
-            <AnswerSheet
-              choice={choice}
-              rows={sheet.rows}
-              activeIndex={sheet.activeIndex}
-              graded={sheet.graded}
-              remaining={sheet.remaining}
-              correctCount={sheet.correctCount}
-              score={sheet.score}
-              onSelect={sheet.setActiveIndex}
-              onWrite={sheet.write}
-              onGrade={sheet.grade}
-              onRestart={sheet.restart}
-            />
-          </div>
+          <div className="lg:w-[54%]">{sheetView}</div>
           <div className="space-y-2 lg:flex-1">
             {display}
             <Button
               type="button"
-              className="w-full"
+              className="min-h-11 w-full text-base"
               disabled={sheet.graded || sheet.rows.length === 0}
               onClick={() => sheet.writeCurrent(state.result)}
             >
@@ -187,17 +237,25 @@ export default function PracticeMode({ kind, choice, assist, onToggleAssist }: P
 
   return (
     <div className="space-y-2">
-      {assistBar}
+      {calcBar}
+      {showCalc && assistBar}
       <ProblemBar
         problem={session.problem}
         judgement={session.judgement}
         answered={session.answered}
         correct={session.correct}
-        onCheck={() => session.check(state.result)}
+        directInput={!showCalc}
+        onCheck={(typed) =>
+          session.check(showCalc ? state.result : normalizeTypedAnswer(typed ?? ''))
+        }
         onNext={session.next}
       />
-      {display}
-      {keypad}
+      {showCalc && (
+        <>
+          {display}
+          {keypad}
+        </>
+      )}
     </div>
   );
 }

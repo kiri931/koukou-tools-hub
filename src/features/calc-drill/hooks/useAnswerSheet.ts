@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { generateProblems } from '../data/problems';
 import { isAnswerCorrect } from '../lib/grading';
+import { normalizeTypedAnswer } from '../lib/drillOptions';
 import type { DrillChoice, DrillProblem } from '../types';
 
 
@@ -94,7 +95,8 @@ export function useAnswerSheet(choice: DrillChoice, enabled: boolean) {
   const rows: SheetRow[] = problems.map((problem, i) => ({
     problem,
     answer: answers[i] ?? '',
-    correct: graded ? isAnswerCorrect(answers[i] ?? '', problem) : undefined,
+    // 手で打った答えは全角・カンマを直してから比べる。判定そのものは isAnswerCorrect のまま
+    correct: graded ? isAnswerCorrect(normalizeTypedAnswer(answers[i] ?? ''), problem) : undefined,
   }));
 
   const write = useCallback(

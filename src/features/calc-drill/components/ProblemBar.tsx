@@ -1,8 +1,10 @@
+import { useId, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import MathText from '@/features/scientific-calculator/components/MathText';
 import { roundingLabel } from '../types';
 import type { DrillProblem } from '../types';
 import type { Judgement } from '../hooks/useProblemSession';
+import KeySteps from './KeySteps';
 
 interface ProblemBarProps {
   /** 級・分野のしるし。問題モードでは上の帯を出さず、ここへ寄せる。 */
@@ -13,7 +15,13 @@ interface ProblemBarProps {
   judgement: Judgement;
   answered: number;
   correct: number;
-  onCheck: () => void;
+  /**
+   * true なら答えを入力欄に打って答え合わせする（画面の電卓を隠しているとき）。
+   * false なら、画面の電卓に出ている値で答え合わせする。
+   */
+  directInput?: boolean;
+  /** directInput のときは、入力欄に打った文字列を渡す */
+  onCheck: (typed?: string) => void;
   onNext: () => void;
 }
 
@@ -28,9 +36,21 @@ export default function ProblemBar({
   judgement,
   answered,
   correct,
+  directInput = false,
   onCheck,
   onNext,
 }: ProblemBarProps) {
+  const [typed, setTyped] = useState('');
+  const [emptyHint, setEmptyHint] = useState(false);
+  const [lastProblemId, setLastProblemId] = useState(problem?.id);
+  const inputId = useId();
+  // 問題が変わったら入力欄を空にする
+  if (problem?.id !== lastProblemId) {
+    setLastProblemId(problem?.id);
+    setTyped('');
+    setEmptyHint(false);
+  }
+
   if (!problem) {
     return (
       <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-base text-[var(--color-text-muted)]">
@@ -48,7 +68,7 @@ export default function ProblemBar({
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         {leading}
 
-        <p className="min-w-0 flex-1 text-lg font-bold text-[var(--color-text)]">
+        <p className="min-w-[min(100%,16rem)] flex-1 text-lg font-bold text-[var(--color-text)]">
           <MathText>{problem.question}</MathText>
         </p>
 
@@ -70,6 +90,7 @@ export default function ProblemBar({
         {/* 正誤は色だけでなく記号と文言でも示す。行を増やさないよう同じ段に置く。 */}
         {judgement.kind !== 'none' && (
           <span
+            role="status"
             className={`text-lg font-bold ${
               judgement.kind === 'correct'
                 ? 'text-[var(--color-success)]'
@@ -80,17 +101,66 @@ export default function ProblemBar({
           </span>
         )}
 
-        {judgement.kind === 'none' ? (
-          <Button type="button" onClick={onCheck} className="min-h-11">
-            答え合わせ
-          </Button>
-        ) : (
-          <Button type="button" onClick={onNext} className="min-h-11">
-            次の問題
-          </Button>
-        )}
+        {!directInput &&
+          (judgement.kind === 'none' ? (
+            <Button type="button" onClick={() => onCheck()} className="min-h-11 text-base">
+              答え合わせ
+            </Button>
+          ) : (
+            <Button type="button" onClick={onNext} className="min-h-11 text-base">
+              次の問題
+            </Button>
+          ))}
 
         {trailing}
+      </div>
+
+      {directInput && (
+        <form
+          className="mt-2 flex flex-wrap items-center gap-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (judgement.kind !== 'none') {
+              onNext();
+              return;
+            }
+            if (!typed.trim()) {
+              setEmptyHint(true);
+              return;
+            }
+            setEmptyHint(false);
+            onCheck(typed);
+          }}
+        >
+          <label htmlFor={inputId} className="text-base font-bold text-[var(--color-text)]">
+            答え
+          </label>
+          <input
+            id={inputId}
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            value={typed}
+            readOnly={judgement.kind !== 'none'}
+            onChange={(e) => {
+              setTyped(e.target.value);
+              if (emptyHint) setEmptyHint(false);
+            }}
+            className="kj-input"
+            // kj-input は幅100%で Tailwind より強いので、幅は style で決める
+            style={{ width: '12rem', maxWidth: '100%' }}
+          />
+          <Button type="submit" className="min-h-11 text-base">
+            {judgement.kind === 'none' ? '答え合わせ' : '次の問題'}
+          </Button>
+          <span aria-live="polite" className="text-base text-[var(--color-text)]">
+            {emptyHint ? '答えを入れてから答え合わせしてください。' : ''}
+          </span>
+        </form>
+      )}
+
+      <div className="mt-1">
+        <KeySteps key={problem.id} problem={problem} />
       </div>
     </div>
   );
