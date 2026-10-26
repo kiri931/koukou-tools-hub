@@ -262,6 +262,10 @@ export default function CalcDrill() {
                 (showCalc ? `／画面の電卓・入力補助 ${assist ? '入' : '切'}` : '／手もとの電卓')}
             </span>
           )}
+          {/* 件数と「作り直す」はガイド練習の問題一覧のもの。
+              自分で解くは1問ずつ尽きるまで作り続け、解答用紙は常に10問で用紙に件数が出る。
+              ほかのモードで出すと、出題と関係のない数と、押しても何も変わらないボタンになる。 */}
+          {mode === 'guide' && (
           <span className="ml-auto flex items-center gap-2">
             <span className="text-base text-[var(--color-text-muted)]">{filteredProblems.length} 問</span>
             <Button
@@ -274,6 +278,7 @@ export default function CalcDrill() {
               作り直す
             </Button>
           </span>
+          )}
         </div>
 
         {settingsOpen && (

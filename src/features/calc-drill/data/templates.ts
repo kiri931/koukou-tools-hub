@@ -486,10 +486,14 @@ const san_shisoku: Template[] = [
     const b = dec(rng, 1, 9.99, 2);
     const c = dec(rng, 1, 9.99, 2);
     const d = dec(rng, 1, 9.99, 2);
-    // 割り算で桁が跳ね上がらないよう、分母の指数は分子と近い正の値にする
+    // 割り算の結果を第1項と同じ桁か1つ上の桁にそろえる（検定の実物では、引く項は第1項と同じ桁か大きい）。
+    // 指数を別々に決めると割り算の結果が何桁も小さくなり、丸めた答えが第1項そのものになっていた。
+    // b ÷ (c + d) の仮数の桁 e（-2〜0）を先に求め、q − r = p + k − e とすれば、結果は ×10^(p+k) になる。
     const p = int(rng, 4, 10);
-    const q = int(rng, 5, 9);
-    const r = int(rng, q - 2, q + 2);
+    const k = int(rng, 0, 1);
+    const e = Math.floor(Math.log10(b.n / (c.n + d.n)));
+    const r = int(rng, 2, 5);
+    const q = r + p + k - e;
     return {
       category: '四則計算',
       question: `${a.tok} × 10^${p} - ${b.tok} × 10^${q} ÷ ( ${c.tok} × 10^${r} + ${d.tok} × 10^${r} )`,

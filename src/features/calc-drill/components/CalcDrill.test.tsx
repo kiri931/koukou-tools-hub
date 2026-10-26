@@ -141,3 +141,19 @@ describe('4級はアーカイブ', () => {
     expect(screen.getByText('4級の問題（アーカイブ）を表示しています。')).toBeInTheDocument();
   });
 });
+
+describe('上の帯の件数', () => {
+  // 件数はガイド練習の問題一覧のもの。ほかのモードで出すと出題と関係のない数になる
+  it('ガイド練習では一覧の件数と「作り直す」が出る', () => {
+    openAt('?mode=guide');
+    expect(screen.getByText('2 問')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '作り直す' })).toBeInTheDocument();
+  });
+
+  it.each(['solo', 'sheet', 'tips'])('%s では件数も「作り直す」も出さない', (mode) => {
+    openAt(`?mode=${mode}`);
+    expect(modeSelect().value).toBe(mode);
+    expect(screen.queryByText(/^\d+ 問$/)).toBeNull();
+    expect(screen.queryByRole('button', { name: '作り直す' })).toBeNull();
+  });
+});
